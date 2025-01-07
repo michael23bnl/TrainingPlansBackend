@@ -76,10 +76,17 @@ app.UseHttpsRedirection();
 
 app.UseCors(corsPolicy);
 
-app.UseCookiePolicy(new CookiePolicyOptions {
+/*app.UseCookiePolicy(new CookiePolicyOptions {
     MinimumSameSitePolicy = SameSiteMode.Strict,
     HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always
+});*/
+
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Lax, // Поддержка кросс-доменных запросов
+    HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,        // Защита от доступа через JS
+    Secure = CookieSecurePolicy.SameAsRequest // HTTPS только если запрос HTTPS
 });
 
 app.UseAuthentication();

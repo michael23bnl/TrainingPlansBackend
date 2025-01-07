@@ -7,6 +7,10 @@ public interface IExercisesRepository
     public Task<Guid> Create(ExerciseModel exercise);
 
     public Task<List<ExerciseModel>> GetAll();
+    
+    public Task<List<ExerciseModel>> GetAllPrepared();
+    
+    public Task<List<ExerciseModel>> GetAllSelfMade(Guid userId);
 
     public Task<ExerciseModel> Get(Guid id);
 

@@ -12,5 +12,4 @@ public class PlansDbContext(DbContextOptions<PlansDbContext> options) : DbContex
     
     public DbSet<FavoritePlanEntity> FavoritePlans { get; set; }
     
-    public DbSet<SelfMadePlanEntity> SelfMadePlans { get; set; }
 }

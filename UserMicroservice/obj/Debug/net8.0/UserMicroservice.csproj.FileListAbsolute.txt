@@ -439,3 +439,4 @@ F:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMic
 F:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMicroservice.genruntimeconfig.cache
 F:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\ref\UserMicroservice.dll
 F:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\Newtonsoft.Json.dll
+F:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMicroservice.sourcelink.json

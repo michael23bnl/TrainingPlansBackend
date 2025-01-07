@@ -16,10 +16,7 @@
             policy.WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // Разрешить отправку cookies.
-            /*policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();*/
+                .AllowCredentials(); 
         });
     });
     
@@ -62,3 +59,4 @@
     app.UseOcelot().Wait();
 
     app.Run();
+    

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
+using UserMicroservice.Repositories.Interfaces;
+
 namespace TrainingPlans.Controllers;
 
 [ApiController]
@@ -9,26 +11,45 @@ namespace TrainingPlans.Controllers;
 public class FavoritePlansController : ControllerBase
 {
     private readonly IFavoritePlansRepository _favoritePlansRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IJwtExtractor _jwtExtractor;
 
-    public FavoritePlansController(IFavoritePlansRepository favoritePlansRepository)
+    public FavoritePlansController(IFavoritePlansRepository favoritePlansRepository, IHttpContextAccessor httpContextAccessor, IJwtExtractor jwtExtractor)
     {
         _favoritePlansRepository = favoritePlansRepository;
+        _httpContextAccessor = httpContextAccessor;
+        _jwtExtractor = jwtExtractor;
     }
-    [HttpPost("add-to-favorites")]
-    public async Task<ActionResult> AddPlanToFavorites(Guid userId, Guid planId)
+    [HttpPost("add/{planId}")]
+    public async Task<ActionResult> AddPlanToFavorites(Guid planId)
     {
-        _favoritePlansRepository.AddToFavorites(userId, planId);
+        
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        
+        await _favoritePlansRepository.AddToFavorites(userId, planId);
         return Ok();
     }
-    [HttpDelete("remove-from-favorites")]
-    public async Task<ActionResult> RemovePlanFromFavorites(Guid userId, Guid planId)
+    [HttpDelete("remove/{planId}")]
+    public async Task<ActionResult> RemovePlanFromFavorites(Guid planId)
     {
-        _favoritePlansRepository.RemoveFromFavorites(userId, planId);
+        
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        
+        await _favoritePlansRepository.RemoveFromFavorites(userId, planId);
         return Ok();
     }
-    [HttpGet("get-favorites")]
-    public async Task<ActionResult<List<PlanModel>>> GetFavoritePlans(Guid userId)
+    [HttpGet("get/all")]
+    public async Task<ActionResult<List<PlanModel>>> GetFavoritePlans()
     {
+        
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        
         return Ok(await _favoritePlansRepository.GetFavorites(userId));
     }
     

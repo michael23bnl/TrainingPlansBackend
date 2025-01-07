@@ -1,4 +1,6 @@
 using ChatMicroservice.Hubs;
+using UserMicroservice.Infrastructure;
+using UserMicroservice.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<IJwtExtractor, JwtExtractor>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSignalR();
 
 var app = builder.Build();

@@ -1,7 +1,8 @@
 ﻿
 services:
-  postgres:
-    container_name: postgres
+  
+  userservice:
+    container_name: usersdb
     image: postgres:latest
     environment:
       POSTGRES_DB: "usersdb"
@@ -11,6 +12,18 @@ services:
       - postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  
+  planservice:
+    container_name: plansdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "plansdb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
   realtimechat.redis:
     image: redis

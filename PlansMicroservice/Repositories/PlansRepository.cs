@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
 using TrainingPlans.Repositories.Interfaces;
@@ -19,12 +20,17 @@ public class PlansRepository : IPlansRepository
         var planEntity = new PlanEntity
         {
             Id = plan.Id,
+            Name = plan.Name,
             Exercises = plan.Exercises.Select(e => new ExerciseEntity
                 {
                     Id = e.Id,
                     Name = e.Name,
                     MuscleGroup = e.MuscleGroup,
-                }).ToList()
+                    IsPrepared = e.IsPrepared,
+                    CreatedBy = e.CreatedBy
+                }).ToList(),
+            IsPrepared = plan.IsPrepared,
+            CreatedBy = plan.CreatedBy
         };
         await _context.Plans.AddAsync(planEntity);
         await _context.SaveChangesAsync();
@@ -37,8 +43,71 @@ public class PlansRepository : IPlansRepository
             .Include(e => e.Exercises)
             .AsNoTracking()
             .ToListAsync();
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id,
-            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup).exerciseModel).ToList()!).planModel).ToList();
+        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
+            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
+
+        return plans;
+    }
+    
+    public async Task<List<PlanModel>> GetAllPrepared()
+    {
+        var planEntities = await _context.Plans
+            .Include(e => e.Exercises)
+            .Where(p => p.IsPrepared == true)
+            .AsNoTracking()
+            .ToListAsync();
+        var plans = planEntities.Select(p => PlanModel.Create(
+            p.Id,
+            p.Name,
+            p.Exercises.Select(e => ExerciseModel.Create(
+                e.Id,
+                e.Name,
+                e.MuscleGroup,
+                e.IsPrepared,
+                e.CreatedBy
+                ).exerciseModel).ToList()!,
+            p.IsPrepared,
+            p.CreatedBy)
+            .planModel).ToList();
+
+        return plans;
+    }
+    
+    public async Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId)
+    {
+        var planEntities = await _context.Plans
+            .Include(e => e.Exercises)
+            .Where(p => p.IsPrepared == true)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var favoritePlans = _context.FavoritePlans
+            .Where(f => f.UserId == userId)
+            .Select(f => f.PlanId)
+            .ToList();
+        var plans = planEntities.Select(p => new PreparedPlanResponse(
+            p.Id,
+            p.Name,
+            p.Exercises.Select(e => new ExerciseResponse(
+                e.Id,
+                e.Name,
+                e.MuscleGroup
+            )).ToList(),
+            favoritePlans.Contains(p.Id)
+        )).ToList();
+
+        return plans;
+    }
+    
+    public async Task<List<PlanModel>> GetAllSelfMade(Guid userId)
+    {
+        var planEntities = await _context.Plans
+            .Include(e => e.Exercises)
+            .Where(p => p.CreatedBy == userId)
+            .AsNoTracking()
+            .ToListAsync();
+        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
+            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
 
         return plans;
     }
@@ -48,22 +117,32 @@ public class PlansRepository : IPlansRepository
         var planEntity = await _context.Plans
             .Include(e => e.Exercises)
             .FirstOrDefaultAsync(p => p.Id == id);
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Exercises
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup).exerciseModel)
-            .ToList()!).planModel;
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Name, planEntity.Exercises
+            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel)
+            .ToList()!, planEntity.IsPrepared, planEntity.CreatedBy).planModel;
         return plan;
     }
 
-    public async Task<Guid> Update(Guid id, List<ExerciseModel> exercises)
+    public async Task<Guid> Update(Guid id, string? name, List<ExerciseModel> exercises)
     {
         // Загружаем план вместе с его упражнениями
         var plan = await _context.Plans
             .Include(p => p.Exercises)
             .FirstOrDefaultAsync(p => p.Id == id);
-
+        
         if (plan == null)
         {
             throw new InvalidOperationException("Plan not found");
+        }
+
+        if (exercises.Count == 0)
+        {
+            throw new InvalidOperationException("Plan must contain at least one exercise");
+        }
+
+        if (name != null)
+        {
+            plan.Name = name;
         }
 
         // Создаем список ID новых упражнений из модели
@@ -113,7 +192,9 @@ public class PlansRepository : IPlansRepository
 
     public async Task<Guid> Delete(Guid id)
     {
-        var plan = await _context.Plans.FirstOrDefaultAsync(p => p.Id == id);
+        var plan = await _context.Plans
+            .Include(p => p.Exercises)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (plan != null)
         {
             _context.Plans.Remove(plan);

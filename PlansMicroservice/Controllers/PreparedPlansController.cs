@@ -9,25 +9,23 @@ namespace TrainingPlans.Controllers;
 [ApiController]
 [Route("/api/[controller]")]
 
-public class PlansController : ControllerBase
+public class PreparedPlansController : ControllerBase
 {
     private readonly IPlansRepository _plansRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IJwtExtractor _jwtExtractor;
 
-    public PlansController(IPlansRepository plansRepository, IHttpContextAccessor httpContextAccessor, IJwtExtractor jwtExtractor)
+
+    public PreparedPlansController(IPlansRepository plansRepository, IHttpContextAccessor httpContextAccessor, IJwtExtractor jwtExtractor)
     {
         _plansRepository = plansRepository;
         _httpContextAccessor = httpContextAccessor;
         _jwtExtractor = jwtExtractor;
     }
+    
     [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreatePlan([FromBody] PlanRequest request)
+    public async Task<ActionResult<Guid>> CreatePreparedPlan([FromBody] PlanRequest request)
     {
-     
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
         
         var exercises = request.exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
@@ -37,7 +35,7 @@ public class PlansController : ControllerBase
             null
         ).exerciseModel).ToList();
         
-        var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.name, exercises, false, userId);
+        var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.name, exercises, true, null);
         
         if (response != "Plan has been created")
         {
@@ -49,16 +47,31 @@ public class PlansController : ControllerBase
         return Ok(planId);
     }
     
-    [Permission("Read")]
-    [HttpGet("get/all")]
+    
+    /*[HttpGet("get/all")]
     public async Task<ActionResult<List<PlanModel>>> GetAllPlans()
     {
+        return Ok(await _plansRepository.GetAllPrepared());
+    }*/
+    
+    [HttpGet("get/all")]
+    public async Task<ActionResult<List<PlanModel>>> GetAllPlans() // переработать
+    {
         var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
         
-        return Ok(await _plansRepository.GetAllSelfMade(userId));
+        
+
+        if (token != null)
+        {
+            var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+            return Ok(await _plansRepository.GetAllPrepared(userId));
+
+        }
+        
+        return Ok(await _plansRepository.GetAllPrepared(null));
+
     }
+    
     [Permission("Create")]
     [HttpGet("get/{id}")]
     public async Task<ActionResult<PlanModel>> GetPlan(Guid id)

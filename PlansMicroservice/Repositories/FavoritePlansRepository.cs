@@ -56,8 +56,8 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             .Where(p => favoritePlans.Contains(p.Id))
             .ToListAsync();
         
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id,
-            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup).exerciseModel).ToList()!).planModel).ToList();
+        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
+            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
 
         return plans;
     }

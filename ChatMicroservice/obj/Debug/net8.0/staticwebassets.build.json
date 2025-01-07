@@ -1,11 +1,34 @@
 {
   "Version": 1,
-  "Hash": "qBa8nZTcaxys6QEWcMUhFOXzk9srbkKtrZLUBI4IXd8=",
+  "Hash": "TyMSHGVcZchE/ZP2UM/St1s6yFx280laBBoO18QMX+k=",
   "Source": "ChatMicroservice",
   "BasePath": "_content/ChatMicroservice",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\PlansMicroservice.csproj",
+      "Version": 2,
+      "Source": "PlansMicroservice",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    },
+    {
+      "Identity": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj",
+      "Version": 2,
+      "Source": "UserMicroservice",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }

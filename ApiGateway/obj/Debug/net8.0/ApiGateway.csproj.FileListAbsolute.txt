@@ -138,3 +138,4 @@ F:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\Microsoft.Ide
 F:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 F:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 F:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+F:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\ApiGateway.sourcelink.json
