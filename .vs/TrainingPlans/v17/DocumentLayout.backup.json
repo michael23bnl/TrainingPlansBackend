@@ -1,0 +1,62 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}|ApiGateway\\ApiGateway.csproj|f:\\projects\\.net\\trainingplans\\backend\\apigateway\\ocelot.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}|ApiGateway\\ApiGateway.csproj|solutionrelative:apigateway\\ocelot.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A96F5C95-E379-4758-98C9-51521AD61E49}|PlansMicroservice\\PlansMicroservice.csproj|f:\\projects\\.net\\trainingplans\\backend\\plansmicroservice\\extensions\\seeddataextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A96F5C95-E379-4758-98C9-51521AD61E49}|PlansMicroservice\\PlansMicroservice.csproj|solutionrelative:plansmicroservice\\extensions\\seeddataextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ocelot.json",
+              "DocumentMoniker": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\ApiGateway\\ocelot.json",
+              "RelativeDocumentMoniker": "ApiGateway\\ocelot.json",
+              "ToolTip": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\ApiGateway\\ocelot.json",
+              "RelativeToolTip": "ApiGateway\\ocelot.json",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-23T14:54:11.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SeedDataExtensions.cs",
+              "DocumentMoniker": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\Extensions\\SeedDataExtensions.cs",
+              "RelativeDocumentMoniker": "PlansMicroservice\\Extensions\\SeedDataExtensions.cs",
+              "ToolTip": "F:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\Extensions\\SeedDataExtensions.cs",
+              "RelativeToolTip": "PlansMicroservice\\Extensions\\SeedDataExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-23T14:51:41.275Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
