@@ -1,3 +1,5 @@
+
+
 namespace TrainingPlans.Entities;
 
 public class PlanEntity

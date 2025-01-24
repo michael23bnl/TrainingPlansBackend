@@ -32,6 +32,24 @@ public class UsersController : ControllerBase {
         return Results.Ok(token);
     }
 
+    [HttpPost("logout")]
+    public IResult Logout()
+    {
+        HttpContext.Response.Cookies.Delete("suchatastycookie");
+        return Results.Ok();
+    }
+    [HttpGet("is-logged-in")]
+    public bool IsLoggedIn()
+    {
+        var cookie = HttpContext.Request.Cookies["suchatastycookie"];
+        if (cookie == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     [HttpPost("check-requirenments")]
     public async Task<ActionResult> CheckUserPermissions([FromBody] PayloadRequest request)
     {

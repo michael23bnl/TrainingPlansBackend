@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
 using TrainingPlans.Repositories.Interfaces;
@@ -69,6 +70,53 @@ public class ExercisesRepository : IExercisesRepository
             .Create(exerciseEntity.Id, exerciseEntity.Name, exerciseEntity.MuscleGroup, exerciseEntity.IsPrepared, exerciseEntity.CreatedBy)
             .exerciseModel;
         return exercise;
+    }
+
+    public async Task<ExerciseModel> GetByName(string name)
+    {
+        var exerciseEntity = await _context.Exercises.FirstOrDefaultAsync(e => e.Name == name);
+        
+        var exercise = ExerciseModel.Create(exerciseEntity.Id, exerciseEntity.Name,
+            exerciseEntity.MuscleGroup, exerciseEntity.IsPrepared, exerciseEntity.CreatedBy).exerciseModel;
+        
+        return exercise;
+    }
+
+    public async Task<List<ExerciseModel>> GetByCategory(string muscleGroup)
+    {
+        var exerciseEntities = await _context.Exercises
+            .Where(e => e.MuscleGroup == muscleGroup).ToListAsync();
+
+        var exercises = exerciseEntities.Select(et =>
+            ExerciseModel.Create(et.Id, et.Name, et.MuscleGroup, et.IsPrepared, et.CreatedBy).exerciseModel).ToList();
+        
+        return exercises;
+    }
+
+    public async Task<Dictionary<string, List<ExerciseModel>>> GetAllCategorized()
+    {
+        
+        var exerciseEntities = await _context.Exercises
+            .Where(e => e.IsPrepared == true)
+            .AsNoTracking()
+            .ToListAsync();
+        var exercises = exerciseEntities
+            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel)
+            .ToList();
+        
+        var categorizedExercises = new Dictionary<string, List<ExerciseModel>>();
+        
+        foreach (var exercise in exercises)
+        {
+            if (!categorizedExercises.ContainsKey(exercise.MuscleGroup))
+            {
+                categorizedExercises[exercise.MuscleGroup] = new List<ExerciseModel>();
+            }
+        
+            categorizedExercises[exercise.MuscleGroup].Add(exercise);
+        }
+
+        return categorizedExercises;
     }
 
     public async Task<Guid> Update(Guid id, string name, string muscleGroup)

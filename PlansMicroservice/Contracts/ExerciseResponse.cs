@@ -1,3 +1,5 @@
+
+
 namespace TrainingPlans.Contracts;
 
 public record ExerciseResponse(

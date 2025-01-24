@@ -1,3 +1,5 @@
+
+
 namespace TrainingPlans.Entities;
 
 public class ExerciseEntity
@@ -11,4 +13,7 @@ public class ExerciseEntity
     public bool? IsPrepared { get; set; } // при добавлении упражнений в план нет разницы, подготовлены ли они или нет
     
     public Guid? CreatedBy { get; set; }
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
 }

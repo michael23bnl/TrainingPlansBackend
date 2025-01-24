@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using TrainingPlans.Entities;
 
 namespace TrainingPlans;

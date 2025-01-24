@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using TrainingPlans.Repositories.Interfaces;

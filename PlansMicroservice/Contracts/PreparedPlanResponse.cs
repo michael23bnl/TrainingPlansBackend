@@ -1,5 +1,7 @@
 
 
+
+
 namespace TrainingPlans.Contracts;
 
 public record PreparedPlanResponse(

@@ -74,6 +74,28 @@ public class ChatHub : Hub<IChatClient>
         }
     }
 
+    public async Task SendPlan(PlanModel plan, string chatRoom)
+    {
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+        
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token)).ToString();
+        
+        var chatRooms = await _cache.GetStringAsync(userId);
+        
+        var roomList = chatRooms != null 
+            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
+            : new List<string>();
+
+        if (roomList.Contains(chatRoom))
+        {
+            await Clients.Groups(chatRoom).RecieveMessage(Context.UserIdentifier ?? "Unknown User", plan);
+        }
+        else
+        {
+            throw new Exception("User is not a member of this chat room.");
+        }
+    }
+
     public async Task LeaveChat(string chatRoom)
     {
         var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];

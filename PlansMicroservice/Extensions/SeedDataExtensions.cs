@@ -2337,87 +2337,87 @@ public static class SeedDataExtensions
                     { Id = Guid.NewGuid(), Name = "Бабочка", MuscleGroup = "", IsPrepared = true, CreatedBy = null },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с гантелью стоя в наклоне", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с гантелью стоя в наклоне", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями сидя на наклонной скамье", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями сидя на наклонной скамье", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями сидя одновременно", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями сидя одновременно", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
                     Id = Guid.NewGuid(), Name = "Бицепс с гантелями стоя в упоре на конструкцию тренажёра Смит",
-                    MuscleGroup = "", IsPrepared = true, CreatedBy = null
+                    MuscleGroup = "Бицепсы", IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями стоя поочерёдно", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями стоя поочерёдно", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями стоя", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с гантелями стоя", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с грифом в наклоне", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с грифом в наклоне", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой на скамье Скотта", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой на скамье Скотта", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой сидя", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой сидя", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой стоя", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой стоя", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой хват сверху", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой хват сверху", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с кривой штангой", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с прямой штангой", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Бицепс с прямой штангой", MuscleGroup = "Бицепсы", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом на скамье Скотта", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом на скамье Скотта", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом с расширителями", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом с расширителями", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом хват сверху", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Бицепс с прямым грифом хват сверху", MuscleGroup = "Бицепсы",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Вис на перекладине", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Вис на перекладине", MuscleGroup = "Вис", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
@@ -2456,55 +2456,55 @@ public static class SeedDataExtensions
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Гиперэкстензия горизонтальная", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Гиперэкстензия горизонтальная", MuscleGroup = "Нижняя часть спины", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Гиперэкстензия", MuscleGroup = "", IsPrepared = true, CreatedBy = null
+                    Id = Guid.NewGuid(), Name = "Гиперэкстензия", MuscleGroup = "Нижняя часть спины", IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантели", MuscleGroup = "", IsPrepared = true, CreatedBy = null
+                    Id = Guid.NewGuid(), Name = "Жим гантели", MuscleGroup = "Грудь", IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа на наклонной скамье", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа на наклонной скамье", MuscleGroup = "Грудь",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа поочерёдно", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа поочерёдно", MuscleGroup = "Грудь", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа с отрицательным наклоном", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа с отрицательным наклоном", MuscleGroup = "Грудь",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель лёжа", MuscleGroup = "Грудь", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель сидя в упоре", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель сидя в упоре", MuscleGroup = "Плечи", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель сидя", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель сидя", MuscleGroup = "Плечи", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель стоя попеременно", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель стоя попеременно", MuscleGroup = "Плечи", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим гантель стоя", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим гантель стоя", MuscleGroup = "Плечи", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
@@ -2513,17 +2513,17 @@ public static class SeedDataExtensions
                     { Id = Guid.NewGuid(), Name = "Жим Свенда", MuscleGroup = "", IsPrepared = true, CreatedBy = null },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа в Смите", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа в Смите", MuscleGroup = "Грудь", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа на горизонтальной скамье", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа на горизонтальной скамье", MuscleGroup = "Грудь",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа на наклонной скамье", MuscleGroup = "",
+                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа на наклонной скамье", MuscleGroup = "Грудь",
                     IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
@@ -2538,7 +2538,7 @@ public static class SeedDataExtensions
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа", MuscleGroup = "", IsPrepared = true, CreatedBy = null
+                    Id = Guid.NewGuid(), Name = "Жим штанги лёжа", MuscleGroup = "Грудь", IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
                 {
@@ -2551,7 +2551,7 @@ public static class SeedDataExtensions
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Задняя дельта в Смите", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Задняя дельта в Смите", MuscleGroup = "Задняя дельта", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
@@ -2561,20 +2561,20 @@ public static class SeedDataExtensions
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Икры в тренажере", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Икры в тренажере", MuscleGroup = "Икроножные", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Икры с гантелями", MuscleGroup = "", IsPrepared = true,
+                    Id = Guid.NewGuid(), Name = "Икры с гантелями", MuscleGroup = "Икроножные", IsPrepared = true,
                     CreatedBy = null
                 },
                 new ExerciseEntity
                 {
-                    Id = Guid.NewGuid(), Name = "Икры со штангой", MuscleGroup = "", IsPrepared = true, CreatedBy = null
+                    Id = Guid.NewGuid(), Name = "Икры со штангой", MuscleGroup = "Икроножные", IsPrepared = true, CreatedBy = null
                 },
                 new ExerciseEntity
-                    { Id = Guid.NewGuid(), Name = "Икры", MuscleGroup = "", IsPrepared = true, CreatedBy = null },
+                    { Id = Guid.NewGuid(), Name = "Икры", MuscleGroup = "Икроножные", IsPrepared = true, CreatedBy = null },
                 new ExerciseEntity
                 {
                     Id = Guid.NewGuid(), Name = "Кисти с грифом сидя", MuscleGroup = "", IsPrepared = true,

@@ -1,3 +1,4 @@
+
 using TrainingPlans.Models;
 
 namespace TrainingPlans.Repositories.Interfaces;
@@ -13,6 +14,12 @@ public interface IExercisesRepository
     public Task<List<ExerciseModel>> GetAllSelfMade(Guid userId);
 
     public Task<ExerciseModel> Get(Guid id);
+
+    public Task<ExerciseModel> GetByName(string name);
+
+    public Task<List<ExerciseModel>> GetByCategory(string muscleGroup);
+
+    public Task<Dictionary<string, List<ExerciseModel>>> GetAllCategorized();
 
     public Task<Guid> Update(Guid id, string name, string muscleGroup);
 

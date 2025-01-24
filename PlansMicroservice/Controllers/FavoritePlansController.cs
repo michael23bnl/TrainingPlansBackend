@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrainingPlans.Contracts;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
 using UserMicroservice.Repositories.Interfaces;
@@ -51,6 +52,27 @@ public class FavoritePlansController : ControllerBase
         var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
         
         return Ok(await _favoritePlansRepository.GetFavorites(userId));
+    }
+    
+    [HttpPut("edit/{planId}")]
+    public async Task<ActionResult> EditFavoritePlan(Guid planId, [FromBody] PlanRequest request)
+    {
+        
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        
+        var exercises = request.exercises.Select(e => ExerciseModel.Create(
+            Guid.NewGuid(), 
+            e.name,
+            e.muscleGroup,
+            null,
+            null
+        ).exerciseModel).ToList();
+
+        await _favoritePlansRepository.EditFavorite(userId, planId, request.name, exercises);
+        
+        return Ok();
     }
     
 }

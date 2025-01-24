@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
@@ -44,7 +45,9 @@ public class PlansRepository : IPlansRepository
             .AsNoTracking()
             .ToListAsync();
         var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
-            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
+            p.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
 
         return plans;
     }
@@ -88,7 +91,9 @@ public class PlansRepository : IPlansRepository
         var plans = planEntities.Select(p => new PreparedPlanResponse(
             p.Id,
             p.Name,
-            p.Exercises.Select(e => new ExerciseResponse(
+            p.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => new ExerciseResponse(
                 e.Id,
                 e.Name,
                 e.MuscleGroup
@@ -107,7 +112,9 @@ public class PlansRepository : IPlansRepository
             .AsNoTracking()
             .ToListAsync();
         var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
-            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
+            p.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel).ToList()!, p.IsPrepared, p.CreatedBy).planModel).ToList();
 
         return plans;
     }
@@ -120,6 +127,54 @@ public class PlansRepository : IPlansRepository
         var plan = PlanModel.Create(planEntity.Id, planEntity.Name, planEntity.Exercises
             .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPrepared, e.CreatedBy).exerciseModel)
             .ToList()!, planEntity.IsPrepared, planEntity.CreatedBy).planModel;
+        return plan;
+    }
+    
+    public async Task<PlanModel> GetByName(Guid userId, string name)
+    {
+        var planEntity = await _context.Plans
+            .Include(pe => pe.Exercises)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(pe => pe.Name == name && pe.CreatedBy == userId);
+        
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Name,
+            planEntity.Exercises
+                .Select(pe => 
+                    ExerciseModel.Create(
+                        pe.Id, 
+                        pe.Name, 
+                        pe.MuscleGroup, 
+                        pe.IsPrepared, 
+                        pe.CreatedBy)
+                        .exerciseModel)
+                .ToList(), 
+            planEntity.IsPrepared, 
+            planEntity.CreatedBy).planModel;
+        
+        return plan;
+    }
+    
+    public async Task<PlanModel> GetPreparedByName(string name)
+    {
+        var planEntity = await _context.Plans
+            .Include(pe => pe.Exercises)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(pe => pe.Name == name && pe.IsPrepared == true);
+        
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Name,
+            planEntity.Exercises
+                .Select(pe => 
+                    ExerciseModel.Create(
+                            pe.Id, 
+                            pe.Name, 
+                            pe.MuscleGroup, 
+                            pe.IsPrepared, 
+                            pe.CreatedBy)
+                        .exerciseModel)
+                .ToList(), 
+            planEntity.IsPrepared, 
+            planEntity.CreatedBy).planModel;
+        
         return plan;
     }
 

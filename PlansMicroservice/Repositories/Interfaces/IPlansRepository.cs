@@ -1,3 +1,4 @@
+
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 
@@ -16,6 +17,11 @@ public interface IPlansRepository
     public Task<List<PlanModel>> GetAllSelfMade(Guid userId);
 
     public Task<PlanModel> Get(Guid id);
+
+    public Task<PlanModel> GetByName(Guid userId, string name);
+    
+    public Task<PlanModel> GetPreparedByName(string name);
+
 
     public Task<Guid> Update(Guid id, string? name, List<ExerciseModel> exercises);
 

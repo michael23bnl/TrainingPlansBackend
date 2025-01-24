@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using TrainingPlans.Repositories.Interfaces;
@@ -59,8 +60,6 @@ public class PreparedPlansController : ControllerBase
     {
         var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
         
-        
-
         if (token != null)
         {
             var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
@@ -84,6 +83,25 @@ public class PreparedPlansController : ControllerBase
 
         return BadRequest("Plan does not exist");
     }
+    
+    [HttpGet("get/{name}")]
+    public async Task<ActionResult<PlanModel>> GetPlanByName(string name)
+    {
+        
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        
+        var plan = await _plansRepository.GetByName(userId, name);
+        if (plan == null)
+        {
+            return BadRequest($"Plan with name {name} does not exist");
+        }
+
+        return plan;
+    }
+    
+    
     [HttpPut("update/{id}")]
     public async Task<ActionResult<Guid>> UpdatePlan(Guid id, [FromBody] PlanRequest request)
     {

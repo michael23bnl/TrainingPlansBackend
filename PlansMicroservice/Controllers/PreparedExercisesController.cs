@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using TrainingPlans.Repositories.Interfaces;
@@ -39,10 +40,34 @@ public class PreparedExercisesController : ControllerBase
     {
         return Ok(await _exercisesRepository.GetAllPrepared());
     }
-    [HttpGet("get")]
+    [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<Guid>> GetExercise(Guid exerciseId)
     {
         return Ok(await _exercisesRepository.Get(exerciseId));
+    }
+    
+    [HttpGet("get/{name}")]
+    public async Task<ExerciseModel> GetExerciseByName(string name)
+    {
+        var exercise = await _exercisesRepository.GetByName(name);
+        
+        return exercise;
+    }
+
+    [HttpGet("get/category/{category}")]
+    public async Task<List<ExerciseModel>> GetExercisesByCategory(string muscleGroup)
+    {
+        var exercises = await _exercisesRepository.GetByCategory(muscleGroup);
+        
+        return exercises;
+    }
+    
+    [HttpGet("get/all/categorized")]
+    public async Task<ActionResult<Dictionary<string, List<ExerciseModel>>>> GetAllExercisesCategorized()
+    {
+        var exercises = await _exercisesRepository.GetAllCategorized();
+        
+        return exercises;
     }
     
     [HttpPut("update")]
