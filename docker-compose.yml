@@ -1,0 +1,75 @@
+﻿
+services:
+  
+  elasticsearch:
+    container_name: els
+    image: elasticsearch:8.17.0
+    ports: 
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+        
+  kibana: 
+    container_name: kibana
+    image: kibana:8.17.0
+    ports: 
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsaerch:9200
+      
+  
+  userservice:
+    container_name: usersdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "usersdb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - usersdb-data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    restart: always
+  
+  planservice:
+    container_name: plansdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "plansdb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - plansdb-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: always
+        
+  chatservice:
+    container_name: chatdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "chatdb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - chatdb-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    restart: always
+
+  realtimechat.redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  elasticsearch-data:
+  usersdb-data:
+  plansdb-data:
+  chatdb-data:

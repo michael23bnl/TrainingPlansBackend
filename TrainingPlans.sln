@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlansMicroservice", "PlansMicroservice\PlansMicroservice.csproj", "{A96F5C95-E379-4758-98C9-51521AD61E49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMicroservice", "UserMicroservice\UserMicroservice.csproj", "{CECE0FB7-5E7E-4EF3-8C58-32B0A4502AF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6F2F143-A8DD-4E43-B48F-2C0D47F20A79}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatMicroservice", "ChatMicroservice\ChatMicroservice.csproj", "{07943816-40CB-4EF5-824F-29765359927D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A96F5C95-E379-4758-98C9-51521AD61E49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96F5C95-E379-4758-98C9-51521AD61E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96F5C95-E379-4758-98C9-51521AD61E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96F5C95-E379-4758-98C9-51521AD61E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CECE0FB7-5E7E-4EF3-8C58-32B0A4502AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CECE0FB7-5E7E-4EF3-8C58-32B0A4502AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CECE0FB7-5E7E-4EF3-8C58-32B0A4502AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CECE0FB7-5E7E-4EF3-8C58-32B0A4502AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B38E10-5B17-4DA8-A44B-EF7B4F5FA3C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07943816-40CB-4EF5-824F-29765359927D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07943816-40CB-4EF5-824F-29765359927D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07943816-40CB-4EF5-824F-29765359927D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07943816-40CB-4EF5-824F-29765359927D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
