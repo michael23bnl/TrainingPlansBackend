@@ -11,7 +11,7 @@ public interface IExercisesRepository
     
     public Task<List<ExerciseModel>> GetAllPrepared();
     
-    public Task<List<ExerciseModel>> GetAllSelfMade(Guid userId);
+    /*public Task<List<ExerciseModel>> GetAllSelfMade(Guid userId);*/
 
     public Task<ExerciseModel> Get(Guid id);
 

@@ -21,13 +21,13 @@ public class PlansRepository : IPlansRepository
         var planEntity = new PlanEntity
         {
             Id = plan.Id,
-            Name = plan.Name,
+            Category = plan.Category,
             Exercises = plan.Exercises.Select(e => new ExerciseEntity
                 {
                     Id = e.Id,
                     Name = e.Name,
                     MuscleGroup = e.MuscleGroup,
-                    CreatedBy = e.CreatedBy
+                    IsPreMade = e.IsPreMade
                 }).ToList(),
             CreatedBy = plan.CreatedBy
         };
@@ -42,10 +42,10 @@ public class PlansRepository : IPlansRepository
             .Include(e => e.Exercises)
             .AsNoTracking()
             .ToListAsync();
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
+        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Category,
             p.Exercises
                 .OrderBy(e => e.CreatedAt)
-                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.CreatedBy)
+                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPreMade)
                     .exerciseModel).ToList()!, p.CreatedBy).planModel).ToList();
 
         return plans;
@@ -60,12 +60,12 @@ public class PlansRepository : IPlansRepository
             .ToListAsync();
         var plans = planEntities.Select(p => PlanModel.Create(
             p.Id,
-            p.Name,
+            p.Category,
             p.Exercises.Select(e => ExerciseModel.Create(
                 e.Id,
                 e.Name,
                 e.MuscleGroup,
-                e.CreatedBy
+                e.IsPreMade
                 ).exerciseModel).ToList()!,
             p.CreatedBy)
             .planModel).ToList();
@@ -87,7 +87,7 @@ public class PlansRepository : IPlansRepository
             .ToList();
         var plans = planEntities.Select(p => new PreparedPlanResponse(
             p.Id,
-            p.Name,
+            p.Category,
             p.Exercises
                 .OrderBy(e => e.CreatedAt)
                 .Select(e => new ExerciseResponse(
@@ -108,11 +108,19 @@ public class PlansRepository : IPlansRepository
             .Where(p => p.CreatedBy == userId)
             .AsNoTracking()
             .ToListAsync();
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
+        var plans = planEntities.Select(p => PlanModel.Create(
+            p.Id, 
+            p.Category,
             p.Exercises
                 .OrderBy(e => e.CreatedAt)
-                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, 
-                    e.CreatedBy).exerciseModel).ToList()!, p.CreatedBy).planModel).ToList();
+                .Select(e => ExerciseModel.Create(
+                    e.Id, 
+                    e.Name, 
+                    e.MuscleGroup, 
+                    e.IsPreMade
+                    ).exerciseModel
+                ).ToList()!, 
+            p.CreatedBy).planModel).ToList();
 
         return plans;
     }
@@ -122,8 +130,8 @@ public class PlansRepository : IPlansRepository
         var planEntity = await _context.Plans
             .Include(e => e.Exercises)
             .FirstOrDefaultAsync(p => p.Id == id);
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Name, planEntity.Exercises
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.CreatedBy).exerciseModel)
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Category, planEntity.Exercises
+            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPreMade).exerciseModel)
             .ToList()!, planEntity.CreatedBy).planModel;
         return plan;
     }
@@ -133,16 +141,16 @@ public class PlansRepository : IPlansRepository
         var planEntity = await _context.Plans
             .Include(pe => pe.Exercises)
             .AsNoTracking()
-            .FirstOrDefaultAsync(pe => pe.Name == name && pe.CreatedBy == userId);
+            .FirstOrDefaultAsync(pe => pe.Category == name && pe.CreatedBy == userId);
         
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Name,
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Category,
             planEntity.Exercises
                 .Select(pe => 
                     ExerciseModel.Create(
                         pe.Id, 
                         pe.Name, 
                         pe.MuscleGroup, 
-                        pe.CreatedBy)
+                        pe.IsPreMade)
                         .exerciseModel)
                 .ToList(), 
             planEntity.CreatedBy).planModel;
@@ -155,16 +163,16 @@ public class PlansRepository : IPlansRepository
         var planEntity = await _context.Plans
             .Include(pe => pe.Exercises)
             .AsNoTracking()
-            .FirstOrDefaultAsync(pe => pe.Name == name && pe.CreatedBy == null);
+            .FirstOrDefaultAsync(pe => pe.Category == name && pe.CreatedBy == null);
         
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Name,
+        var plan = PlanModel.Create(planEntity.Id, planEntity.Category,
             planEntity.Exercises
                 .Select(pe => 
                     ExerciseModel.Create(
                             pe.Id, 
                             pe.Name, 
                             pe.MuscleGroup, 
-                            pe.CreatedBy)
+                            pe.IsPreMade)
                         .exerciseModel)
                 .ToList(), 
             planEntity.CreatedBy).planModel;
@@ -191,7 +199,7 @@ public class PlansRepository : IPlansRepository
 
         if (name != null)
         {
-            plan.Name = name;
+            plan.Category = name;
         }
 
         // Создаем список ID новых упражнений из модели

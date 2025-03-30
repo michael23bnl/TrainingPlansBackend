@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TrainingPlans;
@@ -11,9 +12,11 @@ using TrainingPlans;
 namespace TrainingPlans.Migrations
 {
     [DbContext(typeof(PlansDbContext))]
-    partial class PlansDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328120932_changed exercise model")]
+    partial class changedexercisemodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -34,7 +34,7 @@ public class ExercisesRepository : IExercisesRepository
             .AsNoTracking()
             .ToListAsync();
         var exercises = exerciseEntities
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.CreatedBy).exerciseModel)
+            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPreMade).exerciseModel)
             .ToList();
         return exercises;
     }
@@ -42,25 +42,12 @@ public class ExercisesRepository : IExercisesRepository
     public async Task<List<ExerciseModel>> GetAllPrepared()
     {
         var exerciseEntities = await _context.Exercises
-            .Where(e => e.CreatedBy == null)
+            .Where(e => e.IsPreMade == null)
             .AsNoTracking()
             .ToListAsync();
         var exercises = exerciseEntities
             .Select(e => ExerciseModel.Create(e.Id, e.Name, 
-                e.MuscleGroup, e.CreatedBy).exerciseModel)
-            .ToList();
-        return exercises;
-    }
-    
-    public async Task<List<ExerciseModel>> GetAllSelfMade(Guid userId)
-    {
-        var exerciseEntities = await _context.Exercises
-            .Where(e => e.CreatedBy == userId)
-            .AsNoTracking()
-            .ToListAsync();
-        var exercises = exerciseEntities
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, 
-                e.MuscleGroup, e.CreatedBy).exerciseModel)
+                e.MuscleGroup, e.IsPreMade).exerciseModel)
             .ToList();
         return exercises;
     }
@@ -70,7 +57,7 @@ public class ExercisesRepository : IExercisesRepository
         var exerciseEntity = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id);
         var exercise = ExerciseModel
             .Create(exerciseEntity.Id, exerciseEntity.Name, 
-                exerciseEntity.MuscleGroup, exerciseEntity.CreatedBy)
+                exerciseEntity.MuscleGroup, exerciseEntity.IsPreMade)
             .exerciseModel;
         return exercise;
     }
@@ -80,7 +67,7 @@ public class ExercisesRepository : IExercisesRepository
         var exerciseEntity = await _context.Exercises.FirstOrDefaultAsync(e => e.Name == name);
         
         var exercise = ExerciseModel.Create(exerciseEntity.Id, exerciseEntity.Name,
-            exerciseEntity.MuscleGroup, exerciseEntity.CreatedBy).exerciseModel;
+            exerciseEntity.MuscleGroup, exerciseEntity.IsPreMade).exerciseModel;
         
         return exercise;
     }
@@ -91,7 +78,7 @@ public class ExercisesRepository : IExercisesRepository
             .Where(e => e.MuscleGroup == muscleGroup).ToListAsync();
 
         var exercises = exerciseEntities.Select(et =>
-            ExerciseModel.Create(et.Id, et.Name, et.MuscleGroup, et.CreatedBy).exerciseModel).ToList();
+            ExerciseModel.Create(et.Id, et.Name, et.MuscleGroup, et.IsPreMade).exerciseModel).ToList();
         
         return exercises;
     }
@@ -100,12 +87,12 @@ public class ExercisesRepository : IExercisesRepository
     {
         
         var exerciseEntities = await _context.Exercises
-            .Where(e => e.CreatedBy == null)
+            .Where(e => e.IsPreMade == true)
             .AsNoTracking()
             .ToListAsync();
         var exercises = exerciseEntities
             .Select(e => ExerciseModel.Create(e.Id, e.Name, 
-                e.MuscleGroup, e.CreatedBy).exerciseModel)
+                e.MuscleGroup, e.IsPreMade).exerciseModel)
             .ToList();
         
         var categorizedExercises = new Dictionary<string, List<ExerciseModel>>();

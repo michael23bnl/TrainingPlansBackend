@@ -13,25 +13,18 @@ namespace TrainingPlans.Controllers;
 public class ExercisesController : ControllerBase
 {
     private readonly IExercisesRepository _exercisesRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IJwtExtractor _jwtExtractor;
 
-    public ExercisesController(IExercisesRepository exercisesRepository, IHttpContextAccessor httpContextAccessor, IJwtExtractor jwtExtractor)
+    public ExercisesController(IExercisesRepository exercisesRepository)
     {
         _exercisesRepository = exercisesRepository;
-        _httpContextAccessor = httpContextAccessor;
-        _jwtExtractor = jwtExtractor;
     }
+    
     [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreateExercise([FromBody] ExerciseRequest request)
+    public async Task<ActionResult<Guid>> CreatePreparedExercise([FromBody] ExerciseRequest request)
     {
-        
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
 
         var (exercise, response) = ExerciseModel
-            .Create(Guid.NewGuid(), request.name, request.muscleGroup, userId);
+            .Create(Guid.NewGuid(), request.Name, request.MuscleGroup, true);
 
         if (response != "Exercise has been created")
         {
@@ -43,20 +36,44 @@ public class ExercisesController : ControllerBase
     }
     
     [HttpGet("get/all")]
-    public async Task<ActionResult<List<ExerciseModel>>> GetAllExercises(Guid userId)
+    public async Task<ActionResult<List<ExerciseModel>>> GetAllExercises()
     {
-        return Ok(await _exercisesRepository.GetAllSelfMade(userId));
+        return Ok(await _exercisesRepository.GetAllPrepared());
     }
-    [HttpGet("get")]
+    [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<Guid>> GetExercise(Guid exerciseId)
     {
         return Ok(await _exercisesRepository.Get(exerciseId));
     }
     
+    [HttpGet("get/{name}")]
+    public async Task<ExerciseModel> GetExerciseByName(string name)
+    {
+        var exercise = await _exercisesRepository.GetByName(name);
+        
+        return exercise;
+    }
+
+    [HttpGet("get/category/{category}")]
+    public async Task<List<ExerciseModel>> GetExercisesByCategory(string muscleGroup)
+    {
+        var exercises = await _exercisesRepository.GetByCategory(muscleGroup);
+        
+        return exercises;
+    }
+    
+    [HttpGet("get/all/categorized")]
+    public async Task<ActionResult<Dictionary<string, List<ExerciseModel>>>> GetAllExercisesCategorized()
+    {
+        var exercises = await _exercisesRepository.GetAllCategorized();
+        
+        return exercises;
+    }
+    
     [HttpPut("update")]
     public async Task<ActionResult<Guid>> UpdateExercise(Guid exerciseId, [FromBody] ExerciseRequest request)
     {
-        return Ok(await _exercisesRepository.Update(exerciseId, request.name, request.muscleGroup));
+        return Ok(await _exercisesRepository.Update(exerciseId, request.Name, request.MuscleGroup));
     }
     [HttpDelete("delete")]
     public async Task<ActionResult<Guid>> DeleteExercise(Guid exerciseId)
