@@ -118,9 +118,9 @@ public class ElasticService : IElasticService
                     .Should(
                         // Поиск по названию плана
                         q => q.Match(m => m
-                                .Field(p => p.Name)
+                                .Field(p => p.Category)
                                 .Query(query)
-                                .Fuzziness(new Fuzziness("AUTO")) // Новый синтаксис
+                                .Fuzziness(new Fuzziness("AUTO")) 
                         ),
                     
                         // Поиск по названиям упражнений

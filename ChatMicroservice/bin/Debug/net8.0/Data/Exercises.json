@@ -4,913 +4,913 @@
   {
     "Name": "Бабочка",
     "MuscleGroup": "",
-    "IsPrepared": true,
-    "CreatedBy": null
+    "IsPreMade": true
+    
   },
 
   {
-    "Name": "Бицепс с гантелью стоя в наклоне", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с гантелью стоя в наклоне", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
     "Name": "Бицепс с гантелями сидя на наклонной скамье", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Бицепс с гантелями сидя одновременно", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Бицепс с гантелями стоя в упоре на конструкцию тренажёра Смит",
-    "MuscleGroup": "Бицепсы", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "Бицепсы", "IsPreMade": true
   },
 
   {
     "Name": "Бицепс с гантелями стоя поочерёдно", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Бицепс с гантелями стоя", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с гантелями стоя", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Бицепс с грифом в наклоне", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с грифом в наклоне", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
     "Name": "Бицепс с кривой штангой на скамье Скотта", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Бицепс с кривой штангой сидя", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с кривой штангой сидя", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Бицепс с кривой штангой стоя", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с кривой штангой стоя", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
     "Name": "Бицепс с кривой штангой хват сверху", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Бицепс с кривой штангой", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с кривой штангой", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Бицепс с прямой штангой", "MuscleGroup": "Бицепсы", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Бицепс с прямой штангой", "MuscleGroup": "Бицепсы", "IsPreMade": true
+    
   },
 
   {
     "Name": "Бицепс с прямым грифом на скамье Скотта", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Бицепс с прямым грифом с расширителями", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Бицепс с прямым грифом хват сверху", "MuscleGroup": "Бицепсы",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Вис на перекладине", "MuscleGroup": "Вис", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Вис на перекладине", "MuscleGroup": "Вис", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Выпады в Смитте", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Выпады в Смитте", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Выпады с гантелями на месте шаг назад попеременно", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Выпады с гантелями стоя без смены ног", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Выпады с гантелями стоя без смены ног (задняя нога на шплинте)",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Выпады со штангой на месте без смены ног поочерёдно", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Выпады со штангой на месте без смены ног", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Гиперэкстензия горизонтальная со статической задержкой",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Гиперэкстензия горизонтальная", "MuscleGroup": "Нижняя часть спины", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Гиперэкстензия горизонтальная", "MuscleGroup": "Нижняя часть спины", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Гиперэкстензия", "MuscleGroup": "Нижняя часть спины", "IsPrepared": true, "CreatedBy": null
+    "Name": "Гиперэкстензия", "MuscleGroup": "Нижняя часть спины", "IsPreMade": true
   },
 
   {
-    "Name": "Жим гантели", "MuscleGroup": "Грудь", "IsPrepared": true, "CreatedBy": null
+    "Name": "Жим гантели", "MuscleGroup": "Грудь", "IsPreMade": true
   },
 
   {
     "Name": "Жим гантель лёжа на наклонной скамье", "MuscleGroup": "Грудь",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Жим гантель лёжа поочерёдно", "MuscleGroup": "Грудь", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель лёжа поочерёдно", "MuscleGroup": "Грудь", "IsPreMade": true
+    
   },
 
   {
     "Name": "Жим гантель лёжа с отрицательным наклоном", "MuscleGroup": "Грудь",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Жим гантель лёжа", "MuscleGroup": "Грудь", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель лёжа", "MuscleGroup": "Грудь", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим гантель сидя в упоре", "MuscleGroup": "Плечи", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель сидя в упоре", "MuscleGroup": "Плечи", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим гантель сидя", "MuscleGroup": "Плечи", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель сидя", "MuscleGroup": "Плечи", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим гантель стоя попеременно", "MuscleGroup": "Плечи", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель стоя попеременно", "MuscleGroup": "Плечи", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим гантель стоя", "MuscleGroup": "Плечи", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим гантель стоя", "MuscleGroup": "Плечи", "IsPreMade": true
+    
   },
 
-  { "Name": "Жим ногами", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Жим ногами", "MuscleGroup": "", "IsPreMade": true },
 
-  { "Name": "Жим Свенда", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Жим Свенда", "MuscleGroup": "", "IsPreMade": true },
 
   {
-    "Name": "Жим штанги лёжа в Смите", "MuscleGroup": "Грудь", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим штанги лёжа в Смите", "MuscleGroup": "Грудь", "IsPreMade": true
+    
   },
 
   {
     "Name": "Жим штанги лёжа на горизонтальной скамье", "MuscleGroup": "Грудь",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Жим штанги лёжа на наклонной скамье", "MuscleGroup": "Грудь",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Жим штанги лёжа узким хватом", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим штанги лёжа узким хватом", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим штанги лёжа широким хватом", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим штанги лёжа широким хватом", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим штанги лёжа", "MuscleGroup": "Грудь", "IsPrepared": true, "CreatedBy": null
+    "Name": "Жим штанги лёжа", "MuscleGroup": "Грудь", "IsPreMade": true
   },
 
   {
-    "Name": "Жим штанги стоя за голову", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Жим штанги стоя за голову", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Жим штанги стоя", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Жим штанги стоя", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Задняя дельта в Смите", "MuscleGroup": "Задняя дельта", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Задняя дельта в Смите", "MuscleGroup": "Задняя дельта", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Задняя поверхность бедра", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Задняя поверхность бедра", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Икры в тренажере", "MuscleGroup": "Икроножные", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Икры в тренажере", "MuscleGroup": "Икроножные", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Икры с гантелями", "MuscleGroup": "Икроножные", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Икры с гантелями", "MuscleGroup": "Икроножные", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Икры со штангой", "MuscleGroup": "Икроножные", "IsPrepared": true, "CreatedBy": null
+    "Name": "Икры со штангой", "MuscleGroup": "Икроножные", "IsPreMade": true
   },
 
-  { "Name": "Икры", "MuscleGroup": "Икроножные", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Икры", "MuscleGroup": "Икроножные", "IsPreMade": true },
 
   {
-    "Name": "Кисти с грифом сидя", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
-  },
-
-  {
-    "Name": "Кисти штанга хват сверху", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Кисти с грифом сидя", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Мёртвая тяга с гирей", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Кисти штанга хват сверху", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Мёртвая тяга штанга с пола", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Мёртвая тяга с гирей", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Молот с блином", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Мёртвая тяга штанга с пола", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Молот с одной гантелью в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Молот с блином", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Молот сидя поочерёдно", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Молот с одной гантелью в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
+  },
+
+  {
+    "Name": "Молот сидя поочерёдно", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Молот сидя с упором спиной поочередно", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Молот стоя в наклоне одной рукой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Молот стоя в наклоне одной рукой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Молот стоя попеременно", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Молот стоя попеременно", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
-  { "Name": "Молот стоя", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Молот стоя", "MuscleGroup": "", "IsPreMade": true },
 
   {
     "Name": "Мостик на одной ноге с упором на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Мостик с упором туловища на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Обведение гири ногами", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Обведение гири ногами", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Отведение руки в блоке", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отведение руки в блоке", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Отведение руки в кроссовере", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отведение руки в кроссовере", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Отведение руки в тренажере на заднюю дельту", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Отведение руки лёжа с упором на скамью", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Отведение руки лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отведение руки лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Отведение руки назад лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отведение руки назад лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Отжимание на брусьях", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отжимание на брусьях", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Отжимание от лежака широким хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Отжимание от пола с блином", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отжимание от пола с блином", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Отжимание от пола узкий хват локти вдоль тела", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Отжимание от пола", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отжимание от пола", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Отжимания от лежака узким хватом", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Отжимания от лежака узким хватом", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Передняя поверхность бедра одной ногой", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Передняя поверхность бедра", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Передняя поверхность бедра", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Перекладина хват параллельный", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Перекладина хват параллельный", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Перекладина хват сверху средний", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Перекладина хват сверху средний", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Перекладина хват сверху широкий", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Перекладина хват сверху широкий", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Перекладина хват снизу узкий", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Перекладина хват снизу узкий", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Планка боковая", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Планка боковая", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Планка на одной ноге", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Планка на одной ноге", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Планка на прямых руках", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Планка на прямых руках", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
-  { "Name": "Планка", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Планка", "MuscleGroup": "", "IsPreMade": true },
 
   {
-    "Name": "Подъёмы ног", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
-  },
-
-  {
-    "Name": "Пресс велосипед", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Подъёмы ног", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Пресс на брусьях", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Пресс велосипед", "MuscleGroup": "", "IsPreMade": true
+  },
+
+  {
+    "Name": "Пресс на брусьях", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Пресс на коврике (велосипед + скручивания)", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Пресс на коврике (пулловер + подъемы ног)", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Пресс на коврике локоть к коленке наискосок", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Пресс на коврике", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Пресс на коврике", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Пресс на наклонной скамье с поворотами с набивным мячом",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Пресс на наклонной скамье с поворотами", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Пресс на перекладине (косые мышцы)", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Пресс на перекладине", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Пресс на перекладине", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Присед Зерчера", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Присед Зерчера", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Присед с блином с упором в лежак", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Присед с блином с упором в лежак", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Присед с блином", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Присед с блином", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Присед с гантелью под пятки блин", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Присед с гантелью под пятки блин", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Присед с гирей", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Присед с гирей", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Присед со штангой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Присед со штангой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Присед штанга на груди", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Присед штанга на груди", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Присед штанга на плечах (глубокий)", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Приседания в Смите", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Приседания в Смите", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Приседания со штангой на стул", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Приседания со штангой на стул", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Приседания у шведской стенки на одной ноге", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Приседания штанга на плечах", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Приседания штанга на плечах", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Приседания штанга на плечах на стул", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Прогибы в боковой планке на каждую сторону", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Протяжка с гантелью", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Протяжка с гантелью", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Протяжка с кривой штангой (широкий, средний, узкий хваты)",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Протяжка с кривой штангой узким хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Протяжка с кривой штангой широким хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Протяжка с кривой штангой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Протяжка с кривой штангой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Протяжка с прямым грифом средним хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Пуловер с гантелью лёжа поперёк скамьи", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разводка блинов стоя в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка блинов стоя в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Разводка гантель в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гантель в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Разводка гантель в упоре на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель лёжа на наклонной скамье лицом к полу",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель лёжа на наклонной скамье полуамплитуда",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель лёжа на наклонной скамье", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель лёжа полуамплитуда", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель лёжа с упором на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разводка гантель лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гантель лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Разводка гантель сидя полная амплитуда", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разводка гантель сидя", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гантель сидя", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Разводка гантель стоя одной рукой в наклоне и упоре", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Разводка гантель стоя полная амплитуда", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разводка гантель стоя поочерёдно", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гантель стоя поочерёдно", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Разводка гантель стоя", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гантель стоя", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Разводка гирь лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разводка гирь лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Разводка стоя полная амплитуда ладони наружу", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разминка коленок", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Разминка коленок", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Разминка плеч с гантелями (жим-разводка-наклоны)", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Разминка плеч", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Разминка плеч", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
-    "Name": "Румынская тяга на Т-грифе", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Румынская тяга на Т-грифе", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Румынская тяга с кривой штангой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Румынская тяга с кривой штангой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Сведение рук в кроссовере", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Сведение рук в кроссовере", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Сведение рук стоя в тренажере", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Сведение рук стоя в тренажере", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Сведение рук стоя", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Сведение рук стоя", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Сгибание Зотмана", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Сгибание Зотмана", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
-  { "Name": "Скакалка", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null },
+  { "Name": "Скакалка", "MuscleGroup": "", "IsPreMade": true },
 
   {
-    "Name": "Трицепс от грифа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
-  },
-
-  {
-    "Name": "Трицепс от лежака", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс от грифа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Трицепс с гантелью одной рукой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс от лежака", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Трицепс с гантелью стоя", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс с гантелью одной рукой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Трицепс с гантелями лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс с гантелью стоя", "MuscleGroup": "", "IsPreMade": true
+    
+  },
+
+  {
+    "Name": "Трицепс с гантелями лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Трицепс с гантелями стоя в наклоне", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Трицепс с кривой штангой лёжа", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс с кривой штангой лёжа", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Трицепс-блок", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Трицепс-блок", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Трицепс-блок одной рукой обратным хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Трицепс-блок одной рукой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Трицепс-блок одной рукой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Турецкие подтягивания", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Турецкие подтягивания", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Тяга 2-ух гантель в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга 2-ух гантель в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Тяга 2-ух гантель лёжа на наклонной скамье лицом к полу",
-    "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Тяга 2-ух гантель с упором лба на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга 2-ух гантель с упором на лежак", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга 2-ух гантель стоя в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга 2-ух гантель стоя в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Тяга 2-ух гантель стоя одновременно", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга в Смите за спиной на заднюю дельту", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга вертикальная за голову", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга вертикальная за голову", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Тяга вертикальная к груди обратным хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди средним хватом сверху", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди хват обратный", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди хват сверху средний", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди хват сверху широкий", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди хват сверху", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга вертикальная к груди широким хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга вертикальная к груди", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга вертикальная к груди", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Тяга гантели в наклоне", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга гантели в наклоне", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Тяга кривой штанги в наклоне на заднюю дельту", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга на заднюю дельту в Смите", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга на заднюю дельту в Смите", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Тяга прямой штанги на заднюю дельту", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга с гантелями на одной ноге", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга с гантелями на одной ноге", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Тяга Т-грифа параллельным хватом", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга Т-грифа параллельным хватом", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Тяга Т-грифа", "MuscleGroup": "", "IsPrepared": true, "CreatedBy": null
+    "Name": "Тяга Т-грифа", "MuscleGroup": "", "IsPreMade": true
   },
 
   {
     "Name": "Тяга штанги в наклоне обратным хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Тяга штанги к поясу обратным хватом", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Тяга штанги к поясу", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Тяга штанги к поясу", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
     "Name": "Французский жим лёжа с кривой штангой", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
     "Name": "Французский жим стоя с одной гантелью", "MuscleGroup": "",
-    "IsPrepared": true, "CreatedBy": null
+    "IsPreMade": true
   },
 
   {
-    "Name": "Шаги-фермера с гантелями", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Шаги-фермера с гантелями", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Шаги-фермера со штангой", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Шаги-фермера со штангой", "MuscleGroup": "", "IsPreMade": true
+    
   },
 
   {
-    "Name": "Шраги с гантелями", "MuscleGroup": "", "IsPrepared": true,
-    "CreatedBy": null
+    "Name": "Шраги с гантелями", "MuscleGroup": "", "IsPreMade": true
+    
   }
 ]

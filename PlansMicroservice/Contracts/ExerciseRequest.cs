@@ -1,5 +1,5 @@
 namespace TrainingPlans.Contracts;
 
 public record ExerciseRequest(
-    string name,
-    string? muscleGroup);
+    string Name,
+    string? MuscleGroup);

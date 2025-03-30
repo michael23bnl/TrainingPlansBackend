@@ -7,17 +7,17 @@ public class PlanModel
 {
     public Guid Id { get; set; }
     
-    public string? Name { get; set; }
+    public string? Category { get; set; }
     
     public List<ExerciseModel> Exercises {get; set;}
     
     public Guid? CreatedBy { get; set; }
     
 
-    private PlanModel(Guid id, string? name, List<ExerciseModel> exercises, Guid? createdBy)
+    private PlanModel(Guid id, string? category, List<ExerciseModel> exercises, Guid? createdBy)
     {
         Id = id;
-        Name = name;
+        Category = category;
         Exercises = exercises;
         CreatedBy = createdBy;
     }

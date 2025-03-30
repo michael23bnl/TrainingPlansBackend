@@ -62,14 +62,14 @@ public class FavoritePlansController : ControllerBase
 
         var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
         
-        var exercises = request.exercises.Select(e => ExerciseModel.Create(
+        var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
-            e.name,
-            e.muscleGroup,
-            null
+            e.Name,
+            e.MuscleGroup,
+            false
         ).exerciseModel).ToList();
 
-        await _favoritePlansRepository.EditFavorite(userId, planId, request.name, exercises);
+        await _favoritePlansRepository.EditFavorite(userId, planId, request.Category, exercises);
         
         return Ok();
     }

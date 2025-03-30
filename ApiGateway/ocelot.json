@@ -64,6 +64,7 @@
         }
       ]
     },
+    
     {
       "UpstreamPathTemplate": "/gateway/Plans/get/{id}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -142,38 +143,10 @@
       }
     },
 
-
-
     {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/get/all",
+      "UpstreamPathTemplate": "/gateway/Plans/search/{query}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/get/all",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ]
-    },
-    
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/get/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/get/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ]
-    },
-
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/get/{name}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/get/{name}",
+      "DownstreamPathTemplate": "/api/Plans/search/{query}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -185,41 +158,24 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+
+    {
+      "UpstreamPathTemplate": "/gateway/Plans/get/all-prepared",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Plans/get/all-prepared",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
     
     {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/create",
+      "UpstreamPathTemplate": "/gateway/Plans/create-prepared",
       "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/create",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/update/{id}",
-      "UpstreamHttpMethod": [ "PUT" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/update/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedPlans/delete/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ],
-      "DownstreamPathTemplate": "/api/PreparedPlans/delete/{id}",
+      "DownstreamPathTemplate": "/api/Plans/create-prepared",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -360,12 +316,10 @@
       }
     },
 
-
-
     {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/get/all",
+      "UpstreamPathTemplate": "/gateway/Exercises/get/all/categorized",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/get/all",
+      "DownstreamPathTemplate": "/api/Exercises/get/all/categorized",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -379,103 +333,9 @@
     },
 
     {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/get/all/categorized",
+      "UpstreamPathTemplate": "/gateway/Exercises/get/category/{category}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/get/all/categorized",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/get/{name}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/get/{name}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/get/category/{category}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/get/category/{category}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/get/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/get/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/create",
-      "UpstreamHttpMethod": [ "POST" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/create",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/update/{id}",
-      "UpstreamHttpMethod": [ "PUT" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/update/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/PreparedExercises/delete/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ],
-      "DownstreamPathTemplate": "/api/PreparedExercises/delete/{id}",
+      "DownstreamPathTemplate": "/api/Exercises/get/category/{category}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -487,8 +347,6 @@
         "AuthenticationProviderKey": "Bearer"
       }
     }
-    
-    
     
   ],
   "GlobalConfiguration": {

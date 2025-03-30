@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TrainingPlans;
@@ -11,9 +12,11 @@ using TrainingPlans;
 namespace TrainingPlans.Migrations
 {
     [DbContext(typeof(PlansDbContext))]
-    partial class PlansDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328084114_changed planmodel")]
+    partial class changedplanmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +34,8 @@ namespace TrainingPlans.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsPreMade")
-                        .HasColumnType("boolean");
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("MuscleGroup")
                         .HasColumnType("text");

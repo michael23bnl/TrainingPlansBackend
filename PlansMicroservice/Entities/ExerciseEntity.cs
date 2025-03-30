@@ -9,7 +9,8 @@ public class ExerciseEntity
     public string Name { get; set; }
     
     public string? MuscleGroup { get; set; }
-    public Guid? CreatedBy { get; set; } // если created by = null, значит план загружен в систему заранее
+    
+    public bool IsPreMade { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     

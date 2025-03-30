@@ -64,27 +64,36 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             .Where(p => favoritePlans.Contains(p.Id))
             .ToListAsync();
         
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Name,
-            p.Exercises.Select(e => ExerciseModel.Create(e.Id, e.Name, 
-                e.MuscleGroup, e.CreatedBy).exerciseModel).ToList()!, p.CreatedBy).planModel).ToList();
+        var plans = planEntities.Select(p => PlanModel.Create(
+            p.Id, 
+            p.Category,
+            p.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => ExerciseModel.Create(
+                e.Id, 
+                e.Name, 
+                e.MuscleGroup, 
+                e.IsPreMade
+                ).exerciseModel).ToList()!, 
+            p.CreatedBy).planModel).ToList();
 
         return plans;
     }
 
-    public async Task EditFavorite(Guid userId, Guid planId, string? name, List<ExerciseModel> exercises)
+    public async Task EditFavorite(Guid userId, Guid planId, string? category, List<ExerciseModel> exercises)
     {
         
         var plan = new PlanEntity
         {
             Id = Guid.NewGuid(),
-            Name = name,
+            Category = category,
             Exercises = exercises.Select(e => 
                 new ExerciseEntity
                 {
                     Id = e.Id,
                     Name = e.Name,
                     MuscleGroup = e.MuscleGroup,
-                    CreatedBy = null
+                    IsPreMade = false
                 }).ToList(),
             CreatedBy = userId
         };

@@ -143,13 +143,13 @@ public class ChatHub : Hub<IChatClient>
             ChatRoom = chatRoom,
             Message = message,
             SendingDate = DateTime.UtcNow,
-            Plans = plans.Select(p => PlanModel.Create(p.Id, p.Name, 
+            Plans = plans.Select(p => PlanModel.Create(p.Id, p.Category, 
                         p.Exercises.Select(e => ExerciseModel
                             .Create(
                                 e.Id, 
                                 e.Name,
                                 e.MuscleGroup,
-                                e.CreatedBy
+                                e.IsPreMade
                             ).exerciseModel).ToList()!,
                         p.CreatedBy).planModel).ToList()!
         };
