@@ -5,11 +5,9 @@ using TrainingPlans.Extensions;
 using TrainingPlans.Repositories;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Services;
-using UserMicroservice.Extensions;
-using UserMicroservice.Infrastructure;
-using UserMicroservice.Middlewares;
-using UserMicroservice.Repositories.Interfaces;
-
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,11 +26,32 @@ builder.Services.AddSingleton<IElasticService, ElasticService>();
 builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
-builder.Services.AddScoped<IJwtExtractor, JwtExtractor>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpClient();
 
-builder.Services.AddApiAuthentication();
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretkeysecretkeysecretkeysecretkeysecretkeysecretkey"))
+        };
+        options.Events = new JwtBearerEvents {
+            OnMessageReceived = context => {
+                context.Token = context.Request.Cookies["suchatastycookie"];
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 var app = builder.Build();
 
@@ -61,7 +80,7 @@ app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Exe
 app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Plans.json"));
 app.UseRouting();
 app.UseAuthentication();
-app.UseMiddleware<AuthorizationMiddleware>();
+//app.UseMiddleware<AuthorizationMiddleware>();
 app.MapControllers(); 
 app.UseHttpsRedirection();
 app.Run();
