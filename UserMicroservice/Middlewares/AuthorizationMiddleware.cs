@@ -49,7 +49,7 @@ namespace UserMicroservice.Middlewares
             var arr = permissionsList.ToArray();
             
             var requirement = new PermissionRequirement(arr);
-
+            
             var client = _httpClientFactory.CreateClient();
             
             var payload = new

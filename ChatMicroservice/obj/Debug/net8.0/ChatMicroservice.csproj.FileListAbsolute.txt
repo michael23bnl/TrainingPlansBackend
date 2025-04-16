@@ -242,3 +242,4 @@ D:\Projects\.NET\TrainingPlans\Backend\ChatMicroservice\bin\Debug\net8.0\Data\Ex
 D:\Projects\.NET\TrainingPlans\Backend\ChatMicroservice\bin\Debug\net8.0\Data\Plans.json
 D:\Projects\.NET\TrainingPlans\Backend\ChatMicroservice\bin\Debug\net8.0\Elastic.Clients.Elasticsearch.dll
 D:\Projects\.NET\TrainingPlans\Backend\ChatMicroservice\bin\Debug\net8.0\Elastic.Transport.dll
+D:\Projects\.NET\TrainingPlans\Backend\ChatMicroservice\bin\Debug\net8.0\RabbitMQ.Client.dll

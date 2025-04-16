@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice;
@@ -7,6 +9,10 @@ using UserMicroservice.Infrastructure;
 using UserMicroservice.Repositories;
 using UserMicroservice.Repositories.Interfaces;
 using UserMicroservice.Services;
+using UserMicroservice.Services.RabbitMq;
+using UserMicroservice.Services.RabbitMq.Connection;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,7 +61,7 @@ builder.Services.AddDbContext<UserDbContext>(
     options => {
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
@@ -63,6 +69,9 @@ builder.Services.AddScoped<IJwtExtractor, JwtExtractor>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddScoped<IMessageSubscriber, RabbitMqSubscriber>();
+builder.Services.AddHostedService<RabbitMqBackgroundService>();
 
 var app = builder.Build();
 

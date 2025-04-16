@@ -1,9 +1,12 @@
     using System.Text;
+    using ApiGateway.Middlewares;
+    using ApiGateway.Services.RabbitMq;
+    using ApiGateway.Services.RabbitMq.Connection;
     using Ocelot.DependencyInjection;
     using Ocelot.Middleware;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
-    
+
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +48,8 @@
             };
         });
     
-    
+    builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+    builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
 
     var app = builder.Build();
 
@@ -55,7 +59,7 @@
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
-    
+    app.UseMiddleware<AuthMiddleware>();
     app.UseOcelot().Wait();
 
     app.Run();

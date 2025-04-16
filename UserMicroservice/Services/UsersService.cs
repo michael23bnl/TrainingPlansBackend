@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UserMicroservice.Enums;
 using UserMicroservice.Infrastructure;
 using UserMicroservice.Models;
 using UserMicroservice.Repositories.Interfaces;
@@ -50,6 +51,13 @@ public class UsersService : IUsersService {
         }
 
         return false;
+    }
+
+    public async Task<(Guid userId, HashSet<Permission>)> GetPermissions(string token)
+    {
+        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
+        var permissions = await _usersRepository.GetUserPermissions(userId);
+        return (userId, permissions);
     }
 
 }

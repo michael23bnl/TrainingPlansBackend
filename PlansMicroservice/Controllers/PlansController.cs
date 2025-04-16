@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using TrainingPlans.Contracts;
@@ -5,7 +6,7 @@ using TrainingPlans.Models;
 using TrainingPlans.Entities;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Services;
-using UserMicroservice.Repositories.Interfaces;
+
 
 namespace TrainingPlans.Controllers;
 
@@ -16,18 +17,21 @@ public class PlansController : ControllerBase
 {
     private readonly IPlansRepository _plansRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IJwtExtractor _jwtExtractor;
     private readonly IElasticService _elasticService;
 
     public PlansController(IPlansRepository plansRepository, 
         IHttpContextAccessor httpContextAccessor, 
-        IJwtExtractor jwtExtractor,
         IElasticService elasticService)
     {
         _plansRepository = plansRepository;
         _httpContextAccessor = httpContextAccessor;
-        _jwtExtractor = jwtExtractor;
         _elasticService = elasticService;
+    }
+
+    private string? GetUserId()
+    {
+        var userId = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Id"];
+        return userId;
     }
     
     [HttpPost("create-index")]
@@ -103,7 +107,7 @@ public class PlansController : ControllerBase
         return Ok(plans);
     }
     
-    [Permission("Read")]
+    //[Permission("Read")]
     [HttpGet("search/{query}")]
     public async Task<IActionResult> Search(string query)
     {
@@ -119,11 +123,6 @@ public class PlansController : ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult<Guid>> CreatePlan([FromBody] PlanRequest request)
     {
-     
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
-        
         var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
             e.Name,
@@ -131,7 +130,7 @@ public class PlansController : ControllerBase
             false
         ).exerciseModel).ToList();
         
-        var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.Category, exercises, userId);
+        var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.Category, exercises, Guid.Parse(GetUserId()!));
         
         if (response != "Plan has been created")
         {
@@ -166,35 +165,25 @@ public class PlansController : ControllerBase
         return Ok(planId);
     }
     
-    [Permission("Read")]
+    //[Permission("Read")]
     [HttpGet("get/all")]
     public async Task<ActionResult<List<PlanModel>>> GetAllPlans()
     {
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
-        
-        return Ok(await _plansRepository.GetAllSelfMade(userId));
+        var userId = GetUserId();
+        return Ok(await _plansRepository.GetAllSelfMade(Guid.Parse(GetUserId()!)));
     }
     
-    [Permission("Read")]
+    //[Permission("Read")]
     [HttpGet("get/all-prepared")]
     public async Task<ActionResult<List<PlanModel>>> GetAllPreparedPlans() // переработать
     {
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
+        Guid? userId = Guid.Parse(GetUserId());
         
-        if (token != null)
-        {
-            var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
-            return Ok(await _plansRepository.GetAllPrepared(userId));
-
-        }
-        
-        return Ok(await _plansRepository.GetAllPrepared(null));
+        return Ok(await _plansRepository.GetAllPrepared(userId));
 
     }
     
-    [Permission("Create")]
+    //[Permission("Create")]
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<PlanModel>> GetPlan(Guid id)
     {
@@ -202,7 +191,6 @@ public class PlansController : ControllerBase
         if (plan == null)   
         {
             return BadRequest("Plan does not exist");
-            
         }
         
         return Ok(plan);
@@ -211,12 +199,7 @@ public class PlansController : ControllerBase
     [HttpGet("get/{name}")]
     public async Task<ActionResult<PlanModel>> GetPlanByName(string name)
     {
-        
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-
-        var userId = Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token));
-        
-        var plan = await _plansRepository.GetByName(userId, name);
+        var plan = await _plansRepository.GetByName(Guid.Parse(GetUserId()), name);
         if (plan == null)
         {
             return BadRequest($"Plan with name {name} does not exist");
