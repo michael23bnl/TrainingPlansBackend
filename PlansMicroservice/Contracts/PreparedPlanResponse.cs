@@ -3,6 +3,6 @@ namespace TrainingPlans.Contracts;
 
 public record PreparedPlanResponse(
     Guid Id,
-    string? Name,
+    string? Category,
     List<ExerciseResponse> Exercises,
     bool? IsFavorite);

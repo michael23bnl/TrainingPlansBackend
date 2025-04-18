@@ -1,3 +1,4 @@
+using Elastic.Clients.Elasticsearch.MachineLearning;
 using Microsoft.EntityFrameworkCore;
 
 using TrainingPlans.Contracts;
@@ -49,6 +50,37 @@ public class PlansRepository : IPlansRepository
                     .exerciseModel).ToList()!, p.CreatedBy).planModel).ToList();
 
         return plans;
+    }
+
+    public async Task<List<PreparedPlanResponse>> GetAllAvailable(Guid userId)
+    {
+        var availablePlansUnmarked = await _context.Plans
+            .Include(e => e.Exercises)
+            .Where(p => p.CreatedBy == null || p.CreatedBy == userId)
+            .AsNoTracking()
+            .ToListAsync();
+        
+        var favoritePlanIds = (await _context.FavoritePlans
+                .Where(p => p.UserId == userId)
+                .Select(f => f.PlanId)
+                .ToListAsync())
+            .ToHashSet();
+        
+        var availablePlans = availablePlansUnmarked.Select(p => new PreparedPlanResponse(
+            p.Id,
+            p.Category,
+            p.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => new ExerciseResponse(
+                    e.Id,
+                    e.Name,
+                    e.MuscleGroup
+                )).ToList(),
+            favoritePlanIds.Contains(p.Id)
+        )).ToList();
+        
+
+        return availablePlans;
     }
     
     public async Task<List<PlanModel>> GetAllPrepared()
@@ -125,14 +157,30 @@ public class PlansRepository : IPlansRepository
         return plans;
     }
 
-    public async Task<PlanModel> Get(Guid id)
+    public async Task<PreparedPlanResponse> Get(Guid planId, Guid? userId)
     {
         var planEntity = await _context.Plans
             .Include(e => e.Exercises)
-            .FirstOrDefaultAsync(p => p.Id == id);
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Category, planEntity.Exercises
+            .FirstOrDefaultAsync(p => p.Id == planId);
+
+        var isFavorite = await _context.FavoritePlans
+            .AnyAsync(f => f.UserId == userId && f.PlanId == planId);
+        
+        var plan = new PreparedPlanResponse(
+            planEntity.Id,
+            planEntity.Category,
+            planEntity.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .Select(e => new ExerciseResponse(
+                    e.Id,
+                    e.Name,
+                    e.MuscleGroup
+                )).ToList(),
+            isFavorite);
+        
+        /*var plan = PlanModel.Create(planEntity.Id, planEntity.Category, planEntity.Exercises
             .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPreMade).exerciseModel)
-            .ToList()!, planEntity.CreatedBy).planModel;
+            .ToList()!, planEntity.CreatedBy).planModel;*/
         return plan;
     }
     
@@ -180,7 +228,7 @@ public class PlansRepository : IPlansRepository
         return plan;
     }
 
-    public async Task<Guid> Update(Guid id, string? name, List<ExerciseModel> exercises)
+    public async Task<Guid> Update(Guid id, string? category, List<ExerciseModel> exercises)
     {
         // Загружаем план вместе с его упражнениями
         var plan = await _context.Plans
@@ -197,11 +245,8 @@ public class PlansRepository : IPlansRepository
             throw new InvalidOperationException("Plan must contain at least one exercise");
         }
 
-        if (name != null)
-        {
-            plan.Category = name;
-        }
-
+        plan.Category = category;
+        
         // Создаем список ID новых упражнений из модели
         var incomingExerciseIds = exercises.Select(e => e.Id).ToHashSet();
 

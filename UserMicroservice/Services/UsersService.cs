@@ -60,4 +60,9 @@ public class UsersService : IUsersService {
         return (userId, permissions);
     }
 
+    public async Task<string> GetUserName(Guid userId)
+    {
+        return await _usersRepository.GetUserNameById(userId);
+    }
+
 }

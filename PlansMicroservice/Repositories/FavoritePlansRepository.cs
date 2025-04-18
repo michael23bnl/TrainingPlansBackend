@@ -100,8 +100,9 @@ public class FavoritePlansRepository : IFavoritePlansRepository
         
         var favoritePlan = await _context.FavoritePlans
             .FirstOrDefaultAsync(fp => fp.UserId == userId && fp.PlanId == planId);
-
-        favoritePlan.PlanId = plan.Id;
+        
+        _context.FavoritePlans.Remove(favoritePlan);
+        //favoritePlan.PlanId = plan.Id;
         _context.Plans.Add(plan);
         await _context.SaveChangesAsync();
 

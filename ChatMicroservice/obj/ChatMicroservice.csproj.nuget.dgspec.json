@@ -34,9 +34,6 @@
             "projectReferences": {
               "D:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\PlansMicroservice.csproj": {
                 "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\PlansMicroservice.csproj"
-              },
-              "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj": {
-                "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj"
               }
             }
           }

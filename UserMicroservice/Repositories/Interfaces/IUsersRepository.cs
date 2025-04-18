@@ -10,4 +10,6 @@ public interface IUsersRepository {
 
     public Task<HashSet<Permission>> GetUserPermissions(Guid userId);
 
+    public Task<string> GetUserNameById(Guid userId);
+
 }

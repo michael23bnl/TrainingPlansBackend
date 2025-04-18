@@ -60,6 +60,7 @@
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseMiddleware<AuthMiddleware>();
+    app.UseWebSockets();
     app.UseOcelot().Wait();
 
     app.Run();

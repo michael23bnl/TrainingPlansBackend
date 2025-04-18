@@ -27,14 +27,15 @@ public class AuthMiddleware
                 var data = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
                 var userId = data["UserId"].ToString();
                 var permissions = (JsonElement)data["Permissions"];
+                var userName = data["UserName"].ToString();
 
                 var permissionsList = permissions.EnumerateArray()
                     .Select(p => p.GetString())
                     .ToList();
 
                 context.Request.Headers["X-User-Id"] = userId;
+                context.Request.Headers["X-User-Name"] = userName;
                 context.Request.Headers["X-User-Permissions"] = string.Join(",", permissionsList);
-                Console.WriteLine(context);
             }
         }
 

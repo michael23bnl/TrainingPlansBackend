@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ChatMicroservice.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20250215085914_InitialCreate1")]
-    partial class InitialCreate1
+    [Migration("20250417163616_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,6 @@ namespace ChatMicroservice.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SendingDate")

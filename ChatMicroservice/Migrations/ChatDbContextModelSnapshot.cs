@@ -33,7 +33,6 @@ namespace ChatMicroservice.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SendingDate")

@@ -110,6 +110,25 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }
     
+    /*public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanEntity> plans)
+    {
+        var sortedPlans = plans.Select(plan =>
+        {
+            plan.Exercises = plan.Exercises
+                .OrderBy(e => e.CreatedAt)
+                .ToList();
+            return plan;
+        });
+
+        var response = await _client.BulkAsync(
+            b => b.Index(_settings.DefaultIndex)
+                .UpdateMany(sortedPlans,
+                    (pd, p) 
+                        => pd.Doc(p).DocAsUpsert(true)));
+    
+        return response.IsValidResponse;
+    }*/
+    
     public async Task<List<PlanEntity>> SearchPlansAsync(string query)
     {
         var response = await _client.SearchAsync<PlanEntity>(s => s
@@ -138,7 +157,6 @@ public class ElasticService : IElasticService
                 )
                 
             ).Size(10));
-
         return response.Documents.ToList();
     }
 

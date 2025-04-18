@@ -86,6 +86,8 @@ public class RabbitMqSubscriber : IMessageSubscriber
             var token = JsonSerializer.Deserialize<string>(json);
             
             var permissions = await _usersService.GetPermissions(token);
+
+            var userName = await _usersService.GetUserName(permissions.userId);
             
             var options = new JsonSerializerOptions
             {
@@ -94,7 +96,8 @@ public class RabbitMqSubscriber : IMessageSubscriber
             
             json = JsonSerializer.Serialize(new {
                     UserId = permissions.Item1,
-                    Permissions = permissions.Item2
+                    Permissions = permissions.Item2,
+                    UserName = userName
                 },
                 options);
             

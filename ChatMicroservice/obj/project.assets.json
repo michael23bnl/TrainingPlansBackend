@@ -8641,8 +8641,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
       "Microsoft.Extensions.Caching.StackExchangeRedis >= 8.0.11",
       "PlansMicroservice >= 1.0.0",
-      "Swashbuckle.AspNetCore >= 6.4.0",
-      "UserMicroservice >= 1.0.0"
+      "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
   "packageFolders": {
@@ -8679,9 +8678,6 @@
           "projectReferences": {
             "D:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\PlansMicroservice.csproj": {
               "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\PlansMicroservice\\PlansMicroservice.csproj"
-            },
-            "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj": {
-              "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj"
             }
           }
         }

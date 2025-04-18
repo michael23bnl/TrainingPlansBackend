@@ -5,6 +5,7 @@ using ChatMicroservice.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Distributed;
+using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using UserMicroservice.Repositories.Interfaces;
 using UserMicroservice.Infrastructure;
@@ -13,34 +14,37 @@ namespace ChatMicroservice.Hubs;
 
 public interface IChatClient
 {
-    public Task RecieveMessage(string userName, string message);
+    public Task ReceiveMessage(string userName, string message, DateTime date);
     
-    public Task RecieveMessage(string userName, List<PlanModel> plans, string? message);
+    public Task ReceiveMessage(string userName, string? message, 
+        List<PreparedPlanResponse>? plans, DateTime sendingDate);
 }
-
 public class ChatHub : Hub<IChatClient>
 {
 
     private readonly IDistributedCache _cache;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IJwtExtractor _jwtExtractor;
     private readonly IChatRepository _chatRepository;
 
     public ChatHub(IDistributedCache cache, 
         IHttpContextAccessor httpContextAccessor, 
-        IJwtExtractor jwtExtractor,
         IChatRepository chatRepository)
     {
         _cache = cache;
         _httpContextAccessor = httpContextAccessor;
-        _jwtExtractor = jwtExtractor;
         _chatRepository = chatRepository;
     }
     
-    private string GetUserId()
+    private string? GetUserId()
     {
-        var token = _httpContextAccessor.HttpContext?.Request.Cookies["suchatastycookie"];
-        return Guid.Parse(_jwtExtractor.ExtractUserIdFromJwtToken(token)).ToString();
+        var userId = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Id"].ToString();
+        return userId;
+    }
+    
+    private string? GetUserName()
+    {
+        var userName = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Name"].ToString();
+        return userName;
     }
     
     public async Task<IResult> JoinChat(UserConnection connection)
@@ -58,10 +62,10 @@ public class ChatHub : Hub<IChatClient>
             roomList.Add(connection.ChatRoom);
             await _cache.SetStringAsync(userId, JsonSerializer.Serialize(roomList));
             await Groups.AddToGroupAsync(Context.ConnectionId, connection.ChatRoom);
-            string message = $"{connection.UserName} присоединился к чату {connection.ChatRoom}";
+            string message = $"{GetUserName()} присоединился к чату";
             await Clients
                 .Group(connection.ChatRoom)
-                .RecieveMessage("System", message);
+                .ReceiveMessage("System", message, DateTime.UtcNow);
             var chatMessage = new ChatMessage
             {
                 Id = Guid.NewGuid(),
@@ -69,7 +73,7 @@ public class ChatHub : Hub<IChatClient>
                 UserName = "System",
                 ChatRoom = connection.ChatRoom,
                 Message = message,
-                SendingDate = DateTime.UtcNow
+                SendingDate = DateTime.UtcNow,
             };
             await _chatRepository.SaveMessageAsync(chatMessage);
             return Results.Ok();
@@ -90,7 +94,7 @@ public class ChatHub : Hub<IChatClient>
         ).ToList();
     }
 
-    public async Task SendMessage(string message, string chatRoom)
+    public async Task SendMessage(string? message, List<PreparedPlanResponse>? plans, string chatRoom)
     {
         var userId = GetUserId();
 
@@ -99,65 +103,37 @@ public class ChatHub : Hub<IChatClient>
             ? JsonSerializer.Deserialize<List<string>>(chatRooms)
             : new List<string>();
 
-        if (!roomList.Contains(chatRoom))
-        {
-            throw new Exception("User is not a member of this chat room.");
-        }
-        
-        var chatMessage = new ChatMessage
-        {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            UserName = Context.UserIdentifier ?? "Unknown User",
-            ChatRoom = chatRoom,
-            Message = message,
-            SendingDate = DateTime.UtcNow
-        };
-        
-        await _chatRepository.SaveMessageAsync(chatMessage);
-        await Clients
-            .Group(chatRoom)
-            .RecieveMessage(Context.UserIdentifier ?? "Unknown User", message);
-
-    }
-
-    public async Task SendPlan(List<PlanModel> plans, string? message, string chatRoom)
-    {
-        var userId = GetUserId();
-
-        var chatRooms = await _cache.GetStringAsync(userId);
-        var roomList = chatRooms != null
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms)
-            : new List<string>();
+        var a = new PreparedPlanResponse(Guid.NewGuid(), "", new List<ExerciseResponse>(), false);
 
         if (!roomList.Contains(chatRoom))
         {
             throw new Exception("User is not a member of this chat room.");
         }
-        
+
         var chatMessage = new ChatPlanMessage
         {
             Id = Guid.NewGuid(),
             UserId = userId,
-            UserName = Context.UserIdentifier ?? "Unknown User",
+            UserName = GetUserName() ?? "Unknown User",
             ChatRoom = chatRoom,
             Message = message,
             SendingDate = DateTime.UtcNow,
-            Plans = plans.Select(p => PlanModel.Create(p.Id, p.Category, 
-                        p.Exercises.Select(e => ExerciseModel
-                            .Create(
-                                e.Id, 
-                                e.Name,
-                                e.MuscleGroup,
-                                e.IsPreMade
-                            ).exerciseModel).ToList()!,
-                        p.CreatedBy).planModel).ToList()!
+            Plans = plans.Select(p => new PreparedPlanResponse(
+                p.Id,
+                p.Category,
+                p.Exercises.Select(e => new ExerciseResponse(
+                    e.Id,
+                    e.Name,
+                    e.MuscleGroup
+                )).ToList(),
+                p.IsFavorite
+            )).ToList(),
         };
         
         await _chatRepository.SaveMessageAsync(chatMessage);
         await Clients
             .Group(chatRoom)
-            .RecieveMessage(Context.UserIdentifier ?? "Unknown User", plans, message);
+            .ReceiveMessage(GetUserName() ?? "Unknown User", message, plans, chatMessage.SendingDate);
     }
 
     public async Task LeaveChat(string chatRoom)
@@ -176,7 +152,7 @@ public class ChatHub : Hub<IChatClient>
             await _cache.SetStringAsync(userId, JsonSerializer.Serialize(roomList));
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatRoom);
             await Clients.Groups(chatRoom)
-                .RecieveMessage("Пользователь", $"покинул чат {chatRoom}");
+                .ReceiveMessage(GetUserName() ?? "Unknown User", $"покинул чат {chatRoom}", DateTime.UtcNow);
         }
     }
 
