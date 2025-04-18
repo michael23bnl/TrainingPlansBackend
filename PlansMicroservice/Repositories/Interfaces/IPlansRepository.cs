@@ -15,12 +15,16 @@ public interface IPlansRepository
     public Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId);
     
     public Task<List<PlanModel>> GetAllSelfMade(Guid userId);
-
-    public Task<PlanModel> Get(Guid id);
+    
+    public Task<List<PreparedPlanResponse>> GetAllAvailable(Guid userId);
+    
+    public Task<PreparedPlanResponse> Get(Guid planId, Guid? userId);
 
     public Task<PlanModel> GetByName(Guid userId, string name);
     
     public Task<PlanModel> GetPreparedByName(string name);
+    
+    
 
 
     public Task<Guid> Update(Guid id, string? name, List<ExerciseModel> exercises);

@@ -46,6 +46,15 @@ public class UsersRepository : IUsersRepository {
 
     }
 
+    public async Task<string> GetUserNameById(Guid userId)
+    {
+        var userName = await _context.Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.UserName)
+            .FirstOrDefaultAsync();
+        return userName;
+    }
+
     public async Task<HashSet<Permission>> GetUserPermissions(Guid userId) {
         var roles = await _context.Users
             .AsNoTracking()

@@ -165,12 +165,18 @@ public class PlansController : ControllerBase
         return Ok(planId);
     }
     
-    //[Permission("Read")]
+    [Permission("Create")]
     [HttpGet("get/all")]
     public async Task<ActionResult<List<PlanModel>>> GetAllPlans()
     {
         var userId = GetUserId();
         return Ok(await _plansRepository.GetAllSelfMade(Guid.Parse(GetUserId()!)));
+    }
+    [Permission("Create")]
+    [HttpGet("get/all-available")]
+    public async Task<ActionResult<List<PlanModel>>> GetAllAvailablePlans()
+    {
+        return Ok(await _plansRepository.GetAllAvailable(Guid.Parse(GetUserId()!)));
     }
     
     //[Permission("Read")]
@@ -185,9 +191,10 @@ public class PlansController : ControllerBase
     
     //[Permission("Create")]
     [HttpGet("get/{id:guid}")]
-    public async Task<ActionResult<PlanModel>> GetPlan(Guid id)
+    public async Task<ActionResult<PreparedPlanResponse>> GetPlan(Guid id)
     {
-        var plan = await _plansRepository.Get(id);
+        var userId = GetUserId();
+        var plan = await _plansRepository.Get(id, Guid.Parse(userId));
         if (plan == null)   
         {
             return BadRequest("Plan does not exist");

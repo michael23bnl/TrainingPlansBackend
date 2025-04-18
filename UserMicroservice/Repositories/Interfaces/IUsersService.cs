@@ -11,4 +11,6 @@ public interface IUsersService {
     public Task<bool> CheckPermissions(string token, PermissionRequirement requirement);
 
     public Task<(Guid userId, HashSet<Permission>)> GetPermissions(string token);
+    
+    public Task<string> GetUserName(Guid userId);
 }
