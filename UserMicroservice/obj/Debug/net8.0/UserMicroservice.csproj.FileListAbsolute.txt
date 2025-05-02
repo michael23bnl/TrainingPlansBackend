@@ -588,7 +588,4 @@ D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\refint\
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMicroservice.pdb
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMicroservice.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\ref\UserMicroservice.dll
-D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\UserMicroservice.staticwebassets.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\staticwebassets\msbuild.UserMicroservice.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\RabbitMQ.Client.dll

@@ -35,10 +35,8 @@ public class ElasticService : IElasticService
                 {
                     Properties = new Properties(new Dictionary<PropertyName, IProperty>
                     {
-                        // ID плана
                         { "id", new KeywordProperty() { IgnoreAbove = 256 } },
 
-                        // название плана
                         {
                             "name", new TextProperty()
                             {
@@ -49,19 +47,15 @@ public class ElasticService : IElasticService
                             }
                         },
 
-                        // ID создателя
                         { "createdBy", new KeywordProperty() { IgnoreAbove = 256 } },
 
-                        // упражнения (вложенный тип)
                         {
-                            "exercises", new NestedProperty()
+                            "exercises", new ObjectProperty()
                             {
                                 Properties = new Properties(new Dictionary<PropertyName, IProperty>
                                 {
-                                    // ID упражнения
                                     { "id", new KeywordProperty() { IgnoreAbove = 256 } },
 
-                                    // название упражнения
                                     {
                                         "name", new TextProperty()
                                         {
@@ -72,13 +66,10 @@ public class ElasticService : IElasticService
                                         }
                                     },
 
-                                    // группа мышц
                                     { "muscleGroup", new KeywordProperty() { IgnoreAbove = 256 } },
 
-                                    // ID создателя упражнения
                                     { "createdBy", new KeywordProperty() { IgnoreAbove = 256 } },
 
-                                    // дата создания
                                     { "createdAt", new DateProperty() }
                                 })
                             }
@@ -129,7 +120,7 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }*/
     
-    public async Task<List<PlanEntity>> SearchPlansAsync(string query)
+    /*public async Task<List<PlanEntity>> SearchPlansAsync(string query)
     {
         var response = await _client.SearchAsync<PlanEntity>(s => s
             .Query(q => q
@@ -157,6 +148,102 @@ public class ElasticService : IElasticService
                 )
                 
             ).Size(10));
+        return response.Documents.ToList();
+    }*/
+    
+    public async Task<List<PlanEntity>> SearchPlansAsync(string query)
+    {
+        var response = await _client.SearchAsync<PlanEntity>(s => s
+            .Query(q => q
+                .Bool(b => b
+                    .Should(
+                        q => q.Match(m => m
+                            .Field("exercises.name")
+                            .Query(query)
+                            .Fuzziness(new Fuzziness("AUTO"))
+                        ),
+                        q => q.Match(m => m
+                            .Field(f => f.Category)
+                            .Query(query)
+                            .Fuzziness(new Fuzziness("AUTO"))
+                        )
+                    )
+                )
+            )
+            .Size(10)
+        );
+
+        return response.Documents.ToList();
+    }
+    
+    public async Task<List<PlanEntity>> SearchThroughMyPlans(string query, Guid userId)
+    {
+        var response = await _client.SearchAsync<PlanEntity>(s => s
+            .Query(q => q
+                .Bool(b => b
+                    .Must(
+                        q=> q.Term(t => t
+                            .Field(f => f.CreatedBy).Value(userId.ToString())),
+                        q => q.Bool(b2 => b2
+                            .Should(
+                                // Поиск по названиям упражнений
+                                q => q.Match(m => m
+                                    .Field("exercises.name")
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))),
+                                // Поиск по категории
+                                q => q.Match(m => m
+                                    .Field(f => f.Category)
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            .Size(10)
+        );
+
+        return response.Documents.ToList();
+    }
+
+    public async Task<List<PlanEntity>> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds)
+    {
+
+        if (favoritePlanIds == null || !favoritePlanIds.Any())
+        {
+            return new List<PlanEntity>();
+        }
+
+        var response = await _client.SearchAsync<PlanEntity>(s => s
+            .Query(q => q
+                .Bool(b => b
+                    .Must(
+                        
+                        q => q.Ids(new IdsQuery
+                        {
+                            Values = new Ids(favoritePlanIds.Select(id => Id.From(id.ToString())))
+                        }),
+                        q => q.Bool(b2 => b2
+                            .Should(
+                                q => q.Match(m => m
+                                    .Field("exercises.name")
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))),
+                                q => q.Match(m => m
+                                    .Field(f => f.Category)
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            .Size(10)
+        );
+
         return response.Documents.ToList();
     }
 

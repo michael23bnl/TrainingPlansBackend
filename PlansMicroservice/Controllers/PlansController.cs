@@ -70,8 +70,8 @@ public class PlansController : ControllerBase
                 {
                     Id = e.Id,
                     Name = e.Name,
-                    MuscleGroup = e.MuscleGroup,
-                    IsPreMade = e.IsPreMade
+                    MuscleGroup = e.MuscleGroup
+                    //IsPreMade = e.IsPreMade
                 }).ToList(),
                 CreatedBy = p.CreatedBy
             }).ToList();
@@ -120,14 +120,44 @@ public class PlansController : ControllerBase
         return Ok(results);
     }
     
+    [HttpGet("search/my-plans/{query}")]
+    public async Task<IActionResult> SearchThroughMyPlans(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Search query cannot be empty");
+        }
+        
+        Guid userId = Guid.Parse(GetUserId());
+
+        var results = await _elasticService.SearchThroughMyPlans(query, userId);
+        return Ok(results);
+    }
+    
+    /*[HttpGet("search/favorites/{query}")]
+    public async Task<IActionResult> SearchThroughFavorites(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Search query cannot be empty");
+        }
+        
+        Guid userId = Guid.Parse(GetUserId());
+        
+        var favoritePlanIds = await _fa
+
+        var results = await _elasticService.SearchThroughFavoritePlans(query);
+        return Ok(results);
+    }*/
+    
     [HttpPost("create")]
     public async Task<ActionResult<Guid>> CreatePlan([FromBody] PlanRequest request)
     {
         var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
             e.Name,
-            e.MuscleGroup,
-            false
+            e.MuscleGroup
+            //false
         ).exerciseModel).ToList();
         
         var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.Category, exercises, Guid.Parse(GetUserId()!));
@@ -139,6 +169,23 @@ public class PlansController : ControllerBase
 
         var planId = await _plansRepository.Create(plan);
 
+        var planEntity = new PlanEntity
+        {
+            Id = planId,
+            Category = plan.Category,
+            Exercises = plan.Exercises.Select(p => new ExerciseEntity
+            {
+                Id = p.Id,
+                Name = p.Name,
+                MuscleGroup = p.MuscleGroup
+            }).ToList(),
+            CreatedBy = plan.CreatedBy,
+        };
+        
+        var result = await _elasticService.AddOrUpdateAsync(planEntity);
+        return result ? Ok("План успешно добавлен") : 
+            StatusCode(500, "Ошибка при добавлении плана");
+
         return Ok(planId);
     }
     
@@ -149,8 +196,8 @@ public class PlansController : ControllerBase
         var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
             e.Name,
-            e.MuscleGroup,
-            true
+            e.MuscleGroup
+            //true
         ).exerciseModel).ToList();
         
         var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.Category, exercises, null);
@@ -221,8 +268,8 @@ public class PlansController : ControllerBase
         var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
             e.Name,
-            e.MuscleGroup,
-            false
+            e.MuscleGroup
+            //false
         ).exerciseModel).ToList();
         var planId = await _plansRepository.Update(id, request.Category, exercises);
         return Ok(planId);

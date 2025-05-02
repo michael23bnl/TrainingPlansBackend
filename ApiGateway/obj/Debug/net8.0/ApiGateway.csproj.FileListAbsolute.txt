@@ -192,7 +192,4 @@ D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\refint\ApiGat
 D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\ApiGateway.pdb
 D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\ApiGateway.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\ref\ApiGateway.dll
-D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\ApiGateway.staticwebassets.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\obj\Debug\net8.0\staticwebassets\msbuild.ApiGateway.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 D:\Projects\.NET\TrainingPlans\Backend\ApiGateway\bin\Debug\net8.0\RabbitMQ.Client.dll

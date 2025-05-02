@@ -51,8 +51,8 @@ public class FavoritePlansController : ControllerBase
         var exercises = request.Exercises.Select(e => ExerciseModel.Create(
             Guid.NewGuid(), 
             e.Name,
-            e.MuscleGroup,
-            false
+            e.MuscleGroup
+            //false
         ).exerciseModel).ToList();
 
         await _favoritePlansRepository.EditFavorite(Guid.Parse(GetUserId()!), planId, request.Category, exercises);

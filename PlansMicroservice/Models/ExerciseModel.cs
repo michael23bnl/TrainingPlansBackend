@@ -11,24 +11,24 @@ public class ExerciseModel
     
     public string MuscleGroup { get; set; }
     
-    public bool IsPreMade { get; set; }
+    //public bool IsPreMade { get; set; }
     
     [JsonConstructor]
-    private ExerciseModel(Guid id, string name, string muscleGroup, bool isPreMade)
+    private ExerciseModel(Guid id, string name, string muscleGroup)
     {
         Id = id;
         Name = name;
         MuscleGroup = muscleGroup;
-        IsPreMade = isPreMade;
+        //IsPreMade = isPreMade;
     }
 
     public static (ExerciseModel? exerciseModel, string response) Create(Guid id, string name, 
-        string muscleGroup, bool isPreMade)
+        string muscleGroup)
     {
         var response = "Exercise must have a name";
         if (!string.IsNullOrEmpty(name))
         {
-            var exerciseModel = new ExerciseModel(id, name, muscleGroup, isPreMade);
+            var exerciseModel = new ExerciseModel(id, name, muscleGroup);
             response = "Exercise has been created";
             return (exerciseModel, response);
         }
