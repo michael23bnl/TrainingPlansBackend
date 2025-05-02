@@ -1,5 +1,4 @@
-using TrainingPlans.Contracts;
-using TrainingPlans.Models;
+using ChatMicroservice.Contracts;
 
 namespace ChatMicroservice.Models;
 
@@ -7,13 +6,9 @@ public class ChatMessage
 {
     public Guid Id { get; set; }
     public string? UserId { get; set; } // null нужен для сохранения сообщений от системы
-    public string UserName { get; set; } = null!;
-    public string ChatRoom { get; set; } = null!;
-    public string? Message { get; set; } = null;
+    public string UserName { get; set; }
+    public string ChatRoom { get; set; }
+    public string? Message { get; set; } // сообщение может не содержать текста
+    public List<Plan>? Plans { get; set; } // сообщение может не содержать планов
     public DateTime SendingDate { get; set; }
-}
-
-public class ChatPlanMessage : ChatMessage
-{
-    public List<PreparedPlanResponse>? Plans { get; set; } = new List<PreparedPlanResponse>();
 }

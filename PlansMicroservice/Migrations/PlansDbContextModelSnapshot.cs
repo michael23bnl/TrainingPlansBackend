@@ -28,12 +28,6 @@ namespace TrainingPlans.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsPreMade")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("MuscleGroup")
                         .HasColumnType("text");
 
@@ -41,12 +35,7 @@ namespace TrainingPlans.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PlanEntityId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanEntityId");
 
                     b.ToTable("Exercises");
                 });
@@ -80,21 +69,13 @@ namespace TrainingPlans.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Exercises")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.HasKey("Id");
 
                     b.ToTable("Plans");
-                });
-
-            modelBuilder.Entity("TrainingPlans.Entities.ExerciseEntity", b =>
-                {
-                    b.HasOne("TrainingPlans.Entities.PlanEntity", null)
-                        .WithMany("Exercises")
-                        .HasForeignKey("PlanEntityId");
-                });
-
-            modelBuilder.Entity("TrainingPlans.Entities.PlanEntity", b =>
-                {
-                    b.Navigation("Exercises");
                 });
 #pragma warning restore 612, 618
         }

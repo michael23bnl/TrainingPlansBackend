@@ -160,6 +160,38 @@
     },
 
     {
+      "UpstreamPathTemplate": "/gateway/Plans/search/favorites/{query}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Plans/search/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/Plans/search/my-plans/{query}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Plans/search/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
       "UpstreamPathTemplate": "/gateway/Plans/get/all-prepared",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/api/Plans/get/all-prepared",
@@ -244,6 +276,19 @@
       "UpstreamPathTemplate": "/gateway/FavoritePlans/edit/{planId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamPathTemplate": "/api/FavoritePlans/edit/{planId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/Statistics/get",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Statistics/get",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

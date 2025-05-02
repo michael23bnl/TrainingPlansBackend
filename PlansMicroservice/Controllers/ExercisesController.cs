@@ -23,7 +23,7 @@ public class ExercisesController : ControllerBase
     {
 
         var (exercise, response) = ExerciseModel
-            .Create(Guid.NewGuid(), request.Name, request.MuscleGroup, true);
+            .Create(Guid.NewGuid(), request.Name, request.MuscleGroup);
 
         if (response != "Exercise has been created")
         {

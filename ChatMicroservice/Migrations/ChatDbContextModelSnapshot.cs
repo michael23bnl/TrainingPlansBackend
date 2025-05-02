@@ -35,6 +35,9 @@ namespace ChatMicroservice.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("text");
 
+                    b.Property<string>("Plans")
+                        .HasColumnType("jsonb");
+
                     b.Property<DateTime>("SendingDate")
                         .HasColumnType("timestamp with time zone");
 

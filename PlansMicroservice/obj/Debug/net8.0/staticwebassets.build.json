@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "mpBjd3bQ9NwWYWE8wwQHo4UlaLapXRuT9MdvE+9rzUA=",
+  "Hash": "kaUcaL7z+jE0xK/Of0l2EBErXR+BxBjU8kENdo9pd18=",
   "Source": "PlansMicroservice",
   "BasePath": "_content/PlansMicroservice",
   "Mode": "Default",
@@ -11,14 +11,13 @@
       "Version": 2,
       "Source": "UserMicroservice",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }

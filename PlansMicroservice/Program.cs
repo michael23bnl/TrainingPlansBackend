@@ -8,6 +8,7 @@ using TrainingPlans.Services;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using TrainingPlans.Services.Statistics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<PlansDbContext>(
 
 builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
 builder.Services.AddSingleton<IElasticService, ElasticService>();
-
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();

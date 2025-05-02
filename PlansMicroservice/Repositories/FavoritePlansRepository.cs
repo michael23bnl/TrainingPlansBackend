@@ -60,7 +60,7 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             .Select(f => f.PlanId);
 
         var planEntities = await _context.Plans
-            .Include(p => p.Exercises)
+            //.Include(p => p.Exercises)
             .Where(p => favoritePlans.Contains(p.Id))
             .ToListAsync();
         
@@ -68,12 +68,12 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             p.Id, 
             p.Category,
             p.Exercises
-                .OrderBy(e => e.CreatedAt)
+                //.OrderBy(e => e.CreatedAt)
                 .Select(e => ExerciseModel.Create(
                 e.Id, 
                 e.Name, 
-                e.MuscleGroup, 
-                e.IsPreMade
+                e.MuscleGroup
+                //e.IsPreMade
                 ).exerciseModel).ToList()!, 
             p.CreatedBy).planModel).ToList();
 
@@ -93,7 +93,7 @@ public class FavoritePlansRepository : IFavoritePlansRepository
                     Id = e.Id,
                     Name = e.Name,
                     MuscleGroup = e.MuscleGroup,
-                    IsPreMade = false
+                    //IsPreMade = false
                 }).ToList(),
             CreatedBy = userId
         };

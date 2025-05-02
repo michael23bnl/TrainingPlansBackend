@@ -1,7 +1,6 @@
 using ChatMicroservice.Models;
 using ChatMicroservice.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using TrainingPlans;
 
 namespace ChatMicroservice.Repositories;
 

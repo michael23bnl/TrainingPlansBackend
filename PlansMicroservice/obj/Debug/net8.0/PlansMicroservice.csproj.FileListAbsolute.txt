@@ -409,9 +409,6 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\refint
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\PlansMicroservice.pdb
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\PlansMicroservice.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\ref\PlansMicroservice.dll
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\PlansMicroservice.staticwebassets.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\staticwebassets\msbuild.PlansMicroservice.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Data\Exercises.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Data\Plans.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Elastic.Clients.Elasticsearch.dll
@@ -420,7 +417,6 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Micros
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.Design.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.deps.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.runtimeconfig.json
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.staticwebassets.endpoints.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.exe
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Newtonsoft.Json.dll

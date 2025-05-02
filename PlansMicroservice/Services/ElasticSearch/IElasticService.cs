@@ -19,4 +19,8 @@ public interface IElasticService
     Task<long?> RemoveAll();
 
     Task<List<PlanEntity>> SearchPlansAsync(string query);
+
+    Task<List<PlanEntity>> SearchThroughMyPlans(string query, Guid userId);
+
+    Task<List<PlanEntity>> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds);
 }
