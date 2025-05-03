@@ -10,18 +10,15 @@ namespace TrainingPlans.Controllers;
 
 public class StatisticsController : ControllerBase
 {
-    private readonly IPlansRepository _plansRepository;
-    private readonly IFavoritePlansRepository _favoritePlansRepository;
+    private readonly ICompletedPlansRepository _completedPlansRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IStatisticsService _statisticsService;
 
-    public StatisticsController(IPlansRepository plansRepository,
-        IFavoritePlansRepository favoritePlansRepository,
+    public StatisticsController(ICompletedPlansRepository completedPlansRepository,
         IHttpContextAccessor httpContextAccessor,
         IStatisticsService statisticsService)
     {
-        _plansRepository = plansRepository;
-        _favoritePlansRepository = favoritePlansRepository;
+        _completedPlansRepository = completedPlansRepository;
         _httpContextAccessor = httpContextAccessor;
         _statisticsService = statisticsService;
     }
@@ -37,10 +34,7 @@ public class StatisticsController : ControllerBase
     public async Task<ConcurrentDictionary<string, int>> GetStatistics()
     {
         var userId = Guid.Parse(GetUserId()!);
-        var myPlans = await _plansRepository.GetAllSelfMade(userId);
-        var favoritePlans = await _favoritePlansRepository.GetFavorites(userId);
-        
-        var plans = myPlans.Concat(favoritePlans).ToList();
+        var plans = await _completedPlansRepository.GetCompletedPlans(userId);
         
         var statistics = _statisticsService.GetStatistics(plans);
 

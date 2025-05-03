@@ -215,6 +215,8 @@ public class ElasticService : IElasticService
         {
             return new List<PlanEntity>();
         }
+        
+        var ids = favoritePlanIds.Select(id => id.ToString("D")).ToList();
 
         var response = await _client.SearchAsync<PlanEntity>(s => s
             .Query(q => q
@@ -223,7 +225,48 @@ public class ElasticService : IElasticService
                         
                         q => q.Ids(new IdsQuery
                         {
-                            Values = new Ids(favoritePlanIds.Select(id => Id.From(id.ToString())))
+                            Values = new Ids(favoritePlanIds.Select(id => id.ToString()))
+                        }),
+                        q => q.Bool(b2 => b2
+                            .Should(
+                                q => q.Match(m => m
+                                    .Field("exercises.name")
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))),
+                                q => q.Match(m => m
+                                    .Field(f => f.Category)
+                                    .Query(query)
+                                    .Fuzziness(new Fuzziness("AUTO"))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            .Size(10)
+        );
+
+        return response.Documents.ToList();
+    }
+    
+    public async Task<List<PlanEntity>> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds)
+    {
+
+        if (completedPlanIds == null || !completedPlanIds.Any())
+        {
+            return new List<PlanEntity>();
+        }
+        
+        var ids = completedPlanIds.Select(id => id.ToString("D")).ToList();
+
+        var response = await _client.SearchAsync<PlanEntity>(s => s
+            .Query(q => q
+                .Bool(b => b
+                    .Must(
+                        
+                        q => q.Ids(new IdsQuery
+                        {
+                            Values = new Ids(completedPlanIds.Select(id => id.ToString()))
                         }),
                         q => q.Bool(b2 => b2
                             .Should(

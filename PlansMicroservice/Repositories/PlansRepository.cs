@@ -52,6 +52,24 @@ public class PlansRepository : IPlansRepository
         return plans;
     }
 
+    public async Task<List<Guid>> GetFavoritePlanIds(Guid userId)
+    {
+        var favoritePlanIds = _context.FavoritePlans
+            .Where(p => p.UserId == userId)
+            .Select(p => p.PlanId).ToList();
+        
+        return favoritePlanIds;
+    }
+
+    public async Task<List<Guid>> GetCompletedPlanIds(Guid userId)
+    {
+        var completedPlanIds = _context.CompletedPlans.Where(p => p.UserId == userId)
+            .Where(p => p.UserId == userId)
+            .Select(p => p.PlanId).ToList();
+        
+        return completedPlanIds;
+    }
+
     public async Task<List<PreparedPlanResponse>> GetAllAvailable(Guid userId)
     {
         var availablePlansUnmarked = await _context.Plans
@@ -108,15 +126,15 @@ public class PlansRepository : IPlansRepository
     public async Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId)
     {
         var planEntities = await _context.Plans
-            //.Include(e => e.Exercises)
             .Where(p => p.CreatedBy == null)
             .AsNoTracking()
             .ToListAsync();
 
-        var favoritePlans = _context.FavoritePlans
+        var favoritePlanIds = _context.FavoritePlans
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId)
             .ToList();
+        
         var plans = planEntities.Select(p => new PreparedPlanResponse(
             p.Id,
             p.Category,
@@ -127,32 +145,36 @@ public class PlansRepository : IPlansRepository
                 e.Name,
                 e.MuscleGroup
             )).ToList(),
-            favoritePlans.Contains(p.Id)
+            favoritePlanIds.Contains(p.Id)
         )).ToList();
 
         return plans;
     }
     
-    public async Task<List<PlanModel>> GetAllSelfMade(Guid userId)
+    public async Task<List<CompletedPlanResponse>> GetAllSelfMade(Guid userId)
     {
         var planEntities = await _context.Plans
-            //.Include(e => e.Exercises)
             .Where(p => p.CreatedBy == userId)
             .AsNoTracking()
             .ToListAsync();
-        var plans = planEntities.Select(p => PlanModel.Create(
-            p.Id, 
+        
+        var completedPlanIds = _context.CompletedPlans
+            .Where(f => f.UserId == userId)
+            .Select(f => f.PlanId)
+            .ToList();
+        
+        var plans = planEntities.Select(p => new CompletedPlanResponse(
+            p.Id,
             p.Category,
             p.Exercises
                 //.OrderBy(e => e.CreatedAt)
-                .Select(e => ExerciseModel.Create(
-                    e.Id, 
-                    e.Name, 
+                .Select(e => new ExerciseResponse(
+                    e.Id,
+                    e.Name,
                     e.MuscleGroup
-                    //e.IsPreMade
-                    ).exerciseModel
-                ).ToList()!, 
-            p.CreatedBy).planModel).ToList();
+                )).ToList(),
+            completedPlanIds.Contains(p.Id)
+        )).ToList();
 
         return plans;
     }

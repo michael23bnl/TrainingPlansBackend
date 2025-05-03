@@ -23,4 +23,7 @@ public interface IElasticService
     Task<List<PlanEntity>> SearchThroughMyPlans(string query, Guid userId);
 
     Task<List<PlanEntity>> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds);
+
+    Task<List<PlanEntity>> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds);
+
 }

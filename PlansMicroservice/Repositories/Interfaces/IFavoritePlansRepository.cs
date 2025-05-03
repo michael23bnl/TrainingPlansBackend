@@ -1,4 +1,5 @@
 
+using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
 
@@ -10,7 +11,9 @@ public interface IFavoritePlansRepository
 
     public Task RemoveFromFavorites(Guid userid, Guid planId);
 
-    public Task<List<PlanModel>> GetFavorites(Guid userId);
+    public Task<List<CompletedPlanResponse>> GetFavorites(Guid userId);
+    
+    public Task<PlanEntity> GetFavorite(Guid userId);
 
-    public Task EditFavorite(Guid userId, Guid planId, string? name, List<ExerciseModel> exercises);
+    public Task<Guid> EditFavorite(Guid userId, Guid planId, string? name, List<ExerciseModel> exercises);
 }

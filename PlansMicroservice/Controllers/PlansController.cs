@@ -41,21 +41,21 @@ public class PlansController : ControllerBase
         return Ok();
     }
     
-    [HttpPut("update-plan")]
+    /*[HttpPut("update-plan")]
     public async Task<IActionResult> UpdatePlanEls([FromBody] PlanEntity plan)
     {
         var result = await _elasticService.AddOrUpdateAsync(plan);
         return result ? Ok("План успешно обновлён") : 
             StatusCode(500, "Ошибка при обновлении плана");
-    }
+    }*/
     
-    [HttpPost("add-plan")]
+    /*[HttpPost("add-plan")]
     public async Task<IActionResult> AddPlanEls([FromBody] PlanEntity plan)
     {
         var result = await _elasticService.AddOrUpdateAsync(plan);
         return result ? Ok("План успешно добавлен") : 
             StatusCode(500, "Ошибка при добавлении плана");
-    }
+    }*/
     
     [HttpPost("add-all-plans")]
     public async Task<IActionResult> AddAllPlansEls()
@@ -79,12 +79,12 @@ public class PlansController : ControllerBase
         return Ok();
     }
     
-    [HttpDelete("delete-plan")]
+    /*[HttpDelete("delete-plan")]
     public async Task<IActionResult> DeletePlanEls(string id)
     {
         var result = await _elasticService.RemoveAsync(id);
         return Ok(result);
-    }
+    }*/
     
     [HttpDelete("delete-all-plans")]
     public async Task<IActionResult> DeleteAllPlansEls()
@@ -134,7 +134,7 @@ public class PlansController : ControllerBase
         return Ok(results);
     }
     
-    /*[HttpGet("search/favorites/{query}")]
+    [HttpGet("search/favorites/{query}")]
     public async Task<IActionResult> SearchThroughFavorites(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -143,12 +143,28 @@ public class PlansController : ControllerBase
         }
         
         Guid userId = Guid.Parse(GetUserId());
-        
-        var favoritePlanIds = await _fa
 
-        var results = await _elasticService.SearchThroughFavoritePlans(query);
+        var favoritePlanIds = await _plansRepository.GetFavoritePlanIds(userId);
+
+        var results = await _elasticService.SearchThroughFavoritePlans(query, favoritePlanIds);
         return Ok(results);
-    }*/
+    }
+    
+    [HttpGet("search/completed-plans/{query}")]
+    public async Task<IActionResult> SearchThroughCompletedPlans(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Search query cannot be empty");
+        }
+        
+        Guid userId = Guid.Parse(GetUserId());
+
+        var favoritePlanIds = await _plansRepository.GetCompletedPlanIds(userId);
+
+        var results = await _elasticService.SearchThroughCompletedPlans(query, favoritePlanIds);
+        return Ok(results);
+    }
     
     [HttpPost("create")]
     public async Task<ActionResult<Guid>> CreatePlan([FromBody] PlanRequest request)
@@ -269,9 +285,25 @@ public class PlansController : ControllerBase
             Guid.NewGuid(), 
             e.Name,
             e.MuscleGroup
-            //false
         ).exerciseModel).ToList();
+        
         var planId = await _plansRepository.Update(id, request.Category, exercises);
+        
+        var planEntity = new PlanEntity
+        {
+            Id = planId,
+            Category = request.Category,
+            Exercises = exercises.Select(p => new ExerciseEntity
+            {
+                Id = p.Id,
+                Name = p.Name,
+                MuscleGroup = p.MuscleGroup
+            }).ToList(),
+            CreatedBy = Guid.Parse(GetUserId()!),
+        };
+        
+        var result = await _elasticService.AddOrUpdateAsync(planEntity);
+
         return Ok(planId);
     }
     
@@ -279,6 +311,7 @@ public class PlansController : ControllerBase
     public async Task<ActionResult<Guid>> DeletePlan(Guid id)
     {
         var planId = await _plansRepository.Delete(id);
+        var result = await _elasticService.RemoveAsync(id.ToString());
         return Ok(planId);
     }
     

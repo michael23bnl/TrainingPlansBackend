@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Contracts;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
+using TrainingPlans.Services;
 
 namespace TrainingPlans.Controllers;
 
@@ -12,12 +13,16 @@ public class FavoritePlansController : ControllerBase
 {
     private readonly IFavoritePlansRepository _favoritePlansRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IElasticService _elasticService;
 
     public FavoritePlansController(IFavoritePlansRepository favoritePlansRepository, 
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IElasticService elasticService
+        )
     {
         _favoritePlansRepository = favoritePlansRepository;
         _httpContextAccessor = httpContextAccessor;
+        _elasticService = elasticService;
     }
     
     private string? GetUserId()
@@ -30,12 +35,17 @@ public class FavoritePlansController : ControllerBase
     public async Task<ActionResult> AddPlanToFavorites(Guid planId)
     {
         await _favoritePlansRepository.AddToFavorites(Guid.Parse(GetUserId()!), planId);
+        
+        //var plan = await _favoritePlansRepository.GetFavorite(planId);
+        
+        //var result = await _elasticService.AddOrUpdateAsync(plan);
         return Ok();
     }
     [HttpDelete("remove/{planId}")]
     public async Task<ActionResult> RemovePlanFromFavorites(Guid planId)
     {
         await _favoritePlansRepository.RemoveFromFavorites(Guid.Parse(GetUserId()!), planId);
+        //var result = await _elasticService.RemoveAsync(planId.ToString());
         return Ok();
     }
     [HttpGet("get/all")]
@@ -55,7 +65,11 @@ public class FavoritePlansController : ControllerBase
             //false
         ).exerciseModel).ToList();
 
-        await _favoritePlansRepository.EditFavorite(Guid.Parse(GetUserId()!), planId, request.Category, exercises);
+        var updatedPlanId = await _favoritePlansRepository.EditFavorite(Guid.Parse(GetUserId()!), planId, request.Category, exercises);
+        
+        var plan = await _favoritePlansRepository.GetFavorite(updatedPlanId);
+        
+        var result = await _elasticService.AddOrUpdateAsync(plan);
         
         return Ok();
     }

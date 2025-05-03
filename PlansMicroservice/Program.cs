@@ -26,6 +26,7 @@ builder.Services.AddSingleton<IElasticService, ElasticService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
+builder.Services.AddScoped<ICompletedPlansRepository, CompletedPlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpClient();

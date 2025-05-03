@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
@@ -53,34 +53,47 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             .Select(f => f.PlanId);
     }*/
 
-    public async Task<List<PlanModel>> GetFavorites(Guid userId)
+    public async Task<List<CompletedPlanResponse>> GetFavorites(Guid userId)
     {
-        var favoritePlans = _context.FavoritePlans
+        var favoritePlanIds = _context.FavoritePlans
+            .Where(f => f.UserId == userId)
+            .Select(f => f.PlanId);
+        
+        var completedPlanIds = _context.CompletedPlans.Where(f => f.UserId == userId)
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId);
 
         var planEntities = await _context.Plans
             //.Include(p => p.Exercises)
-            .Where(p => favoritePlans.Contains(p.Id))
+            .Where(p => favoritePlanIds.Contains(p.Id))
             .ToListAsync();
         
-        var plans = planEntities.Select(p => PlanModel.Create(
-            p.Id, 
+        var plans = planEntities.Select(p => new CompletedPlanResponse(
+            p.Id,
             p.Category,
             p.Exercises
-                //.OrderBy(e => e.CreatedAt)
-                .Select(e => ExerciseModel.Create(
-                e.Id, 
-                e.Name, 
-                e.MuscleGroup
-                //e.IsPreMade
-                ).exerciseModel).ToList()!, 
-            p.CreatedBy).planModel).ToList();
+                .Select(e => new ExerciseResponse(
+                    e.Id,
+                    e.Name,
+                    e.MuscleGroup
+                )).ToList(),
+            completedPlanIds.Contains(p.Id)
+        )).ToList();
 
         return plans;
     }
 
-    public async Task EditFavorite(Guid userId, Guid planId, string? category, List<ExerciseModel> exercises)
+    public async Task<PlanEntity> GetFavorite(Guid planId)
+    {
+
+        var planEntity = await _context.Plans
+            .Where(p => p.Id == planId).FirstOrDefaultAsync();
+        
+        
+        return planEntity;
+    }
+
+    public async Task<Guid> EditFavorite(Guid userId, Guid planId, string? category, List<ExerciseModel> exercises)
     {
         
         var plan = new PlanEntity
@@ -93,7 +106,6 @@ public class FavoritePlansRepository : IFavoritePlansRepository
                     Id = e.Id,
                     Name = e.Name,
                     MuscleGroup = e.MuscleGroup,
-                    //IsPreMade = false
                 }).ToList(),
             CreatedBy = userId
         };
@@ -105,6 +117,7 @@ public class FavoritePlansRepository : IFavoritePlansRepository
         //favoritePlan.PlanId = plan.Id;
         _context.Plans.Add(plan);
         await _context.SaveChangesAsync();
+        return plan.Id;
 
     }
     
