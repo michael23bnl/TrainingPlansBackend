@@ -162,7 +162,23 @@
     {
       "UpstreamPathTemplate": "/gateway/Plans/search/favorites/{query}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/Plans/search/{query}",
+      "DownstreamPathTemplate": "/api/Plans/search/favorites/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/Plans/search/completed-plans/{query}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Plans/search/completed-plans/{query}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -178,7 +194,7 @@
     {
       "UpstreamPathTemplate": "/gateway/Plans/search/my-plans/{query}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/Plans/search/{query}",
+      "DownstreamPathTemplate": "/api/Plans/search/my-plans/{query}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -276,6 +292,45 @@
       "UpstreamPathTemplate": "/gateway/FavoritePlans/edit/{planId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamPathTemplate": "/api/FavoritePlans/edit/{planId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/CompletedPlans/get/all",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/CompletedPlans/get/all",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/CompletedPlans/mark/{planId}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/CompletedPlans/mark/{planId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/gateway/CompletedPlans/unmark/{planId}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/CompletedPlans/unmark/{planId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

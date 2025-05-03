@@ -14,7 +14,7 @@ public interface IPlansRepository
     
     public Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId);
     
-    public Task<List<PlanModel>> GetAllSelfMade(Guid userId);
+    public Task<List<CompletedPlanResponse>> GetAllSelfMade(Guid userId);
     
     public Task<List<PreparedPlanResponse>> GetAllAvailable(Guid userId);
     
@@ -23,9 +23,11 @@ public interface IPlansRepository
     public Task<PlanModel> GetByName(Guid userId, string name);
     
     public Task<PlanModel> GetPreparedByName(string name);
-    
-    
 
+
+    public Task<List<Guid>> GetFavoritePlanIds(Guid userId);
+    
+    public Task<List<Guid>> GetCompletedPlanIds(Guid userId);
 
     public Task<Guid> Update(Guid id, string? name, List<ExerciseModel> exercises);
 

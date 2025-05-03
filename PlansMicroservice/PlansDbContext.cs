@@ -13,6 +13,8 @@ public class PlansDbContext(DbContextOptions<PlansDbContext> options) : DbContex
     public DbSet<PlanEntity> Plans { get; set; }
     
     public DbSet<FavoritePlanEntity> FavoritePlans { get; set; }
+    
+    public DbSet<CompletedPlanEntity> CompletedPlans { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
