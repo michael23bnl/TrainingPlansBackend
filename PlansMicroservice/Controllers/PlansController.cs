@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using TrainingPlans.Entities;
+using TrainingPlans.Pagination;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Services;
 
@@ -109,19 +110,23 @@ public class PlansController : ControllerBase
     
     //[Permission("Read")]
     [HttpGet("search/{query}")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, [FromQuery] PlanParameters planParameters)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
             return BadRequest("Search query cannot be empty");
         }
 
-        var results = await _elasticService.SearchPlansAsync(query);
-        return Ok(results);
+        var results = await _elasticService.SearchPlansAsync(query, planParameters);
+        return Ok(new
+        {
+            totalCount = results.totalCount,
+            plans = results.plans
+        });
     }
     
     [HttpGet("search/my-plans/{query}")]
-    public async Task<IActionResult> SearchThroughMyPlans(string query)
+    public async Task<IActionResult> SearchThroughMyPlans(string query, [FromQuery] PlanParameters planParameters)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -130,12 +135,16 @@ public class PlansController : ControllerBase
         
         Guid userId = Guid.Parse(GetUserId());
 
-        var results = await _elasticService.SearchThroughMyPlans(query, userId);
-        return Ok(results);
+        var results = await _elasticService.SearchThroughMyPlans(query, userId, planParameters);
+        return Ok(new
+        {
+            totalCount = results.totalCount,
+            plans = results.plans
+        });
     }
     
     [HttpGet("search/favorites/{query}")]
-    public async Task<IActionResult> SearchThroughFavorites(string query)
+    public async Task<IActionResult> SearchThroughFavorites(string query, [FromQuery] PlanParameters planParameters)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -146,12 +155,16 @@ public class PlansController : ControllerBase
 
         var favoritePlanIds = await _plansRepository.GetFavoritePlanIds(userId);
 
-        var results = await _elasticService.SearchThroughFavoritePlans(query, favoritePlanIds);
-        return Ok(results);
+        var results = await _elasticService.SearchThroughFavoritePlans(query, favoritePlanIds, planParameters);
+        return Ok(new
+        {
+            totalCount = results.totalCount,
+            plans = results.plans
+        });
     }
     
     [HttpGet("search/completed-plans/{query}")]
-    public async Task<IActionResult> SearchThroughCompletedPlans(string query)
+    public async Task<IActionResult> SearchThroughCompletedPlans(string query, [FromQuery] PlanParameters planParameters)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -160,10 +173,14 @@ public class PlansController : ControllerBase
         
         Guid userId = Guid.Parse(GetUserId());
 
-        var favoritePlanIds = await _plansRepository.GetCompletedPlanIds(userId);
+        var completedPlanIds = await _plansRepository.GetCompletedPlanIds(userId);
 
-        var results = await _elasticService.SearchThroughCompletedPlans(query, favoritePlanIds);
-        return Ok(results);
+        var results = await _elasticService.SearchThroughCompletedPlans(query, completedPlanIds, planParameters);
+        return Ok(new
+        {
+            totalCount = results.totalCount,
+            plans = results.plans
+        });
     }
     
     [HttpPost("create")]
@@ -230,10 +247,16 @@ public class PlansController : ControllerBase
     
     [Permission("Create")]
     [HttpGet("get/all")]
-    public async Task<ActionResult<List<PlanModel>>> GetAllPlans()
+    public async Task<ActionResult<(int, List<CompletedPlanResponse>)>> GetAllPlans([FromQuery] PlanParameters planParameters)
     {
         var userId = GetUserId();
-        return Ok(await _plansRepository.GetAllSelfMade(Guid.Parse(GetUserId()!)));
+        var response = await _plansRepository.GetAllSelfMade(Guid.Parse(GetUserId()!), planParameters);
+        
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
     }
     [Permission("Create")]
     [HttpGet("get/all-available")]
@@ -244,11 +267,17 @@ public class PlansController : ControllerBase
     
     //[Permission("Read")]
     [HttpGet("get/all-prepared")]
-    public async Task<ActionResult<List<PlanModel>>> GetAllPreparedPlans() // переработать
+    public async Task<ActionResult<(int, List<PlanModel>)>> GetAllPreparedPlans([FromQuery] PlanParameters planParameters) // переработать
     {
         Guid? userId = Guid.Parse(GetUserId());
+
+        var response = await _plansRepository.GetAllPrepared(userId, planParameters);
         
-        return Ok(await _plansRepository.GetAllPrepared(userId));
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
 
     }
     

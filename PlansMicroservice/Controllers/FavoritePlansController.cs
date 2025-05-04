@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Contracts;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
 using TrainingPlans.Services;
 
 namespace TrainingPlans.Controllers;
@@ -49,9 +50,15 @@ public class FavoritePlansController : ControllerBase
         return Ok();
     }
     [HttpGet("get/all")]
-    public async Task<ActionResult<List<PlanModel>>> GetFavoritePlans()
+    public async Task<ActionResult<(int, List<PlanModel>)>> GetFavoritePlans([FromQuery] PlanParameters planParameters)
     {
-        return Ok(await _favoritePlansRepository.GetFavorites(Guid.Parse(GetUserId()!)));
+        var response = await _favoritePlansRepository.GetFavorites(Guid.Parse(GetUserId()!), planParameters);
+        
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
     }
     
     [HttpPut("edit/{planId}")]

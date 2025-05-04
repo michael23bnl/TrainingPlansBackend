@@ -5,6 +5,7 @@ using Elastic.Clients.Elasticsearch.QueryDsl;
 using Microsoft.Extensions.Options;
 using TrainingPlans.Configurations;
 using TrainingPlans.Entities;
+using TrainingPlans.Pagination;
 
 namespace TrainingPlans.Services;
 
@@ -151,7 +152,7 @@ public class ElasticService : IElasticService
         return response.Documents.ToList();
     }*/
     
-    public async Task<List<PlanEntity>> SearchPlansAsync(string query)
+    public async Task<(int totalCount, List<PlanEntity> plans)> SearchPlansAsync(string query, PlanParameters planParameters)
     {
         var response = await _client.SearchAsync<PlanEntity>(s => s
             .Query(q => q
@@ -170,13 +171,17 @@ public class ElasticService : IElasticService
                     )
                 )
             )
-            .Size(10)
+            .From((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Size(planParameters.PageSize)
         );
-
-        return response.Documents.ToList();
+        
+        var totalCount = (int)response.Total;
+        var plans = response.Documents.ToList();
+        //return response.Documents.ToList();
+        return (totalCount, plans);
     }
     
-    public async Task<List<PlanEntity>> SearchThroughMyPlans(string query, Guid userId)
+    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughMyPlans(string query, Guid userId, PlanParameters planParameters)
     {
         var response = await _client.SearchAsync<PlanEntity>(s => s
             .Query(q => q
@@ -202,18 +207,22 @@ public class ElasticService : IElasticService
                     )
                 )
             )
-            .Size(10)
+            .From((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Size(planParameters.PageSize)
         );
 
-        return response.Documents.ToList();
+        var totalCount = (int)response.Total;
+        var plans = response.Documents.ToList();
+        //return response.Documents.ToList();
+        return (totalCount, plans);
     }
 
-    public async Task<List<PlanEntity>> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds)
+    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds, PlanParameters planParameters)
     {
 
         if (favoritePlanIds == null || !favoritePlanIds.Any())
         {
-            return new List<PlanEntity>();
+            return (0, new List<PlanEntity>());
         }
         
         var ids = favoritePlanIds.Select(id => id.ToString("D")).ToList();
@@ -243,18 +252,22 @@ public class ElasticService : IElasticService
                     )
                 )
             )
-            .Size(10)
+            .From((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Size(planParameters.PageSize)
         );
 
-        return response.Documents.ToList();
+        var totalCount = (int)response.Total;
+        var plans = response.Documents.ToList();
+        //return response.Documents.ToList();
+        return (totalCount, plans);
     }
     
-    public async Task<List<PlanEntity>> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds)
+    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds, PlanParameters planParameters)
     {
 
         if (completedPlanIds == null || !completedPlanIds.Any())
         {
-            return new List<PlanEntity>();
+            return (0, new List<PlanEntity>());
         }
         
         var ids = completedPlanIds.Select(id => id.ToString("D")).ToList();
@@ -284,10 +297,14 @@ public class ElasticService : IElasticService
                     )
                 )
             )
-            .Size(10)
+            .From((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Size(planParameters.PageSize)
         );
 
-        return response.Documents.ToList();
+        var totalCount = (int)response.Total;
+        var plans = response.Documents.ToList();
+        //return response.Documents.ToList();
+        return (totalCount, plans);
     }
 
     public async Task<PlanEntity> GetAsync(string id)

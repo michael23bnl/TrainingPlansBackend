@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
 using TrainingPlans.Repositories.Interfaces;
 
 namespace TrainingPlans.Repositories;
@@ -101,7 +102,7 @@ public class PlansRepository : IPlansRepository
         return availablePlans;
     }
     
-    public async Task<List<PlanModel>> GetAllPrepared()
+    public async Task<List<PlanModel>> GetAllPrepared() // для неавторизованных пользователей
     {
         var planEntities = await _context.Plans
             //.Include(e => e.Exercises)
@@ -123,10 +124,15 @@ public class PlansRepository : IPlansRepository
         return plans;
     }
     
-    public async Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId)
+    public async Task<(int, List<PreparedPlanResponse>)> GetAllPrepared(Guid? userId,
+        PlanParameters planParameters) // для авторизованных пользователей
     {
+        var totalEntityCount = _context.Plans.Count(p => p.CreatedBy == null);
+        
         var planEntities = await _context.Plans
             .Where(p => p.CreatedBy == null)
+            .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Take(planParameters.PageSize)
             .AsNoTracking()
             .ToListAsync();
 
@@ -148,13 +154,17 @@ public class PlansRepository : IPlansRepository
             favoritePlanIds.Contains(p.Id)
         )).ToList();
 
-        return plans;
+        return (totalEntityCount, plans);
     }
     
-    public async Task<List<CompletedPlanResponse>> GetAllSelfMade(Guid userId)
+    public async Task<(int, List<CompletedPlanResponse>)> GetAllSelfMade(Guid userId, PlanParameters planParameters)
     {
+        var totalEntityCount = _context.Plans.Count(p => p.CreatedBy == userId);
+        
         var planEntities = await _context.Plans
             .Where(p => p.CreatedBy == userId)
+            .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Take(planParameters.PageSize)
             .AsNoTracking()
             .ToListAsync();
         
@@ -167,7 +177,6 @@ public class PlansRepository : IPlansRepository
             p.Id,
             p.Category,
             p.Exercises
-                //.OrderBy(e => e.CreatedAt)
                 .Select(e => new ExerciseResponse(
                     e.Id,
                     e.Name,
@@ -176,13 +185,12 @@ public class PlansRepository : IPlansRepository
             completedPlanIds.Contains(p.Id)
         )).ToList();
 
-        return plans;
+        return (totalEntityCount, plans);
     }
 
     public async Task<PreparedPlanResponse> Get(Guid planId, Guid? userId)
     {
         var planEntity = await _context.Plans
-            //.Include(e => e.Exercises)
             .FirstOrDefaultAsync(p => p.Id == planId);
 
         var isFavorite = await _context.FavoritePlans
@@ -192,7 +200,6 @@ public class PlansRepository : IPlansRepository
             planEntity.Id,
             planEntity.Category,
             planEntity.Exercises
-                //.OrderBy(e => e.CreatedAt)
                 .Select(e => new ExerciseResponse(
                     e.Id,
                     e.Name,

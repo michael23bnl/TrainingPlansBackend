@@ -1,4 +1,5 @@
 using TrainingPlans.Entities;
+using TrainingPlans.Pagination;
 
 namespace TrainingPlans.Services;
 
@@ -18,12 +19,12 @@ public interface IElasticService
 
     Task<long?> RemoveAll();
 
-    Task<List<PlanEntity>> SearchPlansAsync(string query);
+    Task<(int totalCount, List<PlanEntity> plans)> SearchPlansAsync(string query, PlanParameters planParameters);
 
-    Task<List<PlanEntity>> SearchThroughMyPlans(string query, Guid userId);
+    Task<(int totalCount, List<PlanEntity> plans)> SearchThroughMyPlans(string query, Guid userId, PlanParameters planParameters);
 
-    Task<List<PlanEntity>> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds);
+    Task<(int totalCount, List<PlanEntity> plans)> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds, PlanParameters planParameters);
 
-    Task<List<PlanEntity>> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds);
+    Task<(int totalCount, List<PlanEntity> plans)> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds, PlanParameters planParameters);
 
 }

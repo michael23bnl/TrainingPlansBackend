@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TrainingPlans.Entities;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
 using TrainingPlans.Repositories.Interfaces;
 
 namespace TrainingPlans.Repositories;
@@ -47,12 +48,12 @@ public class CompletedPlansRepository : ICompletedPlansRepository
 
     public async Task<List<PlanModel>> GetCompletedPlans(Guid userId)
     {
-        var completedPlans = _context.CompletedPlans
+        var completedPlanIds = _context.CompletedPlans
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId);
 
         var planEntities = await _context.Plans
-            .Where(p => completedPlans.Contains(p.Id))
+            .Where(p => completedPlanIds.Contains(p.Id))
             .ToListAsync();
         
         var plans = planEntities.Select(p => PlanModel.Create(
@@ -67,5 +68,33 @@ public class CompletedPlansRepository : ICompletedPlansRepository
             p.CreatedBy).planModel).ToList();
 
         return plans;
+    }
+    
+    public async Task<(int, List<PlanModel?>)> GetCompletedPlansPaginated(Guid userId, PlanParameters planParameters)
+    {
+        var completedPlanIds = _context.CompletedPlans
+            .Where(f => f.UserId == userId)
+            .Select(f => f.PlanId);
+        
+        var totalEntityCount = completedPlanIds.Count();
+
+        var planEntities = await _context.Plans
+            .Where(p => completedPlanIds.Contains(p.Id))
+            .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Take(planParameters.PageSize)
+            .ToListAsync();
+        
+        var plans = planEntities.Select(p => PlanModel.Create(
+            p.Id, 
+            p.Category,
+            p.Exercises
+                .Select(e => ExerciseModel.Create(
+                    e.Id, 
+                    e.Name, 
+                    e.MuscleGroup
+                ).exerciseModel).ToList()!, 
+            p.CreatedBy).planModel).ToList();
+
+        return (totalEntityCount, plans);
     }
 }
