@@ -315,6 +315,19 @@
     },
 
     {
+      "UpstreamPathTemplate": "/gateway/CompletedPlans/get/all/paginated",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/CompletedPlans/get/all/paginated",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ]
+    },
+
+    {
       "UpstreamPathTemplate": "/gateway/CompletedPlans/mark/{planId}",
       "UpstreamHttpMethod": [ "POST" ],
       "DownstreamPathTemplate": "/api/CompletedPlans/mark/{planId}",

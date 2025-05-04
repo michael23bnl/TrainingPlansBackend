@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
 using TrainingPlans.Repositories.Interfaces;
 
 namespace TrainingPlans.Controllers;
@@ -37,8 +38,20 @@ public class CompletedPlansController : ControllerBase
         return Ok();
     }
     [HttpGet("get/all")]
-    public async Task<ActionResult<List<PlanModel>>> GetCompletedPlans()
+    public async Task<ActionResult<List<PlanModel>>> GetCompletedPlans([FromQuery] PlanParameters planParameters)
     {
         return Ok(await _completedPlansRepository.GetCompletedPlans(Guid.Parse(GetUserId()!)));
+    }
+    
+    [HttpGet("get/all/paginated")]
+    public async Task<ActionResult<(int, List<PlanModel?>)>> GetCompletedPlansPaginated([FromQuery] PlanParameters planParameters)
+    {
+        var response = await _completedPlansRepository.GetCompletedPlansPaginated(Guid.Parse(GetUserId()!), planParameters);
+        
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
     }
 }

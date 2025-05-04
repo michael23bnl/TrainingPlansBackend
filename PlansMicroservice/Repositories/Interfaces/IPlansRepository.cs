@@ -1,6 +1,7 @@
 
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
 
 namespace TrainingPlans.Repositories.Interfaces;
 
@@ -12,9 +13,9 @@ public interface IPlansRepository
     
     public Task<List<PlanModel>> GetAllPrepared();
     
-    public Task<List<PreparedPlanResponse>> GetAllPrepared(Guid? userId);
+    public Task<(int, List<PreparedPlanResponse>)> GetAllPrepared(Guid? userId, PlanParameters planParameters);
     
-    public Task<List<CompletedPlanResponse>> GetAllSelfMade(Guid userId);
+    public Task<(int, List<CompletedPlanResponse>)> GetAllSelfMade(Guid userId, PlanParameters planParameters);
     
     public Task<List<PreparedPlanResponse>> GetAllAvailable(Guid userId);
     

@@ -3,6 +3,8 @@ using TrainingPlans.Contracts;
 using TrainingPlans.Entities;
 using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Models;
+using TrainingPlans.Pagination;
+
 namespace TrainingPlans.Repositories;
 
 public class FavoritePlansRepository : IFavoritePlansRepository
@@ -53,19 +55,22 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             .Select(f => f.PlanId);
     }*/
 
-    public async Task<List<CompletedPlanResponse>> GetFavorites(Guid userId)
+    public async Task<(int, List<CompletedPlanResponse>)> GetFavorites(Guid userId, PlanParameters planParameters)
     {
         var favoritePlanIds = _context.FavoritePlans
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId);
+
+        var totalEntityCount = favoritePlanIds.Count();
         
         var completedPlanIds = _context.CompletedPlans.Where(f => f.UserId == userId)
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId);
 
         var planEntities = await _context.Plans
-            //.Include(p => p.Exercises)
             .Where(p => favoritePlanIds.Contains(p.Id))
+            .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
+            .Take(planParameters.PageSize)
             .ToListAsync();
         
         var plans = planEntities.Select(p => new CompletedPlanResponse(
@@ -80,7 +85,7 @@ public class FavoritePlansRepository : IFavoritePlansRepository
             completedPlanIds.Contains(p.Id)
         )).ToList();
 
-        return plans;
+        return (totalEntityCount, plans);
     }
 
     public async Task<PlanEntity> GetFavorite(Guid planId)
