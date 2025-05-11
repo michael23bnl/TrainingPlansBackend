@@ -75,26 +75,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-
-    {
-      "UpstreamPathTemplate": "/gateway/Plans/get/{name}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/Plans/get/{name}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7001
-        }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     
     {
@@ -107,10 +88,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Plans/update/{id}",
@@ -122,10 +100,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Plans/delete/{id}",
@@ -137,10 +112,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -153,10 +125,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -169,10 +138,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -185,10 +151,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -201,10 +164,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -243,10 +203,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -376,10 +333,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Exercises/get/{id}",
@@ -391,10 +345,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Exercises/create",
@@ -406,10 +357,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Exercises/update/{id}",
@@ -421,10 +369,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/Exercises/delete/{id}",
@@ -436,10 +381,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -452,10 +394,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {
@@ -468,10 +407,7 @@
           "Host": "localhost",
           "Port": 7001
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      ]
     },
 
     {

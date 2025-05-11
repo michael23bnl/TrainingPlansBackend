@@ -9,7 +9,7 @@ public interface ICompletedPlansRepository
 
     public Task RemoveCompletedMark(Guid userid, Guid planId);
 
-    public Task<List<PlanModel>> GetCompletedPlans(Guid userId);
+    public Task<List<CompletedPlanModel>> GetCompletedPlans(Guid userId);
     
     public Task<(int, List<PlanModel?>)> GetCompletedPlansPaginated(Guid userId, PlanParameters planParameters);
 }

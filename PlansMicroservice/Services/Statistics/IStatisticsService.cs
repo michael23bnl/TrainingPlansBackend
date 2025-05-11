@@ -5,5 +5,5 @@ namespace TrainingPlans.Services.Statistics;
 
 public interface IStatisticsService
 {
-    public ConcurrentDictionary<string, int> GetStatistics(List<PlanModel> plans);
+    public ConcurrentDictionary<DateOnly, Dictionary<string, int>> GetStatistics(List<CompletedPlanModel> plans);
 }

@@ -15,13 +15,11 @@ public class UsersRepository : IUsersRepository {
         _context = context;
     }
 
-    public async Task<Guid> Create(UserModel userModel, string role)
+    public async Task<Guid> Create(UserModel userModel)
     {
-
-        Enum.TryParse<Role>(role, true, out var userRole);
         
         var roleEntity = await _context.Roles
-                             .SingleOrDefaultAsync(r => r.Id == (int)userRole)
+                             .SingleOrDefaultAsync(r => r.Id == (int)Role.User)
                          ?? throw new InvalidOperationException();
 
         var userEntity = new UserEntity() {
@@ -36,13 +34,20 @@ public class UsersRepository : IUsersRepository {
         return userModel.Id;
     }
 
-    public async Task<UserModel> GetByEmail(string email) {
+    public async Task<UserModel?> GetByEmail(string email)
+    {
 
         var userEntity = await _context.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
+            .FirstOrDefaultAsync(u => u.Email == email);
 
-        return UserModel.Create(userEntity.Id, userEntity.UserName, userEntity.PasswordHash, userEntity.Email);
+        return userEntity != null 
+            ? UserModel.Create(
+                userEntity.Id, 
+                userEntity.UserName, 
+                userEntity.PasswordHash, 
+                userEntity.Email) 
+            : null;
 
     }
 

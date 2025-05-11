@@ -24,18 +24,27 @@ public class UsersService : IUsersService {
         _permissionService = permissionService;
     }
 
-    public async Task<Guid> Register(string userName, string email, string password, string role) {
+    public async Task<Guid> Register(string userName, string email, string password) {
+        var user = await _usersRepository.GetByEmail(email);
+        if (user != null)
+        {
+            return Guid.Empty;
+        }
         var hashedPassword = _passwordHasher.Generate(password);
         var userModel = UserModel.Create(Guid.NewGuid(), userName, hashedPassword, email);
-        var userId = await _usersRepository.Create(userModel, role);
+        var userId = await _usersRepository.Create(userModel);
         return userId;
     }
 
     public async Task<string> Login(string email, string password) {
         var user = await _usersRepository.GetByEmail(email);
+        if (user == null)
+        {
+            return string.Empty;
+        }
         var result = _passwordHasher.Verify(password, user.PasswordHash);
         if (result == false) {
-            throw new Exception("Failed to login");
+            return string.Empty;
         }
         var token = _jwtProvider.GenerateToken(user);
         return token;

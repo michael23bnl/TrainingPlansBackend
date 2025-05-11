@@ -8,5 +8,5 @@ public class CompletedPlanEntity
 
     public Guid PlanId { get; set; }
     
-    public DateTime CompletionDate { get; set; } = DateTime.UtcNow;
+    public DateOnly CompletionDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 }

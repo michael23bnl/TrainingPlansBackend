@@ -19,14 +19,21 @@ public class UsersController : ControllerBase {
 
     [HttpPost("register")]
     public async Task<IResult> Register([FromBody] RegisterUserRequest request) {
-        var userId = await _userService.Register(request.UserName, request.Email, request.Password, request.role);
-        
+        var userId = await _userService.Register(request.UserName, request.Email, request.Password);
+        if (userId == Guid.Empty)
+        {
+            return Results.BadRequest("Пользователь с такой почтой уже существует");
+        }
         return Results.Ok(userId);
     }
     
     [HttpPost("login")]
     public async Task<IResult> Login([FromBody] LoginUserRequest request) {
         var token = await _userService.Login(request.Email, request.Password);
+        if (string.IsNullOrEmpty(token))
+        {
+            return Results.BadRequest("Неверный логин или пароль");
+        }
         HttpContext.Response.Cookies.Append("suchatastycookie", token);
         
         return Results.Ok(token);
