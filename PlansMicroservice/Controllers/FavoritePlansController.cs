@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlans.Contracts;
 using TrainingPlans.Repositories.Interfaces;
@@ -18,8 +19,7 @@ public class FavoritePlansController : ControllerBase
 
     public FavoritePlansController(IFavoritePlansRepository favoritePlansRepository, 
         IHttpContextAccessor httpContextAccessor,
-        IElasticService elasticService
-        )
+        IElasticService elasticService)
     {
         _favoritePlansRepository = favoritePlansRepository;
         _httpContextAccessor = httpContextAccessor;
@@ -31,7 +31,7 @@ public class FavoritePlansController : ControllerBase
         var userId = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Id"];
         return userId;
     }
-    
+    [Authorize]
     [HttpPost("add/{planId}")]
     public async Task<ActionResult> AddPlanToFavorites(Guid planId)
     {
@@ -42,6 +42,8 @@ public class FavoritePlansController : ControllerBase
         //var result = await _elasticService.AddOrUpdateAsync(plan);
         return Ok();
     }
+    
+    [Authorize]
     [HttpDelete("remove/{planId}")]
     public async Task<ActionResult> RemovePlanFromFavorites(Guid planId)
     {
@@ -49,6 +51,8 @@ public class FavoritePlansController : ControllerBase
         //var result = await _elasticService.RemoveAsync(planId.ToString());
         return Ok();
     }
+    
+    [Authorize]
     [HttpGet("get/all")]
     public async Task<ActionResult<(int, List<PlanModel>)>> GetFavoritePlans([FromQuery] PlanParameters planParameters)
     {
@@ -61,6 +65,7 @@ public class FavoritePlansController : ControllerBase
         });
     }
     
+    [Authorize]
     [HttpPut("edit/{planId}")]
     public async Task<ActionResult> EditFavoritePlan(Guid planId, [FromBody] PlanRequest request)
     {

@@ -10,8 +10,6 @@ namespace ChatMicroservice.Hubs;
 
 public interface IChatClient
 {
-    //public Task ReceiveMessage(string userName, string message, DateTime sendingDate);
-    
     public Task ReceiveMessage(string userName, string? message, 
         List<Plan>? plans, DateTime sendingDate);
 }

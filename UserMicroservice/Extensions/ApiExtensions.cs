@@ -76,7 +76,7 @@ public static class ApiExtensions
         this TBuilder builder, params Permission[] permissions)
         where TBuilder : IEndpointConventionBuilder {
         return builder.RequireAuthorization(policy =>
-        policy.AddRequirements(new PermissionRequirenment(permissions)));
+        policy.AddRequirements(new PermissionRequirement(permissions)));
     }*/
 
     // добавление требований для контроллеров

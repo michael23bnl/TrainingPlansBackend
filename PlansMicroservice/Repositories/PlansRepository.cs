@@ -37,22 +37,7 @@ public class PlansRepository : IPlansRepository
         await _context.SaveChangesAsync();
         return planEntity.Id;
     }
-
-    public async Task<List<PlanModel>> GetAll()
-    {
-        var planEntities = await _context.Plans
-            //.Include(e => e.Exercises)
-            .AsNoTracking()
-            .ToListAsync();
-        var plans = planEntities.Select(p => PlanModel.Create(p.Id, p.Category,
-            p.Exercises
-                //.OrderBy(e => e.CreatedAt)
-                .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup)
-                    .exerciseModel).ToList()!, p.CreatedBy).planModel).ToList();
-
-        return plans;
-    }
-
+    
     public async Task<List<Guid>> GetFavoritePlanIds(Guid userId)
     {
         var favoritePlanIds = _context.FavoritePlans
@@ -136,10 +121,14 @@ public class PlansRepository : IPlansRepository
             .AsNoTracking()
             .ToListAsync();
 
-        var favoritePlanIds = _context.FavoritePlans
-            .Where(f => f.UserId == userId)
-            .Select(f => f.PlanId)
-            .ToList();
+        List<Guid> favoritePlanIds = new();
+        if (userId != null)
+        {
+            favoritePlanIds = _context.FavoritePlans
+                .Where(f => f.UserId == userId)
+                .Select(f => f.PlanId)
+                .ToList();
+        }
         
         var plans = planEntities.Select(p => new PreparedPlanResponse(
             p.Id,
@@ -210,29 +199,6 @@ public class PlansRepository : IPlansRepository
         /*var plan = PlanModel.Create(planEntity.Id, planEntity.Category, planEntity.Exercises
             .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup, e.IsPreMade).exerciseModel)
             .ToList()!, planEntity.CreatedBy).planModel;*/
-        return plan;
-    }
-    
-    public async Task<PlanModel> GetByName(Guid userId, string name)
-    {
-        var planEntity = await _context.Plans
-            .Include(pe => pe.Exercises)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(pe => pe.Category == name && pe.CreatedBy == userId);
-        
-        var plan = PlanModel.Create(planEntity.Id, planEntity.Category,
-            planEntity.Exercises
-                .Select(pe => 
-                    ExerciseModel.Create(
-                        pe.Id, 
-                        pe.Name, 
-                        pe.MuscleGroup
-                        //pe.IsPreMade
-                            )
-                        .exerciseModel)
-                .ToList(), 
-            planEntity.CreatedBy).planModel;
-        
         return plan;
     }
     

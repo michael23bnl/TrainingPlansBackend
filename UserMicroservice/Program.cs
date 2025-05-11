@@ -1,35 +1,23 @@
-using System.Text;
-using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice;
+using UserMicroservice.Entities;
 using UserMicroservice.Enums;
-using UserMicroservice.Extensions;
 using UserMicroservice.Infrastructure;
+using UserMicroservice.Models;
 using UserMicroservice.Repositories;
 using UserMicroservice.Repositories.Interfaces;
 using UserMicroservice.Services;
 using UserMicroservice.Services.RabbitMq;
 using UserMicroservice.Services.RabbitMq.Connection;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var corsPolicy = "corsPolicy";
 
-var corsOptions = builder.Configuration.GetSection(nameof(CorsOptions)).Get<CorsOptions>();
-
 builder.Services.AddCors(options => {
     options.AddPolicy(name: corsPolicy,
         policy => {
-            if (corsOptions!.AllowAnyOrigin) {
-                policy.AllowAnyOrigin();
-            }
-            else {
-                policy.WithOrigins(corsOptions.AllowedOrigins);
-            }
             policy.AllowAnyHeader();
             policy.AllowAnyMethod();
             policy.AllowCredentials();
@@ -44,31 +32,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 
-builder.Services.Configure<AuthorizationOptions>(builder.Configuration.GetSection(nameof(AuthorizationOptions)));
-
-builder.Services.RequirePermissions("Create", Permission.Delete);
-
-builder.Services.RequirePermissions("Read", Permission.Read);
-
-builder.Services.RequirePermissions("Update", Permission.Delete);
-
-builder.Services.RequirePermissions("Delete", Permission.Delete);
-
-builder.Services.AddApiAuthentication();
-
-//builder.Services.AddApiAuthentication(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.Services.AddDbContext<UserDbContext>(
     options => {
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
-builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtExtractor, JwtExtractor>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
-builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
 builder.Services.AddScoped<IMessageSubscriber, RabbitMqSubscriber>();
 builder.Services.AddHostedService<RabbitMqBackgroundService>();
@@ -81,7 +55,26 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var dbContext = services.GetRequiredService<UserDbContext>();
-        dbContext.Database.Migrate(); // Применяет все pending миграции
+        dbContext.Database.Migrate();
+        var passwordHasher = services.GetRequiredService<IPasswordHasher>();
+        var userRepository = services.GetRequiredService<IUsersRepository>();
+        if (userRepository.GetByEmail("Admin") == null)
+        {
+            var user = new UserEntity
+            {
+                Id = Guid.NewGuid(),
+                UserName = "Admin",
+                Email = "Admin",
+                PasswordHash = passwordHasher.Generate("Admin"),
+                Roles =
+                [
+                    await dbContext.Roles
+                        .SingleOrDefaultAsync(r => r.Id == (int)Role.Admin)
+                ]
+            };
+            await dbContext.Users.AddAsync(user);
+            await dbContext.SaveChangesAsync();
+        }
     }
     catch (Exception ex)
     {
@@ -90,7 +83,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -108,14 +100,10 @@ app.UseCors(corsPolicy);
 
 app.UseCookiePolicy(new CookiePolicyOptions
 {
-    MinimumSameSitePolicy = SameSiteMode.Lax, // Поддержка кросс-доменных запросов
-    HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,        // Защита от доступа через JS
+    MinimumSameSitePolicy = SameSiteMode.Lax, // поддержка кросс-доменных запросов
+    HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,        // защита от доступа через JS
     Secure = CookieSecurePolicy.SameAsRequest // HTTPS только если запрос HTTPS
 });
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

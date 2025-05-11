@@ -7,8 +7,13 @@ using TrainingPlans.Repositories.Interfaces;
 using TrainingPlans.Services;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using TrainingPlans.Services.Statistics;
+using UserMicroservice.Enums;
+using UserMicroservice.Extensions;
+using UserMicroservice.Infrastructure;
+using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,39 +26,28 @@ builder.Services.AddDbContext<PlansDbContext>(
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
+builder.Services.Configure<AuthorizationOptions>(builder.Configuration.GetSection(nameof(AuthorizationOptions)));
+
+builder.Services.RequirePermissions("Create", Permission.Delete);
+
+builder.Services.RequirePermissions("Read", Permission.Read);
+
+builder.Services.RequirePermissions("Update", Permission.Delete);
+
+builder.Services.RequirePermissions("Delete", Permission.Delete);
+
 builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
+
 builder.Services.AddSingleton<IElasticService, ElasticService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
 builder.Services.AddScoped<ICompletedPlansRepository, CompletedPlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddHttpClient();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretkeysecretkeysecretkeysecretkeysecretkeysecretkey"))
-        };
-        options.Events = new JwtBearerEvents {
-            OnMessageReceived = context => {
-                context.Token = context.Request.Cookies["suchatastycookie"];
-                return Task.CompletedTask;
-            }
-        };
-    });
+builder.Services.AddApiAuthentication();
 
 var app = builder.Build();
 
@@ -63,7 +57,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var dbContext = services.GetRequiredService<PlansDbContext>();
-        dbContext.Database.Migrate(); // Применяет все pending миграции
+        dbContext.Database.Migrate();
     }
     catch (Exception ex)
     {
@@ -80,9 +74,10 @@ if (app.Environment.IsDevelopment())
 
 app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Exercises.json"));
 app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Plans.json"));
+
 app.UseRouting();
 app.UseAuthentication();
-//app.UseMiddleware<AuthorizationMiddleware>();
+app.UseAuthorization();
 app.MapControllers(); 
 app.UseHttpsRedirection();
 app.Run();

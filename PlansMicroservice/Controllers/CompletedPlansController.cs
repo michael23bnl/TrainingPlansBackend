@@ -38,7 +38,7 @@ public class CompletedPlansController : ControllerBase
         return Ok();
     }
     [HttpGet("get/all")]
-    public async Task<ActionResult<List<PlanModel>>> GetCompletedPlans([FromQuery] PlanParameters planParameters)
+    public async Task<ActionResult<List<CompletedPlanModel>>> GetCompletedPlans([FromQuery] PlanParameters planParameters)
     {
         return Ok(await _completedPlansRepository.GetCompletedPlans(Guid.Parse(GetUserId()!)));
     }

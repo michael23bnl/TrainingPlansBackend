@@ -59,7 +59,7 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
         PermissionRequirement requirement)
     {
 
-        var permission = _httpContextAccessor.HttpContext.Request.Headers["Permission"].ToString();
+        var permission = _httpContextAccessor.HttpContext.Request.Headers["X-User-Permissions"].ToString();
 
         var permissionList = permission.Split(',').Select(s => s.Trim()).ToList();
         
@@ -67,9 +67,12 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
 
         foreach (var permissionName in permissionList)
         {
-            permissions.Add((Permission)Enum.Parse(typeof(Permission), permissionName));
+            if (!string.IsNullOrEmpty(permissionName))
+            {
+                permissions.Add((Permission)Enum.Parse(typeof(Permission), permissionName));
+            }
         }
-        
+
         if (permissions.Intersect(requirement.Permissions).Any())
         {
             context.Succeed(requirement);

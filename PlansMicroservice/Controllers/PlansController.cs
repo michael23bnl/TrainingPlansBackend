@@ -1,6 +1,6 @@
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using TrainingPlans.Contracts;
 using TrainingPlans.Models;
 using TrainingPlans.Entities;
@@ -56,6 +56,13 @@ public class PlansController : ControllerBase
         var result = await _elasticService.AddOrUpdateAsync(plan);
         return result ? Ok("План успешно добавлен") : 
             StatusCode(500, "Ошибка при добавлении плана");
+    }
+    
+    [HttpDelete("delete-plan")]
+    public async Task<IActionResult> DeletePlanEls(string id)
+    {
+        var result = await _elasticService.RemoveAsync(id);
+        return Ok(result);
     }*/
     
     [HttpPost("add-all-plans")]
@@ -80,13 +87,6 @@ public class PlansController : ControllerBase
         return Ok();
     }
     
-    /*[HttpDelete("delete-plan")]
-    public async Task<IActionResult> DeletePlanEls(string id)
-    {
-        var result = await _elasticService.RemoveAsync(id);
-        return Ok(result);
-    }*/
-    
     [HttpDelete("delete-all-plans")]
     public async Task<IActionResult> DeleteAllPlansEls()
     {
@@ -108,7 +108,6 @@ public class PlansController : ControllerBase
         return Ok(plans);
     }
     
-    //[Permission("Read")]
     [HttpGet("search/{query}")]
     public async Task<IActionResult> Search(string query, [FromQuery] PlanParameters planParameters)
     {
@@ -124,7 +123,7 @@ public class PlansController : ControllerBase
             plans = results.plans
         });
     }
-    
+    [Authorize]
     [HttpGet("search/my-plans/{query}")]
     public async Task<IActionResult> SearchThroughMyPlans(string query, [FromQuery] PlanParameters planParameters)
     {
@@ -142,7 +141,7 @@ public class PlansController : ControllerBase
             plans = results.plans
         });
     }
-    
+    [Authorize]
     [HttpGet("search/favorites/{query}")]
     public async Task<IActionResult> SearchThroughFavorites(string query, [FromQuery] PlanParameters planParameters)
     {
@@ -162,7 +161,7 @@ public class PlansController : ControllerBase
             plans = results.plans
         });
     }
-    
+    [Authorize]
     [HttpGet("search/completed-plans/{query}")]
     public async Task<IActionResult> SearchThroughCompletedPlans(string query, [FromQuery] PlanParameters planParameters)
     {
@@ -182,7 +181,7 @@ public class PlansController : ControllerBase
             plans = results.plans
         });
     }
-    
+    [Authorize]
     [HttpPost("create")]
     public async Task<ActionResult<Guid>> CreatePlan([FromBody] PlanRequest request)
     {
@@ -216,12 +215,10 @@ public class PlansController : ControllerBase
         };
         
         var result = await _elasticService.AddOrUpdateAsync(planEntity);
-        return result ? Ok("План успешно добавлен") : 
-            StatusCode(500, "Ошибка при добавлении плана");
 
         return Ok(planId);
     }
-    
+    [Authorize("Create")]
     [HttpPost("create-prepared")]
     public async Task<ActionResult<Guid>> CreatePreparedPlan([FromBody] PlanRequest request)
     {
@@ -245,7 +242,7 @@ public class PlansController : ControllerBase
         return Ok(planId);
     }
     
-    [Permission("Create")]
+    [Authorize]
     [HttpGet("get/all")]
     public async Task<ActionResult<(int, List<CompletedPlanResponse>)>> GetAllPlans([FromQuery] PlanParameters planParameters)
     {
@@ -258,19 +255,19 @@ public class PlansController : ControllerBase
             plans = response.Item2
         });
     }
-    [Permission("Create")]
+    
+    [Authorize]
     [HttpGet("get/all-available")]
     public async Task<ActionResult<List<PlanModel>>> GetAllAvailablePlans()
     {
         return Ok(await _plansRepository.GetAllAvailable(Guid.Parse(GetUserId()!)));
     }
     
-    //[Permission("Read")]
+
     [HttpGet("get/all-prepared")]
     public async Task<ActionResult<(int, List<PlanModel>)>> GetAllPreparedPlans([FromQuery] PlanParameters planParameters) // переработать
     {
-        Guid? userId = Guid.Parse(GetUserId());
-
+        var userId = Guid.TryParse(GetUserId(), out var id) ? id : (Guid?)null;
         var response = await _plansRepository.GetAllPrepared(userId, planParameters);
         
         return Ok(new
@@ -281,7 +278,7 @@ public class PlansController : ControllerBase
 
     }
     
-    //[Permission("Create")]
+    [Authorize("Create")]
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<PreparedPlanResponse>> GetPlan(Guid id)
     {
@@ -294,19 +291,8 @@ public class PlansController : ControllerBase
         
         return Ok(plan);
     }
-
-    [HttpGet("get/{name}")]
-    public async Task<ActionResult<PlanModel>> GetPlanByName(string name)
-    {
-        var plan = await _plansRepository.GetByName(Guid.Parse(GetUserId()), name);
-        if (plan == null)
-        {
-            return BadRequest($"Plan with name {name} does not exist");
-        }
-
-        return plan;
-    }
     
+    [Authorize]
     [HttpPut("update/{id}")]
     public async Task<ActionResult<Guid>> UpdatePlan(Guid id, [FromBody] PlanRequest request)
     {
@@ -336,6 +322,7 @@ public class PlansController : ControllerBase
         return Ok(planId);
     }
     
+    [Authorize]
     [HttpDelete("delete/{id}")]
     public async Task<ActionResult<Guid>> DeletePlan(Guid id)
     {

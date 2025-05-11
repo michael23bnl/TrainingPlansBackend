@@ -46,9 +46,24 @@ public class CompletedPlansRepository : ICompletedPlansRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<PlanModel>> GetCompletedPlans(Guid userId)
+    public async Task<List<CompletedPlanModel>> GetCompletedPlans(Guid userId)
     {
-        var completedPlanIds = _context.CompletedPlans
+        
+        var completedPlans = await _context.CompletedPlans
+            .Where(f => f.UserId == userId)
+            .Join(
+                _context.Plans,
+                cp => cp.PlanId,
+                p => p.Id,
+                (cp, p) => new { PlanEntity = p, cp.CompletionDate }
+            ).ToListAsync();
+        
+        var result = completedPlans.Select(item => CompletedPlanModel.Create(item.PlanEntity, item.CompletionDate)).ToList();
+
+        
+        return result;
+        
+        /*var completedPlanIds = _context.CompletedPlans
             .Where(f => f.UserId == userId)
             .Select(f => f.PlanId);
 
@@ -67,14 +82,14 @@ public class CompletedPlansRepository : ICompletedPlansRepository
                 ).exerciseModel).ToList()!, 
             p.CreatedBy).planModel).ToList();
 
-        return plans;
+        return plans;*/
     }
     
     public async Task<(int, List<PlanModel?>)> GetCompletedPlansPaginated(Guid userId, PlanParameters planParameters)
     {
         var completedPlanIds = _context.CompletedPlans
             .Where(f => f.UserId == userId)
-            .Select(f => f.PlanId);
+            .Select(f => f.PlanId); 
         
         var totalEntityCount = completedPlanIds.Count();
 

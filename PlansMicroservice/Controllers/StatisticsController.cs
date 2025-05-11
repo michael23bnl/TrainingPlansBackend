@@ -31,7 +31,7 @@ public class StatisticsController : ControllerBase
     
     [HttpGet("get")]
 
-    public async Task<ConcurrentDictionary<string, int>> GetStatistics()
+    public async Task<ConcurrentDictionary<DateOnly, Dictionary<string, int>>> GetStatistics()
     {
         var userId = Guid.Parse(GetUserId()!);
         var plans = await _completedPlansRepository.GetCompletedPlans(userId);
