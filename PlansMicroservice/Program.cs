@@ -9,7 +9,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using TrainingPlans.Services.Statistics;
+using TrainingPlans.Application.Services;
+using TrainingPlans.Infrastructure.RabbitMq;
+using TrainingPlans.Infrastructure.RabbitMq.Connection;
 using UserMicroservice.Enums;
 using UserMicroservice.Extensions;
 using UserMicroservice.Infrastructure;
@@ -41,11 +43,14 @@ builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("El
 builder.Services.AddSingleton<IElasticService, ElasticService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
 builder.Services.AddScoped<ICompletedPlansRepository, CompletedPlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
+
+builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
+builder.Services.AddScoped<ICompletedPlansService, CompletedPlansService>();
 
 builder.Services.AddApiAuthentication();
 

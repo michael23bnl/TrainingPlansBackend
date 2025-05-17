@@ -25,53 +25,6 @@ public class RabbitMqSubscriber : IMessageSubscriber
     {
         
         await using var channel = await _connection.Connection.CreateChannelAsync(null, stoppingToken);
-        /*
-        await channel.QueueDeclareAsync(
-            "permissions", 
-            exclusive: false, 
-            durable: false, 
-            autoDelete: false, 
-            arguments: null,
-            cancellationToken: stoppingToken);
-        var consumer = new AsyncEventingBasicConsumer(channel);
-        consumer.ReceivedAsync += async (sender, args) =>
-        {
-            var body = args.Body.ToArray();
-            var json = Encoding.UTF8.GetString(body);
-            var token = JsonSerializer.Deserialize<string>(json);
-            
-            var permissions = await _usersService.GetPermissions(token);
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new JsonStringEnumConverter() }
-            };
-            json = JsonSerializer.Serialize(new {
-                UserId = permissions.Item1,
-                Permissions = permissions.Item2
-            },
-            options);
-            var responseBytes = Encoding.UTF8.GetBytes(json);
-    
-            await channel.BasicPublishAsync(exchange: string.Empty, 
-                routingKey: "permissions", 
-                body: responseBytes, 
-                cancellationToken: stoppingToken);
-    
-        };
-
-        await channel.BasicConsumeAsync(
-            queue: "permissions", 
-            autoAck: true, 
-            consumer: consumer, 
-            cancellationToken: stoppingToken);
-        
-        var tcs = new TaskCompletionSource();
-        stoppingToken.Register(() => tcs.SetResult());
-
-        await tcs.Task;
-
-        await channel.CloseAsync(stoppingToken);
-        await _connection.Connection.CloseAsync(stoppingToken);*/
         
         await channel.QueueDeclareAsync(
             "request-queue", 

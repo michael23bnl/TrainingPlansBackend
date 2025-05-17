@@ -409,8 +409,6 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\refint
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\PlansMicroservice.pdb
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\PlansMicroservice.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\obj\Debug\net8.0\ref\PlansMicroservice.dll
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Data\Exercises.json
-D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Data\Plans.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Elastic.Clients.Elasticsearch.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Elastic.Transport.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.Design.dll
@@ -423,3 +421,5 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Newton
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\RabbitMQ.Client.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.pdb
+D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persistence\Data\Exercises.json
+D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persistence\Data\Plans.json

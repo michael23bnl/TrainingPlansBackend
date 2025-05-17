@@ -21,7 +21,6 @@ public class RabbitMqBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await ReceiveMessage(stoppingToken);
-        
     }
 
     private async Task ReceiveMessage(CancellationToken stoppingToken)
