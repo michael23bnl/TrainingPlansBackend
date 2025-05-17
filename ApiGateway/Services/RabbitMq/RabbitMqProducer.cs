@@ -15,34 +15,6 @@ public class RabbitMqProducer : IMessageProducer
     }
     public async Task<string> SendMessage<T>(T message)
     {
-        
-        /*await using var channel = await _connection.Connection.CreateChannelAsync();
-        
-        await channel.QueueDeclareAsync(
-            "permissions", 
-            exclusive: false, 
-            durable: false, 
-            autoDelete: false, 
-            arguments: null);
-        var json = JsonSerializer.Serialize(message);
-        var body = Encoding.UTF8.GetBytes(json);
-        await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "permissions", body: body);
-        
-        var consumer = new AsyncEventingBasicConsumer(channel);
-        var tcs = new TaskCompletionSource<string>();
-        consumer.ReceivedAsync += async (sender, args) =>
-        {
-            var body = args.Body.ToArray();
-            var response = Encoding.UTF8.GetString(body);
-            tcs.SetResult(response);
-        };
-        
-        await channel.BasicConsumeAsync(queue: "permissions", autoAck: true, consumer: consumer);
-        
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-        cts.Token.Register(() => tcs.TrySetCanceled());
-        return await tcs.Task;*/
-        
         await using var channel = await _connection.Connection.CreateChannelAsync();
         
         var replyQueue = await channel.QueueDeclareAsync(

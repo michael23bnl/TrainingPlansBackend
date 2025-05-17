@@ -48,6 +48,19 @@ services:
     ports:
       - "5433:5432"
     restart: always
+    
+  statisticservice:
+    container_name: statisticsdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "statisticsdb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - plansdb-data:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    restart: always
         
   chatservice:
     container_name: chatdb
@@ -85,5 +98,6 @@ volumes:
   elasticsearch-data:
   usersdb-data:
   plansdb-data:
+  statisticdb-data:
   chatdb-data:
   rabbitmq-data:

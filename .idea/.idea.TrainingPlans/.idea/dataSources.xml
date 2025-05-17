@@ -25,5 +25,13 @@
       <jdbc-url>jdbc:postgresql://localhost:5435/usersdb?password=123&amp;user=postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="statisticsdb@localhost" uuid="44f14e81-0cfa-4701-8004-f7fb48425d18">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5436/statisticsdb?password=123&amp;user=postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

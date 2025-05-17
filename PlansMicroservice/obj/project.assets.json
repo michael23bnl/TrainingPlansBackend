@@ -8501,6 +8501,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.1",
       "Npgsql.EntityFrameworkCore.PostgreSQL.Design >= 1.1.0",
+      "RabbitMQ.Client >= 7.1.2",
       "Swashbuckle.AspNetCore >= 6.4.0",
       "UserMicroservice >= 1.0.0"
     ]
@@ -8580,6 +8581,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL.Design": {
             "target": "Package",
             "version": "[1.1.0, )"
+          },
+          "RabbitMQ.Client": {
+            "target": "Package",
+            "version": "[7.1.2, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
