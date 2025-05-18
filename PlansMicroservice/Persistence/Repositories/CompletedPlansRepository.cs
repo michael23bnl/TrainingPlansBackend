@@ -46,6 +46,23 @@ public class CompletedPlansRepository : ICompletedPlansRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<CompletedPlanModel> GetCompletedPlan(Guid userId, Guid planId)
+    {
+        var completedPlan = await _context.CompletedPlans
+            .Where(f => f.UserId == userId && f.PlanId == planId)
+            .Join(
+                _context.Plans,
+                cp => cp.PlanId,
+                p => p.Id,
+                (cp, p) => new { PlanEntity = p, cp.CompletionDate }
+            )
+            .FirstOrDefaultAsync();
+
+        var result = CompletedPlanModel.Create(completedPlan.PlanEntity, completedPlan.CompletionDate);
+        
+        return result;
+    }
+
     public async Task<List<CompletedPlanModel>> GetCompletedPlans(Guid userId)
     {
         
@@ -62,27 +79,6 @@ public class CompletedPlansRepository : ICompletedPlansRepository
 
         
         return result;
-        
-        /*var completedPlanIds = _context.CompletedPlans
-            .Where(f => f.UserId == userId)
-            .Select(f => f.PlanId);
-
-        var planEntities = await _context.Plans
-            .Where(p => completedPlanIds.Contains(p.Id))
-            .ToListAsync();
-        
-        var plans = planEntities.Select(p => PlanModel.Create(
-            p.Id, 
-            p.Category,
-            p.Exercises
-                .Select(e => ExerciseModel.Create(
-                e.Id, 
-                e.Name, 
-                e.MuscleGroup
-                ).exerciseModel).ToList()!, 
-            p.CreatedBy).planModel).ToList();
-
-        return plans;*/
     }
     
     public async Task<(int, List<PlanModel?>)> GetCompletedPlansPaginated(Guid userId, PlanParameters planParameters)

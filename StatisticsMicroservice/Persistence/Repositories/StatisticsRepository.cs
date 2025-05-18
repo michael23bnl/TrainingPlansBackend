@@ -27,4 +27,15 @@ public class StatisticsRepository : IStatisticsRepository
         await _context.Statistics.AddRangeAsync(statistics);
         await _context.SaveChangesAsync();
     }
+
+    public async Task RemoveStatistics(Guid userId, Guid planId)
+    {
+        var statistics = await _context.Statistics
+            .Where(s => s.UserId == userId && s.PlanId == planId)
+            .ToListAsync();
+        
+        _context.Statistics.RemoveRange(statistics);
+        
+        await _context.SaveChangesAsync();
+    }
 }

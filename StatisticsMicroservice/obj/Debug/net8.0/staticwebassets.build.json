@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "9sIRuh7qOk+WBiRacbqLWYKlcDdR8AyX9zZdsREi/3w=",
+  "Hash": "Pf8OsJgZsHHX2b/0XTSa9DxRaCLUccVfylhIDlArNrs=",
   "Source": "StatisticsMicroservice",
   "BasePath": "_content/StatisticsMicroservice",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "UserMicroservice",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],
