@@ -23,4 +23,14 @@
       <ProjectReference Include="..\UserMicroservice\UserMicroservice.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="API\" />
+      <Folder Include="Application\" />
+      <Folder Include="Domain\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Data\TrainingData.json" />
+    </ItemGroup>
+
 </Project>

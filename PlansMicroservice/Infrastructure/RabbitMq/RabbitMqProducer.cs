@@ -15,12 +15,12 @@ public class RabbitMqProducer : IMessageProducer
         _connection = connection;
     }
 
-    public async Task SendMessage<T>(T message)
+    public async Task SendMessage<T>(T message, string queue)
     {
         var channel = await _connection.Connection.CreateChannelAsync();
         
         await channel.QueueDeclareAsync(
-            queue: "statistics", 
+            queue: queue, 
             durable: false, 
             exclusive: false, 
             autoDelete: false,
@@ -32,7 +32,7 @@ public class RabbitMqProducer : IMessageProducer
         
         await channel.BasicPublishAsync(
             exchange: string.Empty, 
-            routingKey: "statistics", 
+            routingKey: queue, 
             mandatory: false, 
             body: body);
     }

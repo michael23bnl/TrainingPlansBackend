@@ -1,6 +1,7 @@
+using StatisticsMicroservice.Models;
 using StatisticsMicroservice.Services.Interfaces;
 
-namespace StatisticsMicroservice.Models;
+namespace StatisticsMicroservice.Infrastructure;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -9,8 +10,8 @@ using System.IO;
 
 public class ExeriseCategoryIdentifier : IExerciseCategoryIdentifier
 {
-    private const string _modelPath = "exerciseCategoryModel.zip";
-    private const string trainingDataPath = "Data/TrainingData.json";
+    private const string _modelPath = "Infrastructure/exerciseCategoryModel.zip";
+    private const string trainingDataPath = "Infrastructure/Data/TrainingData.json";
     private readonly MLContext _mlContext;
     private ITransformer _model;
     private readonly ITrainingDataLoader _loader;

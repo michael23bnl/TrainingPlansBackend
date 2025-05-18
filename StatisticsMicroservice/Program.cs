@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using StatisticsMicroservice;
+using StatisticsMicroservice.Infrastructure;
 using StatisticsMicroservice.Models;
 using StatisticsMicroservice.Repositories;
 using StatisticsMicroservice.Services.Interfaces;

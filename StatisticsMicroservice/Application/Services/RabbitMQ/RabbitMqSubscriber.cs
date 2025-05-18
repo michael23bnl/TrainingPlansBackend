@@ -12,21 +12,20 @@ public class RabbitMqSubscriber : IMessageSubscriber
 {
     
     private readonly IRabbitMqConnection _connection;
-    private readonly IStatisticsService _statisticsService;
 
-    public RabbitMqSubscriber(IRabbitMqConnection connection, 
-        IStatisticsService statisticsService)
+    public RabbitMqSubscriber(IRabbitMqConnection connection)
     {
         _connection = connection;
-        _statisticsService = statisticsService;
     }
 
-    public async Task ReceiveMessage(CancellationToken stoppingToken)
+    public async Task ReceiveMessage(Func<string, Task> messageHandler, 
+        string queue,
+        CancellationToken stoppingToken)
     {
         await using var channel = await _connection.Connection.CreateChannelAsync(null, stoppingToken);
         
         await channel.QueueDeclareAsync(
-            queue: "statistics", 
+            queue: queue, 
             durable: false, 
             exclusive: false, 
             autoDelete: false,
@@ -38,11 +37,12 @@ public class RabbitMqSubscriber : IMessageSubscriber
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-            await _statisticsService.SetStatistics(message);
+            // await _statisticsService.SetStatistics(message);
+            await messageHandler(message);
         };
             
         await channel.BasicConsumeAsync(
-            "statistics", 
+            queue, 
             autoAck: true, 
             consumer: consumer);
         
@@ -54,6 +54,4 @@ public class RabbitMqSubscriber : IMessageSubscriber
         await channel.CloseAsync(stoppingToken);
         await _connection.Connection.CloseAsync(stoppingToken);
     }
-    
-    
 }

@@ -77,8 +77,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Exercises.json"));
-app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Plans.json"));
+app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Exercises.json"));
+app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Plans.json"));
 
 app.UseRouting();
 app.UseAuthentication();

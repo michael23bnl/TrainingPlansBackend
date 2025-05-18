@@ -28,7 +28,7 @@ public class StatisticsService : IStatisticsService
     
     public async Task SetStatistics(string jsonStatisticItems)
     {
-        var data = JsonSerializer.Deserialize<ExercisesData>(jsonStatisticItems);
+        var data = JsonSerializer.Deserialize<CreateStatisticMessage>(jsonStatisticItems);
 
         var statistics = new List<Statistic>();
         
@@ -36,16 +36,24 @@ public class StatisticsService : IStatisticsService
         {
             var statistic = new Statistic
             {
-                Id = Guid.NewGuid(),
-                UserId = Guid.Parse(data.UserId),
+                UserId = data.UserId,
+                PlanId = data.PlanId,
                 MuscleGroup = 
-                    !string.IsNullOrEmpty(exercise.Category) 
-                    ? exercise.Category 
-                    : _identifier.PredictCategory(exercise.Name)
+                    !string.IsNullOrEmpty(exercise.MuscleGroup) 
+                    ? exercise.MuscleGroup 
+                    : _identifier.PredictCategory(exercise.Name),
+                CompletionDate = data.CompletionDate,
             };
             statistics.Add(statistic);
         };
         
         await _repository.SaveStatistics(statistics);
+    }
+    
+    public async Task DeleteStatistics(string jsonIds)
+    {
+        var data = JsonSerializer.Deserialize<DeleteStatisticMessage>(jsonIds);
+
+        await _repository.RemoveStatistics(data.UserId, data.PlanId);
     }
 }

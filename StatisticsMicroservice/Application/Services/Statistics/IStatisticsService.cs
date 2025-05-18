@@ -6,4 +6,5 @@ public interface IStatisticsService
 {
     public Task<List<Statistic>> GetStatistics(Guid userId);
     public Task SetStatistics(string jsonItems);
+    public Task DeleteStatistics(string jsonItems);
 }

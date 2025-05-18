@@ -8,38 +8,45 @@ namespace TrainingPlans.Application.Services;
 public class CompletedPlansService : ICompletedPlansService
 {
     private readonly ICompletedPlansRepository _completedPlansRepository;
-    private readonly IPlansRepository _plansRepository;
     private readonly IMessageProducer _producer;
     
     public CompletedPlansService(ICompletedPlansRepository completedPlansRepository,
-        IPlansRepository plansRepository,
         IMessageProducer producer)
     {
         _completedPlansRepository = completedPlansRepository;
-        _plansRepository = plansRepository;
         _producer = producer;
     }
     
     public async Task MarkAsCompleted(Guid userId, Guid planId)
     {
         await _completedPlansRepository.MarkAsCompleted(userId, planId);
-        var plan = await _plansRepository.Get(planId, userId);
+        var plan = await _completedPlansRepository.GetCompletedPlan(userId, planId);
         var data = new
         {
-            exercises = plan.Exercises
+            UserId = userId,
+            PlanId = plan.Plan.Id,
+            Exercises = plan.Plan.Exercises
                 .Select(x => new
                 {
                     Name = x.Name,
                     Category = x.MuscleGroup
                 }).ToList(),
-            userId = userId
+            CompletionDate = plan.CompletionDate,
         };
-        await _producer.SendMessage(data);
+        await _producer.SendMessage(data, "statistics.create");
     }
     
     public async Task RemoveCompletedMark(Guid userId, Guid planId)
     {
         await _completedPlansRepository.RemoveCompletedMark(userId, planId);
+
+        var data = new
+        {
+            UserId = userId,
+            PlanId = planId
+        };
+        
+        await _producer.SendMessage(data, "statistics.delete");
     }
     
     public async Task<List<CompletedPlanModel>> GetCompletedPlans(Guid userId)
