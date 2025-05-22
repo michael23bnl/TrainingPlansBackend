@@ -3,7 +3,7 @@ using TrainingPlans.Entities;
 using System.Text.Json;
 namespace TrainingPlans.Extensions;
 
-public static class SeedDataExtensions
+public static class SeedPostgresDataExtensions
 {
     public static void SeedPlansData(this WebApplication app, string dataFilePath)
     {

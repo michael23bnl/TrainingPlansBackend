@@ -34,4 +34,8 @@
       <Folder Include="Domain\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
+
 </Project>

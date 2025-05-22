@@ -23,7 +23,6 @@ public class UserDbContext(DbContextOptions<UserDbContext> options,
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserDbContext).Assembly);
         modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(authOptions.Value));
-
     }
     
 }

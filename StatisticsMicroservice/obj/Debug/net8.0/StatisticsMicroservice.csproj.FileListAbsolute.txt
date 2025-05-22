@@ -56,7 +56,6 @@ D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\obj\Debug\net8.0\r
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\obj\Debug\net8.0\StatisticsMicroservice.pdb
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\obj\Debug\net8.0\StatisticsMicroservice.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\obj\Debug\net8.0\ref\StatisticsMicroservice.dll
-D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Data\TrainingData.json
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Humanizer.dll
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Microsoft.Build.Locator.dll
@@ -175,3 +174,6 @@ D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\N
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\UserMicroservice.dll
 D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\UserMicroservice.pdb
+D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Infrastructure\Data\TrainingData.json
+D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Shared.dll
+D:\Projects\.NET\TrainingPlans\Backend\StatisticsMicroservice\bin\Debug\net8.0\Shared.pdb

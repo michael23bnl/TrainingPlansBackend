@@ -423,3 +423,5 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMi
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\UserMicroservice.pdb
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persistence\Data\Exercises.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persistence\Data\Plans.json
+D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Shared.dll
+D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Shared.pdb

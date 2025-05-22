@@ -7,6 +7,8 @@ public interface IElasticService
 {
     Task CreateIndexIfNotExistsAsync(string indexName);
 
+    Task<bool> ContainsDocuments(string indexName);
+
     Task<bool> AddOrUpdateAsync(PlanEntity plan);
     
     Task<bool> AddOrUpdateBulk(IEnumerable<PlanEntity> plans);

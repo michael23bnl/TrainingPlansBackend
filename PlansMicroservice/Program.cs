@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Extensions;
 using TrainingPlans.Application.Services;
 using TrainingPlans.Infrastructure.RabbitMq;
 using TrainingPlans.Infrastructure.RabbitMq.Connection;
@@ -56,20 +57,7 @@ builder.Services.AddApiAuthentication();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var dbContext = services.GetRequiredService<PlansDbContext>();
-        dbContext.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while applying migrations.");
-    }
-}
+app.ApplyDatabaseMigrations<PlansDbContext>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -79,7 +67,7 @@ if (app.Environment.IsDevelopment())
 
 app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Exercises.json"));
 app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Plans.json"));
-
+await app.SeedPlansData();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
