@@ -13,6 +13,7 @@ public interface IChatClient
     public Task ReceiveMessage(string userName, string? message, 
         List<Plan>? plans, DateTime sendingDate);
 }
+[Authorize]
 public class ChatHub : Hub<IChatClient>
 {
 

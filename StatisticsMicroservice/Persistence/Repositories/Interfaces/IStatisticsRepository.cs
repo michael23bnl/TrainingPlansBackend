@@ -4,7 +4,7 @@ namespace StatisticsMicroservice.Repositories;
 
 public interface IStatisticsRepository
 {
-    public Task<List<Statistic>> Get(Guid userId);
+    public Task<List<Statistic>> Get(Guid userId, DateOnly? from);
 
     public Task SaveStatistics(List<Statistic> statistics);
     

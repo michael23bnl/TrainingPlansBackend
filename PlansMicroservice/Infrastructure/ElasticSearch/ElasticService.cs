@@ -76,6 +76,15 @@ public class ElasticService : IElasticService
             });
         }
     }
+    
+    public async Task<bool> ContainsDocuments(string indexName)
+    {
+        var response = await _client.CountAsync<PlanEntity>(c => c
+            .Indices(indexName)
+        );
+
+        return response.Count > 0;
+    }
 
 
     public async Task<bool> AddOrUpdateAsync(PlanEntity plan)

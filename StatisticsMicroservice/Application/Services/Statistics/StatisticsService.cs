@@ -19,9 +19,17 @@ public class StatisticsService : IStatisticsService
         _identifier = identifier;
     }
 
-    public async Task<List<Statistic>> GetStatistics(Guid userId)
+    public async Task<List<Statistic>> GetStatistics(Guid userId, string period)
     {
-        var statistics = await _repository.Get(userId);
+        var isDaysAmount = int.TryParse(period, out var pastDays);
+        DateOnly? from = null;
+        
+        if (isDaysAmount)
+        {
+            from = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-pastDays));
+        }
+
+        var statistics = await _repository.Get(userId, from);
         
         return statistics;
     }

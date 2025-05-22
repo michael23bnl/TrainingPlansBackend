@@ -589,3 +589,5 @@ D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMic
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\UserMicroservice.genruntimeconfig.cache
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\obj\Debug\net8.0\ref\UserMicroservice.dll
 D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\RabbitMQ.Client.dll
+D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\Shared.dll
+D:\Projects\.NET\TrainingPlans\Backend\UserMicroservice\bin\Debug\net8.0\Shared.pdb

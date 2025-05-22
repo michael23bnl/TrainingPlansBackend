@@ -13,14 +13,20 @@ public class StatisticsRepository : IStatisticsRepository
         _context = context;
     }
     
-    public async Task<List<Statistic>> Get(Guid userId)
+    public async Task<List<Statistic>> Get(Guid userId, DateOnly? from)
     {
-        var statistics = await _context.Statistics
-            .Where(s => s.UserId == userId)
-            .ToListAsync();
+        var query = _context.Statistics.AsQueryable();
 
-        return statistics;
+        query = query.Where(s => s.UserId == userId);
+
+        if (from.HasValue)
+        {
+            query = query.Where(s => s.CompletionDate >= from.Value);
+        }
+
+        return await query.ToListAsync();
     }
+
 
     public async Task SaveStatistics(List<Statistic> statistics)
     {

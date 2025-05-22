@@ -6,6 +6,7 @@ using StatisticsMicroservice.Services.Interfaces;
 
 namespace StatisticsMicroservice;
 
+[Authorize]
 [ApiController]
 [Route("/api/[controller]")]
 public class StatisticsController : ControllerBase
@@ -28,11 +29,11 @@ public class StatisticsController : ControllerBase
     }
     
     [Authorize]
-    [HttpGet("get")]
-    public async Task<List<Statistic>> GetUserStatistics()
+    [HttpGet("get/{period}")]
+    public async Task<List<Statistic>> GetUserStatistics(string period)
     {
         var userId = Guid.Parse(GetUserId()!);
-        var statistics = await _statisticsService.GetStatistics(userId);
+        var statistics = await _statisticsService.GetStatistics(userId, period);
         return statistics;
     }
     

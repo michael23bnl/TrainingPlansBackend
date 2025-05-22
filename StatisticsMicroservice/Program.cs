@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using Shared.Extensions;
 using StatisticsMicroservice;
 using StatisticsMicroservice.Infrastructure;
 using StatisticsMicroservice.Models;
@@ -49,6 +50,8 @@ builder.Services.AddHostedService<RabbitMqBackgroundService>();
 builder.Services.AddApiAuthentication();
 
 var app = builder.Build();
+
+app.ApplyDatabaseMigrations<StatisticsDbContext>();
 
 if (app.Environment.IsDevelopment())
 {

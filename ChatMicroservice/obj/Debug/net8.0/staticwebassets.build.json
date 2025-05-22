@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "qBa8nZTcaxys6QEWcMUhFOXzk9srbkKtrZLUBI4IXd8=",
+  "Hash": "X4gXgsiNbNlSrCQAuEh8ElXK2/5SrtkWlGW2wl0Lg14=",
   "Source": "ChatMicroservice",
   "BasePath": "_content/ChatMicroservice",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj",
+      "Version": 2,
+      "Source": "UserMicroservice",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }

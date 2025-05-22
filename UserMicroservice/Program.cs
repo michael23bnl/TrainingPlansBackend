@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Shared.Extensions;
 using UserMicroservice;
 using UserMicroservice.Entities;
 using UserMicroservice.Enums;
@@ -49,37 +50,32 @@ builder.Services.AddHostedService<RabbitMqBackgroundService>();
 
 var app = builder.Build();
 
+app.ApplyDatabaseMigrations<UserDbContext>();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    try
+
+    var dbContext = services.GetRequiredService<UserDbContext>();
+    var passwordHasher = services.GetRequiredService<IPasswordHasher>();
+    var userRepository = services.GetRequiredService<IUsersRepository>();
+    
+    if (await userRepository.GetByEmail("Admin") == null)
     {
-        var dbContext = services.GetRequiredService<UserDbContext>();
-        dbContext.Database.Migrate();
-        var passwordHasher = services.GetRequiredService<IPasswordHasher>();
-        var userRepository = services.GetRequiredService<IUsersRepository>();
-        if (userRepository.GetByEmail("Admin") == null)
+        var user = new UserEntity
         {
-            var user = new UserEntity
-            {
-                Id = Guid.NewGuid(),
-                UserName = "Admin",
-                Email = "Admin",
-                PasswordHash = passwordHasher.Generate("Admin"),
-                Roles =
-                [
-                    await dbContext.Roles
-                        .SingleOrDefaultAsync(r => r.Id == (int)Role.Admin)
-                ]
-            };
-            await dbContext.Users.AddAsync(user);
-            await dbContext.SaveChangesAsync();
-        }
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while applying migrations.");
+            Id = Guid.NewGuid(),
+            UserName = "Admin",
+            Email = "Admin",
+            PasswordHash = passwordHasher.Generate("Admin"),
+            Roles =
+            [
+                await dbContext.Roles
+                    .SingleOrDefaultAsync(r => r.Id == (int)Role.Admin)
+            ]
+        };
+        await dbContext.Users.AddAsync(user);
+        await dbContext.SaveChangesAsync();
     }
 }
 

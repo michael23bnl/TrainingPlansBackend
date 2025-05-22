@@ -311,9 +311,9 @@
     },
 
     {
-      "UpstreamPathTemplate": "/gateway/Statistics/get",
+      "UpstreamPathTemplate": "/gateway/Statistics/get/{period}",
       "UpstreamHttpMethod": [ "GET" ],
-      "DownstreamPathTemplate": "/api/Statistics/get",
+      "DownstreamPathTemplate": "/api/Statistics/get/{period}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
