@@ -1,5 +1,6 @@
 using ChatMicroservice;
-using ChatMicroservice.Hubs;
+using ChatMicroservice.Application.Services;
+using ChatMicroservice.Infrastructure.Hubs;
 using ChatMicroservice.Repositories;
 using ChatMicroservice.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,9 @@ builder.Services.AddCors(options =>
             .AllowCredentials(); 
     });
 });
+
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSignalR();
 

@@ -278,7 +278,7 @@ public class PlansController : ControllerBase
 
     }
     
-    [Authorize("Create")]
+    [Authorize]
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<PreparedPlanResponse>> GetPlan(Guid id)
     {

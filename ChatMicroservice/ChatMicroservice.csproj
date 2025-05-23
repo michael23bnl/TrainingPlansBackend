@@ -30,6 +30,12 @@
       <ProjectReference Include="..\UserMicroservice\UserMicroservice.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="API\" />
+      <Folder Include="Domain\" />
+      <Folder Include="Infrastructure\" />
+    </ItemGroup>
+
     <!--<ItemGroup>
       <ProjectReference Include="..\PlansMicroservice\PlansMicroservice.csproj" />
     </ItemGroup>-->

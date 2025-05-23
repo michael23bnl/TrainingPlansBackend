@@ -1,6 +1,8 @@
+using ChatMicroservice.API.DTO;
 using ChatMicroservice.Models;
 using ChatMicroservice.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatMicroservice.Repositories;
 
@@ -29,7 +31,22 @@ public class ChatRepository : IChatRepository
         return chatMessages;
     }
 
-    public async Task DeleteMessageHistory(string chatRoom)
+    public async Task<LastMessageResponse> GetRoomLastMessage(string chatRoom)
+    {
+        var lastMessage = await _context.ChatMessages
+            .Where(cm => cm.ChatRoom == chatRoom)
+            .OrderByDescending(cm => cm.SendingDate)
+            .ThenByDescending(cm => cm.Id)
+            .Select(cm => new LastMessageResponse(
+                cm.Message,
+                !cm.Plans.IsNullOrEmpty()
+            ))
+            .FirstOrDefaultAsync();
+        
+        return lastMessage;
+    }
+
+    /*public async Task DeleteMessageHistory(string chatRoom)
     {
         var messages = await _context.ChatMessages
             .Where(m => m.ChatRoom == chatRoom)
@@ -37,5 +54,5 @@ public class ChatRepository : IChatRepository
         
         _context.RemoveRange(messages);
         await _context.SaveChangesAsync();
-    }
+    }*/
 }
