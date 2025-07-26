@@ -3,13 +3,14 @@ using Elastic.Clients.Elasticsearch.IndexManagement;
 using Elastic.Clients.Elasticsearch.Mapping;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using Microsoft.Extensions.Options;
+using TrainingPlans.Application.Services.Interfaces;
 using TrainingPlans.Configurations;
-using TrainingPlans.Entities;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Pagination;
 
-namespace TrainingPlans.Services;
+namespace TrainingPlans.Infrastructure.Elasticsearch;
 
-public class ElasticService : IElasticService
+public class ElasticService : IPlansSearch
 {
     
     private readonly ElasticsearchClient _client;
@@ -79,7 +80,7 @@ public class ElasticService : IElasticService
     
     public async Task<bool> ContainsDocuments(string indexName)
     {
-        var response = await _client.CountAsync<PlanEntity>(c => c
+        var response = await _client.CountAsync<PlanModel>(c => c
             .Indices(indexName)
         );
 
@@ -87,7 +88,7 @@ public class ElasticService : IElasticService
     }
 
 
-    public async Task<bool> AddOrUpdateAsync(PlanEntity plan)
+    public async Task<bool> AddOrUpdateAsync(PlanModel plan)
     {
         var response = await _client.IndexAsync(plan, idx
             => idx.Index(_settings.DefaultIndex)
@@ -96,7 +97,7 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }
 
-    public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanEntity> plans)
+    public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanModel> plans)
     {
         var response = await _client.BulkAsync(
             b => b.Index(_settings.DefaultIndex)
@@ -107,7 +108,7 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }
     
-    /*public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanEntity> plans)
+    /*public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanModel> plans)
     {
         var sortedPlans = plans.Select(plan =>
         {
@@ -126,9 +127,9 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }*/
     
-    /*public async Task<List<PlanEntity>> SearchPlansAsync(string query)
+    /*public async Task<List<PlanModel>> SearchPlansAsync(string query)
     {
-        var response = await _client.SearchAsync<PlanEntity>(s => s
+        var response = await _client.SearchAsync<PlanModel>(s => s
             .Query(q => q
                 .Bool(b => b
                     .Should(
@@ -156,10 +157,11 @@ public class ElasticService : IElasticService
             ).Size(10));
         return response.Documents.ToList();
     }*/
-    
-    public async Task<(int totalCount, List<PlanEntity> plans)> SearchPlansAsync(string query, PlanParameters planParameters)
+
+    public async Task<(int totalCount, List<PlanModel> plans)> SearchPlansAsync(string query,
+        PlanParameters planParameters)
     {
-        var response = await _client.SearchAsync<PlanEntity>(s => s
+        var response = await _client.SearchAsync<PlanModel>(s => s
             .Query(q => q
                 .Bool(b => b
                     .Should(
@@ -179,16 +181,16 @@ public class ElasticService : IElasticService
             .From((planParameters.PageNumber - 1) * planParameters.PageSize)
             .Size(planParameters.PageSize)
         );
-        
+
         var totalCount = (int)response.Total;
         var plans = response.Documents.ToList();
         //return response.Documents.ToList();
         return (totalCount, plans);
     }
-    
-    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughMyPlans(string query, Guid userId, PlanParameters planParameters)
+
+    public async Task<(int totalCount, List<PlanModel> plans)> SearchThroughMyPlans(string query, Guid userId, PlanParameters planParameters)
     {
-        var response = await _client.SearchAsync<PlanEntity>(s => s
+        var response = await _client.SearchAsync<PlanModel>(s => s
             .Query(q => q
                 .Bool(b => b
                     .Must(
@@ -196,12 +198,12 @@ public class ElasticService : IElasticService
                             .Field(f => f.CreatedBy).Value(userId.ToString())),
                         q => q.Bool(b2 => b2
                             .Should(
-                                // Поиск по названиям упражнений
+                                // поиск по названиям упражнений
                                 q => q.Match(m => m
                                     .Field("exercises.name")
                                     .Query(query)
                                     .Fuzziness(new Fuzziness("AUTO"))),
-                                // Поиск по категории
+                                // поиск по категории
                                 q => q.Match(m => m
                                     .Field(f => f.Category)
                                     .Query(query)
@@ -222,21 +224,20 @@ public class ElasticService : IElasticService
         return (totalCount, plans);
     }
 
-    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds, PlanParameters planParameters)
+    public async Task<(int totalCount, List<PlanModel> plans)> SearchThroughFavoritePlans(string query, List<Guid> favoritePlanIds, PlanParameters planParameters)
     {
 
         if (favoritePlanIds == null || !favoritePlanIds.Any())
         {
-            return (0, new List<PlanEntity>());
+            return (0, new List<PlanModel>());
         }
         
         var ids = favoritePlanIds.Select(id => id.ToString("D")).ToList();
 
-        var response = await _client.SearchAsync<PlanEntity>(s => s
+        var response = await _client.SearchAsync<PlanModel>(s => s
             .Query(q => q
                 .Bool(b => b
                     .Must(
-                        
                         q => q.Ids(new IdsQuery
                         {
                             Values = new Ids(favoritePlanIds.Select(id => id.ToString()))
@@ -267,17 +268,17 @@ public class ElasticService : IElasticService
         return (totalCount, plans);
     }
     
-    public async Task<(int totalCount, List<PlanEntity> plans)> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds, PlanParameters planParameters)
+    public async Task<(int totalCount, List<PlanModel> plans)> SearchThroughCompletedPlans(string query, List<Guid> completedPlanIds, PlanParameters planParameters)
     {
 
         if (completedPlanIds == null || !completedPlanIds.Any())
         {
-            return (0, new List<PlanEntity>());
+            return (0, new List<PlanModel>());
         }
         
         var ids = completedPlanIds.Select(id => id.ToString("D")).ToList();
 
-        var response = await _client.SearchAsync<PlanEntity>(s => s
+        var response = await _client.SearchAsync<PlanModel>(s => s
             .Query(q => q
                 .Bool(b => b
                     .Must(
@@ -312,17 +313,17 @@ public class ElasticService : IElasticService
         return (totalCount, plans);
     }
 
-    public async Task<PlanEntity> GetAsync(string id)
+    public async Task<PlanModel> GetAsync(string id)
     {
-        var response = await _client.GetAsync<PlanEntity>(id, g =>
+        var response = await _client.GetAsync<PlanModel>(id, g =>
             g.Index(_settings.DefaultIndex));
         
         return response.Source;
     }
 
-    public async Task<List<PlanEntity>?> GetAllAsync()
+    public async Task<List<PlanModel>?> GetAllAsync()
     {
-        var response = await _client.SearchAsync<PlanEntity>(s =>
+        var response = await _client.SearchAsync<PlanModel>(s =>
             s.Index(_settings.DefaultIndex));
         
         return response.IsValidResponse ? response.Documents.ToList() : default;
@@ -330,7 +331,7 @@ public class ElasticService : IElasticService
 
     public async Task<bool> RemoveAsync(string id)
     {
-        var response = await _client.DeleteAsync<PlanEntity>(id,
+        var response = await _client.DeleteAsync<PlanModel>(id,
             d => d.Index(_settings.DefaultIndex));
         
         return response.IsValidResponse;
@@ -338,7 +339,7 @@ public class ElasticService : IElasticService
 
     public async Task<long?> RemoveAll()
     {
-        var response = await _client.DeleteByQueryAsync<PlanEntity>(d => d
+        var response = await _client.DeleteByQueryAsync<PlanModel>(d => d
             .Indices(_settings.DefaultIndex)
             .Query(q => q
                     .MatchAll(new MatchAllQuery())

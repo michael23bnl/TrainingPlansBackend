@@ -1,4 +1,4 @@
-namespace StatisticsMicroservice.Services.RabbitMQ;
+namespace StatisticsMicroservice.Infrastructure.RabbitMQ;
 
 public interface IMessageSubscriber
 {

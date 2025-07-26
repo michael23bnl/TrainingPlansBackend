@@ -1,6 +1,6 @@
 using StatisticsMicroservice.Models;
 
-namespace StatisticsMicroservice.Services.Interfaces;
+namespace StatisticsMicroservice.Application.Services.Interfaces;
 
 public interface IStatisticsService
 {

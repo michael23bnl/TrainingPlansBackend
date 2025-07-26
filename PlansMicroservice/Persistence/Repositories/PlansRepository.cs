@@ -1,13 +1,15 @@
-using Elastic.Clients.Elasticsearch.MachineLearning;
+using System.Data;
+using System.Text.Json;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
-
-using TrainingPlans.Contracts;
+using TrainingPlans.API.DTO;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Entities;
-using TrainingPlans.Models;
 using TrainingPlans.Pagination;
-using TrainingPlans.Repositories.Interfaces;
+using TrainingPlans.Persistence.Entities;
+using TrainingPlans.Persistence.Repositories.Interfaces;
 
-namespace TrainingPlans.Repositories;
+namespace TrainingPlans.Persistence.Repositories;
 
 public class PlansRepository : IPlansRepository
 {
@@ -269,5 +271,129 @@ public class PlansRepository : IPlansRepository
 
         return id;
     }
+
+    public async Task<(int totalCount, List<PlanModel> plans)> Search(string query, 
+        PlanParameters planParameters, List<Guid> filter)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var offset = (planParameters.PageNumber - 1) * planParameters.PageSize;
+
+        string sql = @"
+        SELECT ""Id"", ""Category"", ""Exercises"", ""CreatedBy"" AS ""CreatedBy"",
+               ts_rank(
+                   to_tsvector('russian', coalesce(""Category"", '')) ||
+                   to_tsvector('russian', coalesce(""Exercises""::text, '')),
+                   plainto_tsquery('russian', @query)
+               ) AS ""Rank""
+        FROM ""Plans""
+        WHERE 
+            (
+                to_tsvector('russian', coalesce(""Category"", '')) ||
+                to_tsvector('russian', coalesce(""Exercises""::text, '')) 
+            ) @@ plainto_tsquery('russian', @query)
+            AND (""Id"" = ANY(@filter))
+        ORDER BY ""Rank"" DESC
+        LIMIT @limit OFFSET @offset;";
+
+        var countSql = @"
+        SELECT COUNT(*) 
+        FROM ""Plans""
+        WHERE
+            to_tsvector('russian', coalesce(""Category"", '')) ||
+            to_tsvector('russian', coalesce(""Exercises""::text, '')) @@
+            plainto_tsquery('russian', @query);";
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        var plansRaw = await connection.QueryAsync<PlanSearchResultEntity>(sql, new
+        {
+            query,
+            filter,
+            limit = planParameters.PageSize,
+            offset
+        });
+
+        var totalCount = await connection.ExecuteScalarAsync<int>(countSql, new { query });
+        
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var plans = plansRaw
+            .Select(r =>
+            {
+                var exercises = JsonSerializer.Deserialize<List<ExerciseModel>>(r.Exercises, options) ?? new();
+                var (plan, _) = PlanModel.Create(r.Id, r.Category, exercises, r.CreatedBy);
+                return plan;
+            })
+            .Where(p => p is not null)
+            .ToList();
+
+        return (totalCount, plans);
+    }
     
+    public async Task<(int totalCount, List<PlanModel> plans)> Search(string query, 
+        PlanParameters planParameters, Guid? filter)
+    {
+        var connection = _context.Database.GetDbConnection();
+        var offset = (planParameters.PageNumber - 1) * planParameters.PageSize;
+
+        string sql = @"
+        SELECT ""Id"", ""Category"", ""Exercises"", ""CreatedBy"" AS ""CreatedBy"",
+               ts_rank(
+                   to_tsvector('russian', coalesce(""Category"", '')) ||
+                   to_tsvector('russian', coalesce(""Exercises""::text, '')),
+                   plainto_tsquery('russian', @query)
+               ) AS ""Rank""
+        FROM ""Plans""
+        WHERE 
+            (
+                to_tsvector('russian', coalesce(""Category"", '')) ||
+                to_tsvector('russian', coalesce(""Exercises""::text, '')) 
+            ) @@ plainto_tsquery('russian', @query)
+            AND (@filter IS NULL OR ""CreatedBy"" = @filter)
+        ORDER BY ""Rank"" DESC
+        LIMIT @limit OFFSET @offset;";
+
+        var countSql = @"
+        SELECT COUNT(*) 
+        FROM ""Plans""
+        WHERE
+            to_tsvector('russian', coalesce(""Category"", '')) ||
+            to_tsvector('russian', coalesce(""Exercises""::text, '')) @@
+            plainto_tsquery('russian', @query);";
+
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        var plansRaw = await connection.QueryAsync<PlanSearchResultEntity>(sql, new
+        {
+            query,
+            filter,
+            limit = planParameters.PageSize,
+            offset
+        });
+
+        var totalCount = await connection.ExecuteScalarAsync<int>(countSql, new { query });
+        
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var plans = plansRaw
+            .Select(r =>
+            {
+                var exercises = JsonSerializer.Deserialize<List<ExerciseModel>>(r.Exercises, options) ?? new();
+                var (plan, _) = PlanModel.Create(r.Id, r.Category, exercises, r.CreatedBy);
+                return plan;
+            })
+            .Where(p => p is not null)
+            .ToList();
+
+        return (totalCount, plans);
+    }
+
 }

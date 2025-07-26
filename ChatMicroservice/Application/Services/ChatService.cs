@@ -54,7 +54,7 @@ public class ChatService : IChatService
             };
             await _hubContext.Clients
                 .Group(connection.ChatRoom)
-                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate);
+                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate, connection.ChatRoom);
             await _chatRepository.SaveMessageAsync(chatMessage);
             return Results.Ok();
     }
@@ -72,7 +72,7 @@ public class ChatService : IChatService
             roomList.Remove(chatRoom);
             await _cache.SetStringAsync(userId, JsonSerializer.Serialize(roomList));
             await _hubContext.Groups.RemoveFromGroupAsync(connectionId, chatRoom);
-            var message = $"{userName} покинул чат {chatRoom}";
+            var message = $"{userName} покинул чат";
             var chatMessage = new ChatMessage
             {
                 Id = Guid.NewGuid(),
@@ -84,7 +84,7 @@ public class ChatService : IChatService
             };
             await SaveMessageAsync(chatMessage);
             await _hubContext.Clients.Groups(chatRoom)
-                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate);
+                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate, chatRoom);
         }
     }
     
@@ -149,7 +149,7 @@ public class ChatService : IChatService
         await SaveMessageAsync(chatMessage);
         await _hubContext.Clients
             .Group(chatRoom)
-            .ReceiveMessage(userName, message, plans, chatMessage.SendingDate);
+            .ReceiveMessage(userName, message, plans, chatMessage.SendingDate, chatRoom);
     }
     
     public async Task SaveMessageAsync(ChatMessage message)
@@ -168,7 +168,7 @@ public class ChatService : IChatService
         return roomList;
     }
     
-    public async Task<Dictionary<string, LastMessageResponse>> GetChatRoomsWithLastMessages(string userId)
+    public async Task<Dictionary<string, ChatMessage>> GetChatRoomsWithLastMessages(string userId)
     {
         var chatRooms = await _cache.GetStringAsync(userId);
         
@@ -176,7 +176,7 @@ public class ChatService : IChatService
             ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
             : new List<string>();
 
-        var roomLastMessage = new Dictionary<string, LastMessageResponse>();
+        var roomLastMessage = new Dictionary<string, ChatMessage>();
 
         foreach (var room in roomList)
         {
@@ -201,4 +201,24 @@ public class ChatService : IChatService
         
         return response;
     }
+    
+    /*public async Task<List<MessageResponse>> GetRoomsLastMessages(string userId)
+    {
+        
+        var chatRooms = await _cache.GetStringAsync(userId);
+        
+        var roomList = chatRooms != null 
+            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
+            : new List<string>();
+        
+        
+        
+        foreach (var chatRoom in roomList)
+        {
+             var roomLastMessage = await _chatRepository.GetRoomLastMessage(chatRoom);
+        }
+       
+        
+
+    }*/
 }

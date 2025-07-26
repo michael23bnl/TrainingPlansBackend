@@ -61,8 +61,7 @@ public class RabbitMqSubscriber : IMessageSubscriber
                 routingKey: args.BasicProperties.ReplyTo!, 
                 body: responseBytes, 
                 cancellationToken: stoppingToken);
-    
-        };
+    };
 
         await channel.BasicConsumeAsync(
             queue: "request-queue", 

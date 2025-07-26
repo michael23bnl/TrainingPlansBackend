@@ -9,7 +9,7 @@ public interface IChatRepository
     
     public Task<List<ChatMessage>> GetMessagesByRoomAsync(string chatRoom, int limit = 50);
 
-    public Task<LastMessageResponse> GetRoomLastMessage(string chatRoom);
+    public Task<ChatMessage> GetRoomLastMessage(string chatRoom);
 
     // public Task DeleteMessageHistory(string chatRoom);
 }

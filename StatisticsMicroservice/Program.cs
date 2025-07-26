@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.ML;
-using Microsoft.ML.Data;
 using Shared.Extensions;
 using StatisticsMicroservice;
-using StatisticsMicroservice.Infrastructure;
-using StatisticsMicroservice.Models;
+using StatisticsMicroservice.Application.Services;
+using StatisticsMicroservice.Application.Services.Interfaces;
+using StatisticsMicroservice.Infrastructure.ML;
+using StatisticsMicroservice.Infrastructure.RabbitMQ;
 using StatisticsMicroservice.Repositories;
 using StatisticsMicroservice.Services.Interfaces;
-using StatisticsMicroservice.Services.RabbitMQ;
 using StatisticsMicroservice.Services.RabbitMQ.Connection;
-using StatisticsMicroservice.Services.Statistics;
 using UserMicroservice.Enums;
 using UserMicroservice.Extensions;
 
@@ -40,7 +36,7 @@ builder.Services.RequirePermissions("Delete", Permission.Delete);
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<ITrainingDataLoader, TrainingDataLoader>();
-builder.Services.AddSingleton<IExerciseCategoryIdentifier, ExeriseCategoryIdentifier>();
+builder.Services.AddSingleton<IExerciseCategoryIdentifier, ExerciseCategoryIdentifier>();
 builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
 builder.Services.AddScoped<IMessageSubscriber, RabbitMqSubscriber>();

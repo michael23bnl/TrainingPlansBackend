@@ -57,7 +57,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "123"
     volumes:
-      - plansdb-data:/var/lib/postgresql/data
+      - statisticsdb-data:/var/lib/postgresql/data
     ports:
       - "5436:5432"
     restart: always
@@ -98,6 +98,6 @@ volumes:
   elasticsearch-data:
   usersdb-data:
   plansdb-data:
-  statisticdb-data:
+  statisticsdb-data:
   chatdb-data:
   rabbitmq-data:

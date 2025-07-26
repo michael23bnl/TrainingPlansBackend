@@ -6,7 +6,7 @@ using RabbitMQ.Client.Events;
 using StatisticsMicroservice.Services.Interfaces;
 using StatisticsMicroservice.Services.RabbitMQ.Connection;
 
-namespace StatisticsMicroservice.Services.RabbitMQ;
+namespace StatisticsMicroservice.Infrastructure.RabbitMQ;
 
 public class RabbitMqSubscriber : IMessageSubscriber
 {
@@ -36,8 +36,6 @@ public class RabbitMqSubscriber : IMessageSubscriber
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-
-            // await _statisticsService.SetStatistics(message);
             await messageHandler(message);
         };
             

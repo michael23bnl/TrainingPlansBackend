@@ -1,54 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
+using TrainingPlans.API.DTO;
+using TrainingPlans.Application.Services.Interfaces;
+using TrainingPlans.Domain.Models;
 
-using TrainingPlans.Contracts;
-using TrainingPlans.Models;
-using TrainingPlans.Repositories.Interfaces;
-
-namespace TrainingPlans.Controllers;
+namespace TrainingPlans.API.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
 
 public class ExercisesController : ControllerBase
 {
-    private readonly IExercisesRepository _exercisesRepository;
+    private readonly IExercisesService _exercisesService;
 
-    public ExercisesController(IExercisesRepository exercisesRepository)
+    public ExercisesController(IExercisesService exercisesService)
     {
-        _exercisesRepository = exercisesRepository;
+        _exercisesService = exercisesService;
     }
     
     [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreatePreparedExercise([FromBody] ExerciseRequest request)
+    public async Task<ActionResult<Guid>> CreateExercise([FromBody] ExerciseRequest request)
     {
-
-        var (exercise, response) = ExerciseModel
-            .Create(Guid.NewGuid(), request.Name, request.MuscleGroup);
-
-        if (response != "Exercise has been created")
+        var exerciseId = await _exercisesService.CreateExercise(request);
+        if (exerciseId == Guid.Empty)
         {
-            return BadRequest(response);
-            
-        } 
-        var exerciseId = await _exercisesRepository.Create(exercise);
+            return BadRequest("Не удалось создать упражнение");
+        }
         return Ok(exerciseId);
     }
     
     [HttpGet("get/all")]
     public async Task<ActionResult<List<ExerciseModel>>> GetAllExercises()
     {
-        return Ok(await _exercisesRepository.GetAllPrepared());
+        var exercises = await _exercisesService.GetAllExercises();
+        return Ok(exercises);
     }
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<Guid>> GetExercise(Guid exerciseId)
     {
-        return Ok(await _exercisesRepository.Get(exerciseId));
+        var exercise = await _exercisesService.GetExercise(exerciseId);
+        return Ok(exercise);
     }
     
     [HttpGet("get/{name}")]
     public async Task<ExerciseModel> GetExerciseByName(string name)
     {
-        var exercise = await _exercisesRepository.GetByName(name);
+        var exercise = await _exercisesService.GetExerciseByName(name);
         
         return exercise;
     }
@@ -56,15 +52,15 @@ public class ExercisesController : ControllerBase
     [HttpGet("get/category/{category}")]
     public async Task<List<ExerciseModel>> GetExercisesByCategory(string muscleGroup)
     {
-        var exercises = await _exercisesRepository.GetByCategory(muscleGroup);
+        var exercises = await _exercisesService.GetExercisesByCategory(muscleGroup);
         
         return exercises;
     }
     
     [HttpGet("get/all/categorized")]
-    public async Task<ActionResult<Dictionary<string, List<ExerciseModel>>>> GetAllExercisesCategorized()
+    public async Task<ActionResult<Dictionary<string, List<CategorizedExercise>>>> GetAllExercisesCategorized()
     {
-        var exercises = await _exercisesRepository.GetAllCategorized();
+        var exercises = await _exercisesService.GetAllExercisesCategorized();
         
         return exercises;
     }
@@ -72,11 +68,13 @@ public class ExercisesController : ControllerBase
     [HttpPut("update")]
     public async Task<ActionResult<Guid>> UpdateExercise(Guid exerciseId, [FromBody] ExerciseRequest request)
     {
-        return Ok(await _exercisesRepository.Update(exerciseId, request.Name, request.MuscleGroup));
+        var updatedExerciseId = await _exercisesService.UpdateExercise(exerciseId, request);
+        return Ok(updatedExerciseId);
     }
     [HttpDelete("delete")]
     public async Task<ActionResult<Guid>> DeleteExercise(Guid exerciseId)
     {
-        return Ok(await _exercisesRepository.Delete(exerciseId));
+        var deletedExerciseId = await _exercisesService.DeleteExercise(exerciseId);
+        return Ok(deletedExerciseId);
     }
 }

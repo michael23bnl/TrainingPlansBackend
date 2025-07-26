@@ -1,9 +1,9 @@
 
-using TrainingPlans.Contracts;
-using TrainingPlans.Models;
+using TrainingPlans.API.DTO;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Pagination;
 
-namespace TrainingPlans.Repositories.Interfaces;
+namespace TrainingPlans.Persistence.Repositories.Interfaces;
 
 public interface IPlansRepository
 {
@@ -26,5 +26,14 @@ public interface IPlansRepository
     public Task<List<Guid>> GetFavoritePlanIds(Guid userId);
     
     public Task<List<Guid>> GetCompletedPlanIds(Guid userId);
-    
+
+    public Task<(int totalCount, List<PlanModel> plans)> Search(string query, PlanParameters planParameters,
+        Guid? filter);
+
+    public Task<(int totalCount, List<PlanModel> plans)> Search(string query, PlanParameters planParameters,
+        List<Guid> filter);
+
+
+
+
 }

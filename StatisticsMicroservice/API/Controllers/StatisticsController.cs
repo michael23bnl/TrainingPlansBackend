@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StatisticsMicroservice.Application.Services.Interfaces;
 using StatisticsMicroservice.Models;
 using StatisticsMicroservice.Repositories;
 using StatisticsMicroservice.Services.Interfaces;
 
-namespace StatisticsMicroservice;
+namespace StatisticsMicroservice.API.Controllers;
 
 [Authorize]
 [ApiController]

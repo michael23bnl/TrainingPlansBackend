@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using TrainingPlans.Application.Services;
-using TrainingPlans.Models;
+using TrainingPlans.Application.Services.Interfaces;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Pagination;
-using TrainingPlans.Repositories.Interfaces;
 
-namespace TrainingPlans.Controllers;
+namespace TrainingPlans.API.Controllers;
 [ApiController]
 [Route("/api/[controller]")]
 

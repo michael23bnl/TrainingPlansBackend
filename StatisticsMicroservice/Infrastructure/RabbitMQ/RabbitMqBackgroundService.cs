@@ -1,6 +1,7 @@
-using StatisticsMicroservice.Services.Interfaces;
 
-namespace StatisticsMicroservice.Services.RabbitMQ;
+using StatisticsMicroservice.Application.Services.Interfaces;
+
+namespace StatisticsMicroservice.Infrastructure.RabbitMQ;
 
 public class RabbitMqBackgroundService : BackgroundService
 {
