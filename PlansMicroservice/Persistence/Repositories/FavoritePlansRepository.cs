@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using TrainingPlans.Contracts;
+using TrainingPlans.API.DTO;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Entities;
-using TrainingPlans.Repositories.Interfaces;
-using TrainingPlans.Models;
 using TrainingPlans.Pagination;
+using TrainingPlans.Persistence.Repositories.Interfaces;
 
-namespace TrainingPlans.Repositories;
+namespace TrainingPlans.Persistence.Repositories;
 
 public class FavoritePlansRepository : IFavoritePlansRepository
 {

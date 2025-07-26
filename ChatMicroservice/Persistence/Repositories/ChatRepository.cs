@@ -31,16 +31,12 @@ public class ChatRepository : IChatRepository
         return chatMessages;
     }
 
-    public async Task<LastMessageResponse> GetRoomLastMessage(string chatRoom)
+    public async Task<ChatMessage> GetRoomLastMessage(string chatRoom)
     {
         var lastMessage = await _context.ChatMessages
             .Where(cm => cm.ChatRoom == chatRoom)
             .OrderByDescending(cm => cm.SendingDate)
             .ThenByDescending(cm => cm.Id)
-            .Select(cm => new LastMessageResponse(
-                cm.Message,
-                !cm.Plans.IsNullOrEmpty()
-            ))
             .FirstOrDefaultAsync();
         
         return lastMessage;

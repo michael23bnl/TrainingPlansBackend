@@ -1,19 +1,19 @@
 using System.Text.Json.Serialization;
 
 
-namespace TrainingPlans.Models;
+namespace TrainingPlans.Domain.Models;
 
 public class PlanModel
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; }
     
-    public string? Category { get; set; }
+    public string? Category { get; }
     
-    public List<ExerciseModel> Exercises {get; set;}
+    public List<ExerciseModel> Exercises {get; }
     
-    public Guid? CreatedBy { get; set; }
+    public Guid? CreatedBy { get; }
     
-
+    [JsonConstructor]
     private PlanModel(Guid id, string? category, List<ExerciseModel> exercises, Guid? createdBy)
     {
         Id = id;

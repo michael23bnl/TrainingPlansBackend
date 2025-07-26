@@ -1,7 +1,8 @@
+using TrainingPlans.Application.Services.Interfaces;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Infrastructure.RabbitMq;
-using TrainingPlans.Models;
 using TrainingPlans.Pagination;
-using TrainingPlans.Repositories.Interfaces;
+using TrainingPlans.Persistence.Repositories.Interfaces;
 
 namespace TrainingPlans.Application.Services;
 
@@ -29,7 +30,7 @@ public class CompletedPlansService : ICompletedPlansService
                 .Select(x => new
                 {
                     Name = x.Name,
-                    Category = x.MuscleGroup
+                    MuscleGroup = x.MuscleGroup
                 }).ToList(),
             CompletionDate = plan.CompletionDate,
         };

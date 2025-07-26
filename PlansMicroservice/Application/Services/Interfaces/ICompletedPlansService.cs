@@ -1,7 +1,7 @@
-using TrainingPlans.Models;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Pagination;
 
-namespace TrainingPlans.Application.Services;
+namespace TrainingPlans.Application.Services.Interfaces;
 
 public interface ICompletedPlansService
 {

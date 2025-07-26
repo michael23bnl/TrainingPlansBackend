@@ -1,6 +1,6 @@
-using TrainingPlans.Models;
 
-namespace TrainingPlans.Contracts;
+
+namespace TrainingPlans.API.DTO;
 
 public record PlanRequest(
     string? Category, 

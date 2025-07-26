@@ -1,7 +1,10 @@
 
-using TrainingPlans.Models;
 
-namespace TrainingPlans.Repositories.Interfaces;
+
+using TrainingPlans.API.DTO;
+using TrainingPlans.Domain.Models;
+
+namespace TrainingPlans.Persistence.Repositories.Interfaces;
 
 public interface IExercisesRepository
 {
@@ -19,7 +22,7 @@ public interface IExercisesRepository
 
     public Task<List<ExerciseModel>> GetByCategory(string muscleGroup);
 
-    public Task<Dictionary<string, List<ExerciseModel>>> GetAllCategorized();
+    public Task<Dictionary<string, List<CategorizedExercise>>> GetAllCategorized();
 
     public Task<Guid> Update(Guid id, string name, string muscleGroup);
 

@@ -1,6 +1,6 @@
 using TrainingPlans.Entities;
 
-namespace TrainingPlans.Models;
+namespace TrainingPlans.Domain.Models;
 
 public class CompletedPlanModel
 {

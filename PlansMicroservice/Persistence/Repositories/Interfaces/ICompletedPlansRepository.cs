@@ -1,7 +1,7 @@
-using TrainingPlans.Models;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Pagination;
 
-namespace TrainingPlans.Repositories.Interfaces;
+namespace TrainingPlans.Persistence.Repositories.Interfaces;
 
 public interface ICompletedPlansRepository
 {

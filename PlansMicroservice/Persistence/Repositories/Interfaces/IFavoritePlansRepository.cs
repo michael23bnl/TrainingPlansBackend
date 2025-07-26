@@ -1,10 +1,10 @@
 
-using TrainingPlans.Contracts;
+using TrainingPlans.API.DTO;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Entities;
-using TrainingPlans.Models;
 using TrainingPlans.Pagination;
 
-namespace TrainingPlans.Repositories.Interfaces;
+namespace TrainingPlans.Persistence.Repositories.Interfaces;
 
 public interface IFavoritePlansRepository
 {

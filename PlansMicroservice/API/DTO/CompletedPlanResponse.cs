@@ -1,5 +1,6 @@
-namespace TrainingPlans.Contracts;
 
+
+namespace TrainingPlans.API.DTO;
 public record CompletedPlanResponse(
     Guid Id,
     string? Category,

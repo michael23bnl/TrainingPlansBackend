@@ -31,6 +31,7 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Data\TrainingData.json" />
+      <_ContentIncludedByDefault Remove="Infrastructure\TrainingData\TrainingData.json" />
     </ItemGroup>
 
 </Project>

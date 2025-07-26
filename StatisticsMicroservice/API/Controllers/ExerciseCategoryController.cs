@@ -1,6 +1,7 @@
+using StatisticsMicroservice.Infrastructure.ML;
 using StatisticsMicroservice.Models;
 using StatisticsMicroservice.Services.Interfaces;
-namespace StatisticsMicroservice;
+namespace StatisticsMicroservice.API.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ public class ExerciseCategoryController : ControllerBase
     [HttpPost("predict")]
     public ActionResult<string> Predict([FromBody] string exerciseDescription)
     {
-        var category = _identifier.PredictCategory(exerciseDescription);
+        var category = _identifier.DefineCategory(exerciseDescription);
         return Ok(category);
     }
 
@@ -27,5 +28,19 @@ public class ExerciseCategoryController : ControllerBase
     {
         _identifier.TrainModel();
         return Ok("Model trained successfully.");
+    }
+    
+    [HttpPost("evaluate")]
+    public IActionResult Evaluate()
+    {
+        var result = _identifier.EvaluateModel();
+        return Ok(result);
+    }
+    
+    [HttpPost("cross-validate")]
+    public IActionResult CrossValidate()
+    {
+        _identifier.CrossValidateModel();
+        return Ok();
     }
 }

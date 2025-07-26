@@ -21,7 +21,7 @@ public interface IChatService
 
     public Task<List<string>> GetChatRooms(string userId);
     
-    public Task<Dictionary<string, LastMessageResponse>> GetChatRoomsWithLastMessages(string userId);
+    public Task<Dictionary<string, ChatMessage>> GetChatRoomsWithLastMessages(string userId);
     
     public Task<List<MessageResponse>> GetPreviousMessages(string chatRoom);
 }

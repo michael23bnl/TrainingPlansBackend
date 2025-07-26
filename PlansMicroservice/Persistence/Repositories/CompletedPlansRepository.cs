@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using TrainingPlans.Domain.Models;
 using TrainingPlans.Entities;
-using TrainingPlans.Models;
 using TrainingPlans.Pagination;
-using TrainingPlans.Repositories.Interfaces;
+using TrainingPlans.Persistence.Repositories.Interfaces;
 
-namespace TrainingPlans.Repositories;
+namespace TrainingPlans.Persistence.Repositories;
 
 public class CompletedPlansRepository : ICompletedPlansRepository
 {

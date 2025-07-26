@@ -425,3 +425,4 @@ D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persis
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Persistence\Data\Plans.json
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Shared.dll
 D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Shared.pdb
+D:\Projects\.NET\TrainingPlans\Backend\PlansMicroservice\bin\Debug\net8.0\Dapper.dll

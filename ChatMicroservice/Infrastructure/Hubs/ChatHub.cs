@@ -13,7 +13,7 @@ namespace ChatMicroservice.Infrastructure.Hubs;
 public interface IChatClient
 {
     public Task ReceiveMessage(string userName, string? message, 
-        List<Plan>? plans, DateTime sendingDate);
+        List<Plan>? plans, DateTime sendingDate, string chatRoom);
 }
 [Authorize]
 public class ChatHub : Hub<IChatClient>
@@ -72,7 +72,7 @@ public class ChatHub : Hub<IChatClient>
         return chatRooms;
     }
     
-    public async Task<Dictionary<string, LastMessageResponse>> GetChatRoomsWithLastMessages()
+    public async Task<Dictionary<string, ChatMessage>> GetChatRoomsWithLastMessages()
     {
         var userId = GetUserId()!;
         var chatRoomsWithLastMessages = await _chatService
