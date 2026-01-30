@@ -1,7 +1,8 @@
 
-using TrainingPlans.Entities;
+using TrainingPlans.Domain.Entities;
 using System.Text.Json;
-namespace TrainingPlans.Extensions;
+
+namespace TrainingPlans.Persistence.Extensions;
 
 public static class SeedPostgresDataExtensions
 {

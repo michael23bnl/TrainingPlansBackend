@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj": {}
+    "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\Shared.csproj": {
+    "D:\\Projects\\TrainingPlansBackend\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\Shared.csproj",
+        "projectUniqueName": "D:\\Projects\\TrainingPlansBackend\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\Shared.csproj",
-        "packagesPath": "C:\\Users\\b2sev\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\obj\\",
+        "projectPath": "D:\\Projects\\TrainingPlansBackend\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\Михаил\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\TrainingPlansBackend\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\b2sev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Михаил\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,7 +37,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -50,6 +51,10 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.2.0, )"
             }
           },
           "imports": [
@@ -63,6 +68,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -71,21 +90,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj": {
+    "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj",
+        "projectUniqueName": "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj",
         "projectName": "UserMicroservice",
-        "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj",
-        "packagesPath": "C:\\Users\\b2sev\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\obj\\",
+        "projectPath": "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj",
+        "packagesPath": "C:\\Users\\Михаил\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\b2sev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Михаил\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -97,8 +116,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\Shared.csproj": {
-                "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\Shared\\Shared.csproj"
+              "D:\\Projects\\TrainingPlansBackend\\Shared\\Shared.csproj": {
+                "projectPath": "D:\\Projects\\TrainingPlansBackend\\Shared\\Shared.csproj"
               }
             }
           }
@@ -112,7 +131,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -172,6 +192,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.22, 8.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.22, 8.0.22]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -180,7 +218,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

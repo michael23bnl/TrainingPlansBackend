@@ -1,20 +1,20 @@
 using Microsoft.EntityFrameworkCore;
-using TrainingPlans;
-using TrainingPlans.Configurations;
-using TrainingPlans.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Shared.Auth;
 using Shared.Extensions;
+using Shared.RabbitMq.Connection;
+using TrainingPlans.Application.Abstractions;
 using TrainingPlans.Application.Services;
-using TrainingPlans.Application.Services.Interfaces;
-using TrainingPlans.Infrastructure.Elasticsearch;
 using TrainingPlans.Infrastructure.RabbitMq;
-using TrainingPlans.Infrastructure.RabbitMq.Connection;
+using TrainingPlans.Persistence;
 using UserMicroservice.Enums;
 using UserMicroservice.Extensions;
 using UserMicroservice.Infrastructure;
 using TrainingPlans.Persistence.Extensions;
+using TrainingPlans.Infrastructure.Extensions;
 using TrainingPlans.Persistence.Repositories;
-using TrainingPlans.Persistence.Repositories.Interfaces;
+using TrainingPlans.Domain.Abstractions;
+using TrainingPlans.Infrastructure.Elasticsearch;
 using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,23 +38,19 @@ builder.Services.RequirePermissions("Update", Permission.Delete);
 
 builder.Services.RequirePermissions("Delete", Permission.Delete);
 
-builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-builder.Services.AddScoped<IPlansSearch, ElasticService>();
-builder.Services.AddScoped<IPlansService, PlansService>();
-builder.Services.AddScoped<IFavoritePlansService, FavoritePlansService>();
-builder.Services.AddScoped<ICompletedPlansService, CompletedPlansService>();
-builder.Services.AddScoped<IExercisesService, ExercisesService>();
-builder.Services.AddScoped<IPlansRepository, PlansRepository>();
-builder.Services.AddScoped<IFavoritePlansRepository, FavoritePlansRepository>();
-builder.Services.AddScoped<ICompletedPlansRepository, CompletedPlansRepository>();
-builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
+builder.Services.AddSingleton<IRabbitMqConnection>(await RabbitMqConnection.InitializeConnection());
 
-builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<IPlansRepository, PlansRepository>();
+builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
+builder.Services.AddScoped<ICustomPlansRepository, CustomPlansRepository>();
+builder.Services.AddScoped<IPlansService, PlansService>();
+builder.Services.AddScoped<IExercisesService, ExercisesService>();
+builder.Services.AddScoped<ICustomPlansService, CustomPlansService>();
 builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
-builder.Services.AddScoped<ICompletedPlansService, CompletedPlansService>();
+builder.Services.AddScoped<IElasticService, ElasticService>();
 
 builder.Services.AddApiAuthentication();
 
@@ -70,7 +66,8 @@ if (app.Environment.IsDevelopment())
 
 app.SeedExercisesData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Exercises.json"));
 app.SeedPlansData(Path.Combine(Directory.GetCurrentDirectory(), "Persistence/Data", "Plans.json"));
-await app.SeedPlansData();
+await app.SeedPlansData(app.Lifetime.ApplicationStopping);
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

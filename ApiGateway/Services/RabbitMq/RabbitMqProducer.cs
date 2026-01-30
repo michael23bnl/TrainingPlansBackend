@@ -1,8 +1,9 @@
 using System.Text;
 using System.Text.Json;
-using ApiGateway.Services.RabbitMq.Connection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Shared.RabbitMq.Connection;
+
 namespace ApiGateway.Services.RabbitMq;
 
 public class RabbitMqProducer : IMessageProducer
@@ -13,7 +14,8 @@ public class RabbitMqProducer : IMessageProducer
     {
         _connection = connection;
     }
-    public async Task<string> SendMessage<T>(T message)
+    
+    public async Task<string> SendMessageAsync<T>(T message)
     {
         await using var channel = await _connection.Connection.CreateChannelAsync();
         
@@ -25,11 +27,12 @@ public class RabbitMqProducer : IMessageProducer
         var consumer = new AsyncEventingBasicConsumer(channel);
         var tcs = new TaskCompletionSource<string>();
         
-        consumer.ReceivedAsync += async (sender, args) =>
+        consumer.ReceivedAsync += (sender, args) =>
         {
             var body = args.Body.ToArray();
             var response = Encoding.UTF8.GetString(body);
             tcs.SetResult(response);
+            return Task.CompletedTask;
         };
         
         await channel.BasicConsumeAsync(queue: replyQueue.QueueName, autoAck: true, consumer: consumer);

@@ -1,8 +1,10 @@
-using TrainingPlans.API.DTO;
-using TrainingPlans.Application.Services.Interfaces;
-using TrainingPlans.Domain.Models;
-using TrainingPlans.Pagination;
-using TrainingPlans.Persistence.Repositories.Interfaces;
+
+using Shared.DTO;
+using TrainingPlans.Domain.Abstractions;
+using TrainingPlans.Domain.Entities;
+using Shared.Pagination;
+using TrainingPlans.Application.Abstractions;
+
 
 namespace TrainingPlans.Application.Services;
 
@@ -10,37 +12,26 @@ public class PlansService : IPlansService
 {
     
     private readonly IPlansRepository _plansRepository;
-    private readonly IPlansSearch _plansSearch; 
-    private readonly PlansDbContext _plansDbContext;
+    //private readonly IPlansSearch _plansSearch; 
 
-    public PlansService(IPlansRepository plansRepository, IPlansSearch plansSearch, 
-        PlansDbContext plansDbContext)
+
+    public PlansService(IPlansRepository plansRepository)
     {
         _plansRepository = plansRepository;
-        _plansSearch = plansSearch;
-        _plansDbContext = plansDbContext;
+        //_plansSearch = plansSearch;
     }
     
-    public async Task<Guid> CreatePlan(PlanRequest request, Guid? userId)
+    public async Task<Guid> CreatePlanAsync(List<Guid> exerciseIds, Guid? userId, CancellationToken ct)
     {
-        var exercises = request.Exercises.Select(e => ExerciseModel.Create(
-            Guid.NewGuid(), 
-            e.Name,
-            e.MuscleGroup
-        ).exerciseModel).ToList();
+        var planId = await _plansRepository.CreateAsync(exerciseIds, userId, ct);
         
-        var (plan, response) = PlanModel.Create(Guid.NewGuid(), request.Category, exercises, userId);
+        return planId;
         
-        if (response != "Plan has been created")
-        {
-            return Guid.Empty;
-        }
-        
-        await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
+        /*await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
         
         try
         {
-            var planId = await _plansRepository.Create(plan);
+            var planId = await _plansRepository.CreateAsync(exercises, userId);
             var planSearchResponse = await _plansSearch.AddOrUpdateAsync(plan);
             if (!planSearchResponse)
             {
@@ -54,53 +45,68 @@ public class PlansService : IPlansService
         {
             await transaction.RollbackAsync();
             return Guid.Empty;
-        }
+        }*/
     }
-    
-    public async Task<(int, List<CompletedPlanResponse>)> GetAllSelfMadePlans(PlanParameters planParameters, Guid userId)
-    {
-        var response = await _plansRepository.GetAllSelfMade(userId, planParameters);
 
-        return response;
+    public async Task<(int, List<PlanResponse>)> GetAllPreloadedPlansAsync(PlanParameters planParameters, CancellationToken ct)
+    {
+        var plans = await _plansRepository.GetAllPreloadedAsync(planParameters, ct);
+        
+        var planResponse = plans.Item2
+            .Select(pe => new PlanResponse 
+            ( 
+                pe.Id, 
+                pe.Tags, 
+                pe.Exercises
+                    .Select(e => new ExerciseResponse(e.Id, e.Name, e.MuscleGroup))
+                    .ToList()
+            ))
+            .ToList();
+
+        return (plans.Item1, planResponse);
     }
     
-    public async Task<List<PreparedPlanResponse>> GetAllAvailablePlans(Guid userId)
+    public async Task<List<PlanEntity>> GetAllPreloadedPlansAsync(CancellationToken ct)
     {
-        var plans = await _plansRepository.GetAllAvailable(userId);
-        
+        var plans = await _plansRepository.GetAllPreloadedAsync(ct);
+
         return plans;
     }
-    
-    public async Task<(int, List<PreparedPlanResponse>)> GetAllPreparedPlans(PlanParameters planParameters, Guid? userId)
-    {
-        var response = await _plansRepository.GetAllPrepared(userId, planParameters);
-        
-        return response;
 
-    }
-    
-    public async Task<PreparedPlanResponse> GetPlan(Guid planId, Guid userId)
+    public async Task<PlanResponse?> GetPlanAsync(Guid planId, Guid userId, CancellationToken ct)
     {
-        var plan = await _plansRepository.Get(planId, userId);
+        var plan = await _plansRepository.GetAsync(planId, userId, ct);
+        var exerciseResponse = plan.Exercises
+            .Select(e => new ExerciseResponse(e.Id, e.Name, e.MuscleGroup)).ToList();
+        var planResponse = new PlanResponse(plan.Id, plan.Tags, exerciseResponse);
         
-        return plan;
+        return planResponse;
     }
-    
-    public async Task<Guid> UpdatePlan(Guid planId, PlanRequest request, Guid userId)
+
+    public async Task<List<PlanEntity>> GetPlansAsync(List<Guid> planIds, CancellationToken ct)
     {
+        var plans = await _plansRepository.GetAsync(planIds, ct);
+
+        return plans;
+    }
+
+    public async Task<Guid> UpdatePlanAsync(Guid id, List<Guid> exerciseIds, CancellationToken ct)
+    {
+        var planId = await _plansRepository.UpdateAsync(id, exerciseIds, ct);
         
-        await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
+        return planId;
+        /*await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
 
         try
         {
             var exercises = request.Exercises.Select(e => ExerciseModel.Create(
-                Guid.NewGuid(), 
+                Guid.NewGuid(),
                 e.Name,
                 e.MuscleGroup
             ).exerciseModel).ToList();
-            
+
             var updatedPlanId = await _plansRepository.Update(planId, request.Category, exercises);
-        
+
             var planModel = PlanModel.Create(
                 updatedPlanId,
                 request.Category,
@@ -111,7 +117,7 @@ public class PlansService : IPlansService
                 ).exerciseModel).ToList()!,
                 userId
             ).planModel!;
-        
+
             var planSearchResponse = await _plansSearch.AddOrUpdateAsync(planModel);
 
             if (!planSearchResponse)
@@ -126,13 +132,15 @@ public class PlansService : IPlansService
         {
             await transaction.RollbackAsync();
             return Guid.Empty;
-        }
+        }*/
     }
     
-    public async Task<Guid> DeletePlan(Guid id)
+    public async Task<Guid> DeletePlanAsync(Guid id, CancellationToken ct)
     {
-        
-        await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
+        var planId = await _plansRepository.DeleteAsync(id, ct);
+
+        return planId;
+        /*await using var transaction = await _plansDbContext.Database.BeginTransactionAsync();
 
         try
         {
@@ -150,22 +158,10 @@ public class PlansService : IPlansService
         {
             await transaction.RollbackAsync();
             return Guid.Empty;
-        }
-    }
-
-    public async Task<List<Guid>> GetFavoritePlansIds(Guid userId)
-    {
-        var ids = await _plansRepository.GetFavoritePlanIds(userId);
-        return ids;
+        }*/
     }
     
-    public async Task<List<Guid>> GetCompletedPlansIds(Guid userId)
-    {
-        var ids = await _plansRepository.GetCompletedPlanIds(userId);
-        return ids;
-    }
-
-    public async Task<(int totalCount, List<PlanModel> plans)> SearchCatalogPlans(string query, PlanParameters planParameters)
+    /*public async Task<(int totalCount, List<PlanModel> plans)> SearchCatalogPlans(string query, PlanParameters planParameters)
     {
         var plans = await _plansRepository.Search(query, planParameters, (Guid?)null);
         return (plans.plans.Count, plans.plans);
@@ -189,5 +185,5 @@ public class PlansService : IPlansService
         var completedPlansIds = await GetCompletedPlansIds(userId);
         var plans = await _plansRepository.Search(query, planParameters, completedPlansIds);
         return (plans.plans.Count, plans.plans);
-    }
+    }*/
 }

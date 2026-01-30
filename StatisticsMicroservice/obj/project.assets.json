@@ -2755,7 +2755,8 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "9.0.0",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.1"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.1",
+          "RabbitMQ.Client": "7.2.0"
         },
         "compile": {
           "bin/placeholder/Shared.dll": {}
@@ -8825,19 +8826,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\b2sev\\.nuget\\packages\\": {}
+    "C:\\Users\\Михаил\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\StatisticsMicroservice\\StatisticsMicroservice.csproj",
+      "projectUniqueName": "D:\\Projects\\TrainingPlansBackend\\StatisticsMicroservice\\StatisticsMicroservice.csproj",
       "projectName": "StatisticsMicroservice",
-      "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\StatisticsMicroservice\\StatisticsMicroservice.csproj",
-      "packagesPath": "C:\\Users\\b2sev\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\StatisticsMicroservice\\obj\\",
+      "projectPath": "D:\\Projects\\TrainingPlansBackend\\StatisticsMicroservice\\StatisticsMicroservice.csproj",
+      "packagesPath": "C:\\Users\\Михаил\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\TrainingPlansBackend\\StatisticsMicroservice\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\b2sev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Михаил\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -8849,8 +8850,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj": {
-              "projectPath": "D:\\Projects\\.NET\\TrainingPlans\\Backend\\UserMicroservice\\UserMicroservice.csproj"
+            "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj": {
+              "projectPath": "D:\\Projects\\TrainingPlansBackend\\UserMicroservice\\UserMicroservice.csproj"
             }
           }
         }
@@ -8864,7 +8865,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -8912,6 +8914,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8920,8 +8940,19 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.405/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "Warning As Error: Detected package downgrade: RabbitMQ.Client from 7.2.0 to 7.1.2. Reference the package directly from the project to select a different version. \r\n StatisticsMicroservice -> UserMicroservice -> Shared -> RabbitMQ.Client (>= 7.2.0) \r\n StatisticsMicroservice -> RabbitMQ.Client (>= 7.1.2)",
+      "libraryId": "RabbitMQ.Client",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

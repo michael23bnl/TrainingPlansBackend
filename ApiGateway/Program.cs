@@ -1,7 +1,7 @@
    
 using ApiGateway.Middlewares;
 using ApiGateway.Services.RabbitMq;
-using ApiGateway.Services.RabbitMq.Connection;
+using Shared.RabbitMq.Connection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddSingleton<IRabbitMqConnection>(await RabbitMqConnection.InitializeConnection());
 builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
 
 var app = builder.Build();

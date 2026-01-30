@@ -1,10 +1,7 @@
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using StatisticsMicroservice.Services.Interfaces;
-using StatisticsMicroservice.Services.RabbitMQ.Connection;
+using Shared.RabbitMq.Connection;
 
 namespace StatisticsMicroservice.Infrastructure.RabbitMQ;
 

@@ -1,16 +1,15 @@
 
 using Microsoft.EntityFrameworkCore;
 using Shared.Extensions;
+using Shared.RabbitMq.Connection;
 using UserMicroservice;
 using UserMicroservice.Entities;
 using UserMicroservice.Enums;
 using UserMicroservice.Infrastructure;
-using UserMicroservice.Models;
 using UserMicroservice.Repositories;
 using UserMicroservice.Repositories.Interfaces;
 using UserMicroservice.Services;
 using UserMicroservice.Services.RabbitMq;
-using UserMicroservice.Services.RabbitMq.Connection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +43,7 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtExtractor, JwtExtractor>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
-builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddSingleton<IRabbitMqConnection>(await RabbitMqConnection.InitializeConnection());
 builder.Services.AddScoped<IMessageSubscriber, RabbitMqSubscriber>();
 builder.Services.AddHostedService<RabbitMqBackgroundService>();
 

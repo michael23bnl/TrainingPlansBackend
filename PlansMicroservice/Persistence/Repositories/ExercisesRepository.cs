@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TrainingPlans.API.DTO;
-using TrainingPlans.Domain.Models;
-using TrainingPlans.Entities;
-using TrainingPlans.Persistence.Repositories.Interfaces;
+using TrainingPlans.Domain.Abstractions;
+using TrainingPlans.Domain.Entities;
 
 namespace TrainingPlans.Persistence.Repositories;
 
@@ -15,129 +13,98 @@ public class ExercisesRepository : IExercisesRepository
         _context = context;
     }
 
-    public async Task<Guid> Create(ExerciseModel exercise)
+    public async Task<Guid> CreateAsync(string name, string? muscleGroup, CancellationToken ct)
     {
-        var exerciseEntity = new ExerciseEntity
+        var exercise = new ExerciseEntity
         {
-            Id = exercise.Id,
-            Name = exercise.Name,
-            MuscleGroup = exercise.MuscleGroup,
+            Id = Guid.NewGuid(),
+            Name = name,
+            MuscleGroup = muscleGroup,
         };
-        await _context.Exercises.AddAsync(exerciseEntity);
-        await _context.SaveChangesAsync();
-        return exerciseEntity.Id;
+        
+        await _context.Exercises.AddAsync(exercise, ct);
+        await _context.SaveChangesAsync(ct);
+        
+        return exercise.Id;
     }
     
-    public async Task<List<ExerciseModel>> GetAll()
+    public async Task<List<ExerciseEntity>> GetAllAsync(CancellationToken ct)
     {
-        var exerciseEntities = await _context.Exercises
+        var exercises = await _context.Exercises
             .AsNoTracking()
-            .ToListAsync();
-        var exercises = exerciseEntities
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, e.MuscleGroup).exerciseModel)
-            .ToList();
-        return exercises;
-    }
-    
-    public async Task<List<ExerciseModel>> GetAllPrepared()
-    {
-        var exerciseEntities = await _context.Exercises
-            .AsNoTracking()
-            .ToListAsync();
-        var exercises = exerciseEntities
-            .Select(e => ExerciseModel.Create(e.Id, e.Name, 
-                e.MuscleGroup).exerciseModel)
-            .ToList();
+            .ToListAsync(ct);
+
         return exercises;
     }
 
-    public async Task<ExerciseModel> Get(Guid id)
+    public async Task<ExerciseEntity?> GetAsync(Guid id, CancellationToken ct)
     {
-        var exerciseEntity = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id);
-        var exercise = ExerciseModel
-            .Create(exerciseEntity.Id, exerciseEntity.Name, 
-                exerciseEntity.MuscleGroup)
-            .exerciseModel;
+        var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id, ct);
+
         return exercise;
     }
 
-    public async Task<ExerciseModel> GetByName(string name)
+    public async Task<ExerciseEntity?> GetByNameAsync(string name, CancellationToken ct)
     {
-        var exerciseEntity = await _context.Exercises.FirstOrDefaultAsync(e => e.Name == name);
-        
-        var exercise = ExerciseModel.Create(exerciseEntity.Id, exerciseEntity.Name,
-            exerciseEntity.MuscleGroup).exerciseModel;
+        var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Name == name, ct);
         
         return exercise;
     }
 
-    public async Task<List<ExerciseModel>> GetByCategory(string muscleGroup)
+    public async Task<List<ExerciseEntity>> GetByMuscleGroupAsync(string muscleGroup, CancellationToken ct)
     {
-        var exerciseEntities = await _context.Exercises
-            .Where(e => e.MuscleGroup == muscleGroup).ToListAsync();
-
-        var exercises = exerciseEntities.Select(et =>
-            ExerciseModel.Create(et.Id, et.Name, et.MuscleGroup).exerciseModel).ToList();
+        var exercises = await _context.Exercises
+            .Where(e => e.MuscleGroup == muscleGroup).ToListAsync(ct);
         
         return exercises;
     }
 
-    public async Task<Dictionary<string, List<CategorizedExercise>>> GetAllCategorized()
+    public async Task<Dictionary<string, List<ExerciseEntity>>> GetAllByMuscleGroupAsync(CancellationToken ct)
     {
-        var exerciseEntities = await _context.Exercises
+        var exercises = await _context.Exercises
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(ct);
 
-        var categorizedExercises = new Dictionary<string, List<CategorizedExercise>>();
+        var categorizedExercises = new Dictionary<string, List<ExerciseEntity>>();
 
-        foreach (var entity in exerciseEntities)
+        foreach (var exercise in exercises)
         {
-            var categories = entity.MuscleGroup!
+            var categories = exercise.MuscleGroup!
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(c => c.Trim())
                 .ToList();
-
-            var exerciseDto = new CategorizedExercise(entity.Name, categories);
             
             foreach (var category in categories)
             {
                 if (!categorizedExercises.ContainsKey(category))
                 {
-                    categorizedExercises[category] = new List<CategorizedExercise>();
+                    categorizedExercises[category] = new List<ExerciseEntity>();
                 }
 
-                categorizedExercises[category].Add(exerciseDto);
+                categorizedExercises[category].Add(exercise);
             }
         }
 
         return categorizedExercises;
     }
-
-
-    public async Task<Guid> Update(Guid id, string name, string muscleGroup)
-    {
-        var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id);
-        
-        if (exercise != null)
-        {
-            exercise.Name = name;
-            exercise.MuscleGroup = muscleGroup;
-        }
-
-        await _context.SaveChangesAsync();
-        return exercise.Id;
-    }
-
-    public async Task<Guid> Delete(Guid id)
-    {
-        var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id);
-        
-        if (exercise != null)
-        {
-            _context.Exercises.Remove(exercise);
-        }
-
-        return id;
-    }
     
+    public async Task<int> UpdateAsync(Guid id, string name, string muscleGroup, CancellationToken ct)
+    {
+        var rowsUpdated = await _context.Exercises
+            .Where(e => e.Id == id)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(e => e.Name, name)
+                .SetProperty(e => e.MuscleGroup, muscleGroup), ct);
+        
+        return rowsUpdated;
+    }
+
+    public async Task<int> DeleteAsync(Guid id, CancellationToken ct)
+    {
+        var rowsDeleted = await _context.Exercises
+            .Where(e => e.Id == id)
+            .ExecuteDeleteAsync(ct);
+        
+        return rowsDeleted;
+    }
 }

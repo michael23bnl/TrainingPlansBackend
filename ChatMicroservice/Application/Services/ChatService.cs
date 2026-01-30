@@ -1,130 +1,107 @@
-using System.Text.Json;
-using ChatMicroservice.API.DTO;
-using ChatMicroservice.Contracts;
-using ChatMicroservice.Infrastructure.Hubs;
-using ChatMicroservice.Models;
-using ChatMicroservice.Repositories.Interfaces;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Distributed;
+using ChatMicroservice.Application.Abstractions;
+using ChatMicroservice.Domain.Abstractions;
+using ChatMicroservice.Domain.Models;
+using Shared.DTO;
 
 namespace ChatMicroservice.Application.Services;
 
 public class ChatService : IChatService
-{   
-    
-    private readonly IDistributedCache _cache;
+{
+    private readonly IUserChatRoomCache _userChatRoomCache;
     private readonly IChatRepository _chatRepository;
-    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
+    private readonly IChatNotifier _chatNotifier;
+    private readonly IMessageProducer _messageProducer;
 
     public ChatService(
-        IDistributedCache cache, 
         IChatRepository chatRepository,
-        IHubContext<ChatHub, IChatClient> hubContext)
+        IChatNotifier chatNotifier,
+        IUserChatRoomCache userChatRoomCache,
+        IMessageProducer messageProducer)
     {
-        _cache = cache;
         _chatRepository = chatRepository;
-        _hubContext = hubContext;
+        _chatNotifier = chatNotifier;
+        _userChatRoomCache = userChatRoomCache;
+        _messageProducer = messageProducer;
     }
 
-    public async Task<IResult> JoinChat(string userId, string userName, string connectionId, UserConnection connection)
+    public async Task<IResult> JoinChat(string userId, string userName, string connectionId, string chatRoom, CancellationToken ct)
     {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
 
-        if (roomList.Contains(connection.ChatRoom))
+        if (chatRooms.Contains(chatRoom))
         {
             return Results.BadRequest();
         }
 
-        roomList.Add(connection.ChatRoom);
-            await _cache.SetStringAsync(userId, JsonSerializer.Serialize(roomList));
-            await _hubContext.Groups.AddToGroupAsync(connectionId, connection.ChatRoom);
-            var message = $"{userName} присоединился к чату";
-            var chatMessage = new ChatMessage
-            {
-                Id = Guid.NewGuid(),
-                UserId = null,
-                UserName = "System",
-                ChatRoom = connection.ChatRoom,
-                Message = message,
-                SendingDate = DateTime.UtcNow
-            };
-            await _hubContext.Clients
-                .Group(connection.ChatRoom)
-                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate, connection.ChatRoom);
-            await _chatRepository.SaveMessageAsync(chatMessage);
-            return Results.Ok();
-    }
-    
-    public async Task LeaveChat(string chatRoom, string userId, string userName, string connectionId)
-    {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
-        
-        if (roomList.Contains(chatRoom))
+        chatRooms.Add(chatRoom);
+        await _userChatRoomCache.SetUserChatRoomsAsync(userId, chatRooms, ct);
+        await _chatNotifier.AddUserToGroupAsync(connectionId, chatRoom);
+        var message = $"{userName} присоединился к чату";
+        var chatMessage = new ChatMessage
         {
-            roomList.Remove(chatRoom);
-            await _cache.SetStringAsync(userId, JsonSerializer.Serialize(roomList));
-            await _hubContext.Groups.RemoveFromGroupAsync(connectionId, chatRoom);
+            Id = Guid.NewGuid(),
+            UserId = null,
+            ChatRoom = chatRoom,
+            Message = message,
+            SendingDate = DateTime.UtcNow
+        };
+        await _chatNotifier.NotifyGroupAsync(chatRoom, userName, chatMessage.Message, null,
+            chatMessage.SendingDate);
+        await _chatRepository.SaveMessageAsync(chatMessage, ct);
+        return Results.Ok();
+    }
+
+    public async Task LeaveChat(string chatRoom, string userId, string userName, string connectionId, CancellationToken ct)
+    {
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
+        
+        if (chatRooms.Contains(chatRoom))
+        {
+            chatRooms.Remove(chatRoom);
+            await _userChatRoomCache.SetUserChatRoomsAsync(userId, chatRooms, ct);
+            await _chatNotifier.RemoveUserFromGroupAsync(connectionId, chatRoom);
             var message = $"{userName} покинул чат";
             var chatMessage = new ChatMessage
             {
                 Id = Guid.NewGuid(),
                 UserId = null,
-                UserName = "System",
                 ChatRoom = chatRoom,
                 Message = message,
                 SendingDate = DateTime.UtcNow,
             };
-            await SaveMessageAsync(chatMessage);
-            await _hubContext.Clients.Groups(chatRoom)
-                .ReceiveMessage(chatMessage.UserName, chatMessage.Message, null, chatMessage.SendingDate, chatRoom);
+            
+            await _chatRepository.SaveMessageAsync(chatMessage, ct);
+            await _chatNotifier.NotifyGroupAsync(chatRoom, userName, chatMessage.Message, null,
+                chatMessage.SendingDate);
         }
     }
     
-    public async Task ConnectedAsync(string userId, string connectionId)
+    public async Task ConnectedAsync(string userId, string connectionId, CancellationToken ct)
     {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
 
-        foreach (var room in roomList)
+        foreach (var room in chatRooms)
         {
-            await _hubContext.Groups.AddToGroupAsync(connectionId, room);
+            await _chatNotifier.AddUserToGroupAsync(connectionId, room);
         }
     }
     
-    public async Task DisconnectedAsync(string userId, string connectionId)
+    public async Task DisconnectedAsync(string userId, string connectionId, CancellationToken ct)
     {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
 
-        foreach (var room in roomList)
+        foreach (var room in chatRooms)
         {
-            await _hubContext.Groups.RemoveFromGroupAsync(connectionId, room);
+            await _chatNotifier.RemoveUserFromGroupAsync(connectionId, room);
         }
     }
 
-    public async Task SendMessage(string? message, List<Plan>? plans, 
-        string chatRoom, string userId, string userName)
+    public async Task SendMessage(string? message, List<Guid>? planIds, 
+        string chatRoom, string userId, string userName, CancellationToken ct)
     {
-
-        var chatRooms = await _cache.GetStringAsync(userId);
-        var roomList = chatRooms != null
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms)
-            : new List<string>();
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
         
-        if (!roomList.Contains(chatRoom))
+        if (!chatRooms.Contains(chatRoom))
         {
             throw new Exception("User is not a member of this chat room.");
         }
@@ -133,92 +110,48 @@ public class ChatService : IChatService
         {
             Id = Guid.NewGuid(),
             UserId = userId,
-            UserName = userName,
             ChatRoom = chatRoom,
             Message = message,
+            AttachedPlanIds = planIds,
             SendingDate = DateTime.UtcNow,
-            Plans = plans.Select(p => new Plan {
-                Category = p.Category,
-                Exercises = p.Exercises.Select(e => new Exercise {
-                    Name = e.Name,
-                    MuscleGroup = e.MuscleGroup
-                }).ToList()
-            }).ToList(),
         };
+        var plans = new List<PlanResponse>();
+
+        if (planIds is not null)
+        {
+            plans = await _messageProducer.SendMessageAsync(planIds, ct);
+        }
         
-        await SaveMessageAsync(chatMessage);
-        await _hubContext.Clients
-            .Group(chatRoom)
-            .ReceiveMessage(userName, message, plans, chatMessage.SendingDate, chatRoom);
+        await _chatRepository.SaveMessageAsync(chatMessage, ct);
+        await _chatNotifier.NotifyGroupAsync(chatRoom, userName, message, plans, chatMessage.SendingDate);
     }
     
-    public async Task SaveMessageAsync(ChatMessage message)
+    public async Task<List<string>> GetChatRooms(string userId, CancellationToken ct)
     {
-        await _chatRepository.SaveMessageAsync(message);
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
+        
+        return chatRooms;
     }
     
-    public async Task<List<string>> GetChatRooms(string userId)
+    public async Task<Dictionary<string, ChatMessage>> GetChatRoomsWithLastMessages(string userId, CancellationToken ct)
     {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
-        
-        return roomList;
-    }
-    
-    public async Task<Dictionary<string, ChatMessage>> GetChatRoomsWithLastMessages(string userId)
-    {
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
+        var chatRooms = await _userChatRoomCache.GetUserChatRoomsAsync(userId, ct);
 
         var roomLastMessage = new Dictionary<string, ChatMessage>();
 
-        foreach (var room in roomList)
+        foreach (var room in chatRooms)
         {
-            var lastMessage = await _chatRepository.GetRoomLastMessage(room);
+            var lastMessage = await _chatRepository.GetRoomLastMessage(room, ct);
             roomLastMessage.Add(room, lastMessage);
         }
         
         return roomLastMessage;
     }
     
-    public async Task<List<MessageResponse>> GetPreviousMessages(string chatRoom)
+    public async Task<List<ChatMessage>> GetPreviousMessages(string chatRoom, CancellationToken ct)
     {
-        var previousMessages = await _chatRepository.GetMessagesByRoomAsync(chatRoom);
-
-        var response = previousMessages.Select(pm => new MessageResponse(
-                pm.UserName,
-                pm.Message,
-                pm.Plans,
-                pm.SendingDate
-            )
-        ).ToList();
+        var previousMessages = await _chatRepository.GetMessagesByRoomAsync(chatRoom, ct);
         
-        return response;
+        return previousMessages;
     }
-    
-    /*public async Task<List<MessageResponse>> GetRoomsLastMessages(string userId)
-    {
-        
-        var chatRooms = await _cache.GetStringAsync(userId);
-        
-        var roomList = chatRooms != null 
-            ? JsonSerializer.Deserialize<List<string>>(chatRooms) 
-            : new List<string>();
-        
-        
-        
-        foreach (var chatRoom in roomList)
-        {
-             var roomLastMessage = await _chatRepository.GetRoomLastMessage(chatRoom);
-        }
-       
-        
-
-    }*/
 }

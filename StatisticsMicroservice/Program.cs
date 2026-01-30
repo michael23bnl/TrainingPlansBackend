@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Shared.Extensions;
+using Shared.RabbitMq.Connection;
 using StatisticsMicroservice;
 using StatisticsMicroservice.Application.Services;
 using StatisticsMicroservice.Application.Services.Interfaces;
@@ -9,7 +10,6 @@ using StatisticsMicroservice.Infrastructure.ML;
 using StatisticsMicroservice.Infrastructure.RabbitMQ;
 using StatisticsMicroservice.Repositories;
 using StatisticsMicroservice.Services.Interfaces;
-using StatisticsMicroservice.Services.RabbitMQ.Connection;
 using UserMicroservice.Enums;
 using UserMicroservice.Extensions;
 
@@ -38,7 +38,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<ITrainingDataLoader, TrainingDataLoader>();
 builder.Services.AddSingleton<IExerciseCategoryIdentifier, ExerciseCategoryIdentifier>();
 builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
-builder.Services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+builder.Services.AddSingleton<IRabbitMqConnection>(await RabbitMqConnection.InitializeConnection());
 builder.Services.AddScoped<IMessageSubscriber, RabbitMqSubscriber>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddHostedService<RabbitMqBackgroundService>();

@@ -22,7 +22,7 @@ public class AuthMiddleware
             var token = context.Request.Cookies["suchatastycookie"];
             if (!string.IsNullOrEmpty(token))
             {
-                var json = await producer.SendMessage(token);
+                var json = await producer.SendMessageAsync(token);
 
                 var data = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
                 var userId = data["UserId"].ToString();

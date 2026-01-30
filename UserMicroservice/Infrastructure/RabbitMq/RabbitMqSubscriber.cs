@@ -3,10 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using UserMicroservice.Enums;
-using UserMicroservice.Infrastructure;
+using Shared.RabbitMq.Connection;
 using UserMicroservice.Repositories.Interfaces;
-using UserMicroservice.Services.RabbitMq.Connection;
 
 namespace UserMicroservice.Services.RabbitMq;
 

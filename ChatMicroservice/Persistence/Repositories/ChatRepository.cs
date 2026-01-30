@@ -1,54 +1,50 @@
-using ChatMicroservice.API.DTO;
-using ChatMicroservice.Models;
-using ChatMicroservice.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using ChatMicroservice.Domain.Abstractions;
+using ChatMicroservice.Domain.Models;
+using MongoDB.Driver;
 
-namespace ChatMicroservice.Repositories;
+namespace ChatMicroservice.Persistence.Repositories;
 
 public class ChatRepository : IChatRepository
 {
     
-    private readonly ChatDbContext _context;
+    private readonly IMongoCollection<ChatMessage>? _collection;
     
-    public ChatRepository(ChatDbContext context)
+    public ChatRepository(MongoDbService mongoDbService)
     {
-        _context = context;
+        _collection = mongoDbService.Database?.GetCollection<ChatMessage>("ChatMessages");
     }
     
-    public async Task SaveMessageAsync(ChatMessage message)
+    public async Task SaveMessageAsync(ChatMessage message, CancellationToken ct)
     {
-        await _context.ChatMessages.AddAsync(message);
-        await _context.SaveChangesAsync();
+        var options = new InsertOneOptions();
+
+        await _collection.InsertOneAsync(message, options, ct);
     }
 
-    public async Task<List<ChatMessage>> GetMessagesByRoomAsync(string chatRoom, int limit = 50)
+    public async Task<List<ChatMessage>> GetMessagesByRoomAsync(string chatRoom, CancellationToken ct, int limit = 50)
     {
-        var chatMessages = await _context.ChatMessages
-            .Where(cm => cm.ChatRoom == chatRoom)
-            .OrderBy(cm => cm.SendingDate)
-            .ToListAsync();
+        var chatMessages = await _collection
+            .Find(cm => cm.ChatRoom == chatRoom)
+            .SortBy(cm => cm.SendingDate)
+            .Limit(limit)
+            .ToListAsync(ct);
+        
         return chatMessages;
     }
 
-    public async Task<ChatMessage> GetRoomLastMessage(string chatRoom)
+    public async Task<ChatMessage> GetRoomLastMessage(string chatRoom, CancellationToken ct)
     {
-        var lastMessage = await _context.ChatMessages
-            .Where(cm => cm.ChatRoom == chatRoom)
-            .OrderByDescending(cm => cm.SendingDate)
+        var lastMessage = await _collection
+            .Find(cm => cm.ChatRoom == chatRoom)
+            .SortByDescending(cm => cm.SendingDate)
             .ThenByDescending(cm => cm.Id)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(ct);
         
         return lastMessage;
     }
 
-    /*public async Task DeleteMessageHistory(string chatRoom)
+    public async Task DeleteMessageHistory(string chatRoom, CancellationToken ct)
     {
-        var messages = await _context.ChatMessages
-            .Where(m => m.ChatRoom == chatRoom)
-            .ToListAsync();
-        
-        _context.RemoveRange(messages);
-        await _context.SaveChangesAsync();
-    }*/
+        await _collection.DeleteManyAsync(m => m.ChatRoom == chatRoom, ct);
+    }
 }

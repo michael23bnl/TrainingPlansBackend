@@ -1,7 +1,8 @@
 using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
-using TrainingPlans.Infrastructure.RabbitMq.Connection;
+using Shared.RabbitMq.Connection;
+using TrainingPlans.Application.Abstractions;
 
 namespace TrainingPlans.Infrastructure.RabbitMq;
 
@@ -15,19 +16,17 @@ public class RabbitMqProducer : IMessageProducer
         _connection = connection;
     }
 
-    public async Task SendMessage<T>(T message, string queue)
+    public async Task SendMessageAsync<T>(T message, string queue)
     {
         var channel = await _connection.Connection.CreateChannelAsync();
         
         await channel.QueueDeclareAsync(
             queue: queue, 
-            durable: false, 
+            durable: true, 
             exclusive: false, 
-            autoDelete: false,
-            arguments: null);
+            autoDelete: false);
         
         var json = JsonSerializer.Serialize(message);
-        
         var body = Encoding.UTF8.GetBytes(json);
         
         await channel.BasicPublishAsync(
@@ -36,5 +35,4 @@ public class RabbitMqProducer : IMessageProducer
             mandatory: false, 
             body: body);
     }
-    
 }

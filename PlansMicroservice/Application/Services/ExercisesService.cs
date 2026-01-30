@@ -1,8 +1,7 @@
 
-using TrainingPlans.API.DTO;
-using TrainingPlans.Application.Services.Interfaces;
-using TrainingPlans.Domain.Models;
-using TrainingPlans.Persistence.Repositories.Interfaces;
+using TrainingPlans.Application.Abstractions;
+using TrainingPlans.Domain.Abstractions;
+using TrainingPlans.Domain.Entities;
 
 namespace TrainingPlans.Application.Services;
 
@@ -15,66 +14,60 @@ public class ExercisesService : IExercisesService
         _exercisesRepository = exercisesRepository;
     }
 
-    public async Task<Guid> CreateExercise(ExerciseRequest request)
+    public async Task<Guid> CreateExerciseAsync(string name, string muscleGroup, CancellationToken ct)
     {
-
-        var (exercise, response) = ExerciseModel
-            .Create(Guid.NewGuid(), request.Name, request.MuscleGroup);
-
-        if (response != "Exercise has been created")
-        {
-            return Guid.Empty;
-        }
-
-        var exerciseId = await _exercisesRepository.Create(exercise);
+        var exerciseId = await _exercisesRepository.CreateAsync(name, muscleGroup, ct);
+        
         return exerciseId;
     }
 
-    public async Task<List<ExerciseModel>> GetAllExercises()
+    public async Task<List<ExerciseEntity>> GetAllExercisesAsync(CancellationToken ct)
     {
-        var exercises = await _exercisesRepository.GetAllPrepared();
+        var exercises = await _exercisesRepository.GetAllAsync(ct);
+        
         return exercises;
     }
 
-    public async Task<ExerciseModel> GetExercise(Guid exerciseId)
+    public async Task<ExerciseEntity?> GetExerciseAsync(Guid id, CancellationToken ct)
     {
-        var exercise = await _exercisesRepository.Get(exerciseId);
+        var exercise = await _exercisesRepository.GetAsync(id, ct);
+        
         return exercise;
     }
 
-    public async Task<ExerciseModel> GetExerciseByName(string name)
+    public async Task<ExerciseEntity?> GetExerciseByNameAsync(string name, CancellationToken ct)
     {
-        var exercise = await _exercisesRepository.GetByName(name);
+        var exercise = await _exercisesRepository.GetByNameAsync(name, ct);
 
         return exercise;
     }
 
-    public async Task<List<ExerciseModel>> GetExercisesByCategory(string muscleGroup)
+    public async Task<List<ExerciseEntity>> GetExercisesByMuscleGroupAsync(string muscleGroup, CancellationToken ct)
     {
-        var exercises = await _exercisesRepository.GetByCategory(muscleGroup);
+        var exercises = await _exercisesRepository.GetByMuscleGroupAsync(muscleGroup, ct);
 
         return exercises;
     }
 
-    public async Task<Dictionary<string, List<CategorizedExercise>>> GetAllExercisesCategorized()
+    public async Task<Dictionary<string, List<ExerciseEntity>>> GetAllExercisesByMuscleGroupAsync(CancellationToken ct)
     {
-        var exercises = await _exercisesRepository.GetAllCategorized();
+        var exercises = await _exercisesRepository.GetAllByMuscleGroupAsync(ct);
 
         return exercises;
     }
 
-    public async Task<Guid> UpdateExercise(Guid exerciseId, ExerciseRequest request)
+    public async Task<Guid> UpdateExerciseAsync(Guid id, string name, string muscleGroup, CancellationToken ct)
     {
-        var updatedExerciseId = await _exercisesRepository
-            .Update(exerciseId, request.Name, request.MuscleGroup);
+        var rowsUpdated = await _exercisesRepository
+            .UpdateAsync(id, name, muscleGroup, ct);
         
-        return updatedExerciseId;
+        return id;
     }
 
-    public async Task<Guid> DeleteExercise(Guid exerciseId)
+    public async Task<Guid> DeleteExerciseAsync(Guid id, CancellationToken ct)
     {
-        var deletedExerciseId = await _exercisesRepository.Delete(exerciseId);
+        var rowsDeleted = await _exercisesRepository.DeleteAsync(id, ct);
         
-        return deletedExerciseId;
+        return id;
     }
 }

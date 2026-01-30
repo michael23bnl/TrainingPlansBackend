@@ -1,9 +1,9 @@
-using System.Text.Json;
+
 using Microsoft.EntityFrameworkCore;
+using TrainingPlans.Persistence.Configurations;
+using TrainingPlans.Domain.Entities;
 
-using TrainingPlans.Entities;
-
-namespace TrainingPlans;
+namespace TrainingPlans.Persistence;
 
 public class PlansDbContext(DbContextOptions<PlansDbContext> options) : DbContext(options)
 {
@@ -12,29 +12,15 @@ public class PlansDbContext(DbContextOptions<PlansDbContext> options) : DbContex
     
     public DbSet<PlanEntity> Plans { get; set; }
     
-    public DbSet<FavoritePlanEntity> FavoritePlans { get; set; }
+    public DbSet<CustomPlanEntity> CustomPlans { get; set; }
     
-    public DbSet<CompletedPlanEntity> CompletedPlans { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<PlanEntity>(p =>
-        {
-            p.Property(x => x.Exercises)
-                .HasConversion(
-                    v => JsonSerializer.Serialize(v, new JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        WriteIndented = false
-                    }),
-                    v => JsonSerializer.Deserialize<List<ExerciseEntity>>(v, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    }))
-                .HasColumnType("jsonb"); // Для PostgreSQL
-        });
-
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new PlanConfiguration());
+        modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
+        modelBuilder.ApplyConfiguration(new PlanExerciseConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomPlanConfiguration());
     }
     
 }

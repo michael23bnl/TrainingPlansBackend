@@ -1,10 +1,13 @@
-using ChatMicroservice;
+
+using ChatMicroservice.API.Hubs;
+using ChatMicroservice.Application.Abstractions;
 using ChatMicroservice.Application.Services;
-using ChatMicroservice.Infrastructure.Hubs;
-using ChatMicroservice.Repositories;
-using ChatMicroservice.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Shared.Extensions;
+using ChatMicroservice.Domain.Abstractions;
+using ChatMicroservice.Infrastructure.RabbitMq;
+using ChatMicroservice.Infrastructure.Redis;
+using ChatMicroservice.Infrastructure.SignalR;
+using ChatMicroservice.Persistence;
+using ChatMicroservice.Persistence.Repositories;
 using UserMicroservice.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +18,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = connection;
 });
 
-builder.Services.AddDbContext<ChatDbContext>(
-    options =>
-    {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
+builder.Services.AddSingleton<MongoDbService>();
 
 builder.Services.AddCors(options =>
 {
@@ -33,15 +32,15 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatNotifier, ChatNotifier>();
+builder.Services.AddScoped<IUserChatRoomCache, UserChatRoomCache>();
 builder.Services.AddScoped<IChatService, ChatService>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IMessageProducer, RabbitMqProducer>();
 builder.Services.AddSignalR();
 
 builder.Services.AddApiAuthentication();
 
 var app = builder.Build();
-
-app.ApplyDatabaseMigrations<ChatDbContext>();
 
 app.UseCors();
 app.UseAuthentication();
