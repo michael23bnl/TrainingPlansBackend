@@ -14,9 +14,9 @@ public class ExercisesService : IExercisesService
         _exercisesRepository = exercisesRepository;
     }
 
-    public async Task<Guid> CreateExerciseAsync(string name, string muscleGroup, CancellationToken ct)
+    public async Task<Guid> CreateExerciseAsync(string name, string muscleGroup, string description, CancellationToken ct)
     {
-        var exerciseId = await _exercisesRepository.CreateAsync(name, muscleGroup, ct);
+        var exerciseId = await _exercisesRepository.CreateAsync(name, muscleGroup, description, ct);
         
         return exerciseId;
     }
@@ -56,10 +56,11 @@ public class ExercisesService : IExercisesService
         return exercises;
     }
 
-    public async Task<Guid> UpdateExerciseAsync(Guid id, string name, string muscleGroup, CancellationToken ct)
+    public async Task<Guid> UpdateExerciseAsync(Guid id, string name, string muscleGroup, 
+        string description, CancellationToken ct)
     {
         var rowsUpdated = await _exercisesRepository
-            .UpdateAsync(id, name, muscleGroup, ct);
+            .UpdateAsync(id, name, muscleGroup,  description, ct);
         
         return id;
     }

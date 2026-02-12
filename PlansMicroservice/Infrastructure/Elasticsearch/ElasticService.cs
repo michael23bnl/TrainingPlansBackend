@@ -10,7 +10,7 @@ using TrainingPlans.Application.Abstractions;
 using TrainingPlans.Domain.Abstractions;
 
 namespace TrainingPlans.Infrastructure.Elasticsearch;
-
+/*
 public class ElasticService : IElasticService
 {
     private readonly ElasticsearchClient _client;
@@ -114,56 +114,6 @@ public class ElasticService : IElasticService
         return response.IsValidResponse;
     }
     
-    /*public async Task<bool> AddOrUpdateBulk(IEnumerable<PlanEntity> plans)
-    {
-        var sortedPlans = plans.Select(plan =>
-        {
-            plan.Exercises = plan.Exercises
-                .OrderBy(e => e.CreatedAt)
-                .ToList();
-            return plan;
-        });
-
-        var response = await _client.BulkAsync(
-            b => b.Index(_settings.DefaultIndex)
-                .UpdateMany(sortedPlans,
-                    (pd, p) 
-                        => pd.Doc(p).DocAsUpsert(true)));
-    
-        return response.IsValidResponse;
-    }*/
-    
-    /*public async Task<List<PlanEntity>> SearchPlansAsync(string query)
-    {
-        var response = await _client.SearchAsync<PlanEntity>(s => s
-            .Query(q => q
-                .Bool(b => b
-                    .Should(
-                        // Поиск по названию плана
-                        q => q.Match(m => m
-                                .Field(p => p.Category)
-                                .Query(query)
-                                .Fuzziness(new Fuzziness("AUTO")) 
-                        ),
-                    
-                        // Поиск по названиям упражнений
-                        q => q.Nested(n => n
-                            .Path(p => p.Exercises)
-                            .Query(nq => nq
-                                .Match(m => m
-                                    .Field("exercises.name")
-                                    .Query(query)
-                                    .Fuzziness(new Fuzziness("AUTO"))
-                                )
-                            )
-                        )
-                    )
-                )
-                
-            ).Size(10));
-        return response.Documents.ToList();
-    }*/
-
     public async Task<(int totalCount, List<PlanEntity> plans)> SearchPlansAsync(string query,
         PlanParameters planParameters, CancellationToken ct)
     {
@@ -313,4 +263,4 @@ public class ElasticService : IElasticService
         
         return response.IsValidResponse ? response.Deleted : default;
     }
-}
+} */

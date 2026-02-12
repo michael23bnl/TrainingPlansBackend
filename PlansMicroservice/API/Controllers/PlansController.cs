@@ -1,7 +1,5 @@
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Auth;
 using Shared.DTO;
 using TrainingPlans.API.DTO;
 using Shared.Pagination;
@@ -14,40 +12,27 @@ namespace TrainingPlans.API.Controllers;
 
 public class PlansController : ControllerBase
 {
-
     private readonly IPlansService _plansService;
-    private readonly IUserContextService _userContextService;
 
-    public PlansController(IPlansService plansService, IUserContextService userContextService)
+    public PlansController(IPlansService plansService)
     {
         _plansService = plansService;
-        _userContextService = userContextService;
     }
     
-    [Authorize]
-    [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreatePlanAsync([FromBody] PlanRequest request, CancellationToken ct)
+    //[Authorize]
+    [HttpPost]
+    public async Task<ActionResult<Guid>> CreateAsync([FromBody] PlanRequest request, CancellationToken ct)
     {
-        var userId = _userContextService.GetUserId();
-        var planId = await _plansService.CreatePlanAsync(request.ExerciseIds, userId, ct);
+        var planId = await _plansService.CreatePlanAsync(request.Exercises, request.Description, ct);
 
         return Ok(planId);
     }
     
-    [Authorize("Create")]
-    [HttpPost("create-preloaded")]
-    public async Task<ActionResult<Guid>> CreatePreloadedPlanAsync([FromBody] PlanRequest request, CancellationToken ct)
+    [HttpGet]
+    public async Task<ActionResult> GetAllAsync([FromQuery] PlanParameters planParameters, 
+        CancellationToken ct)
     {
-        var planId = await _plansService.CreatePlanAsync(request.ExerciseIds, null, ct);
-
-        return Ok(planId);
-    }
-    
-    [HttpGet("get/all")]
-    public async Task<ActionResult> GetAllPreloadedPlansAsync([FromQuery] PlanParameters planParameters, CancellationToken ct)
-    {
-
-        var response = await _plansService.GetAllPreloadedPlansAsync(planParameters, ct);
+        var response = await _plansService.GetAllPlansAsync(planParameters, ct);
         
         return Ok(new
         {
@@ -56,27 +41,36 @@ public class PlansController : ControllerBase
         });
     }
     
-    [Authorize]
-    [HttpGet("get")]
-    public async Task<ActionResult<PlanResponse>> GetPlanAsync(Guid planId, CancellationToken ct)
+    //[Authorize]
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<PlanResponse>> GetAsync(Guid id, CancellationToken ct)
     {
-        var userId = _userContextService.GetUserId();
-        var response = await _plansService.GetPlanAsync(planId, userId, ct);
+        var response = await _plansService.GetPlanAsync(id, ct);
 
         return Ok(response);
     }
+
+    [HttpPost("batch")]
+    public async Task<ActionResult<List<PlanResponse>>> GetByIdsAsync(
+        [FromBody] GetPlansByIdsRequest request,
+        CancellationToken ct)
+    {
+        var response = await _plansService.GetPlansByIdsAsync(request.Ids, ct);
+        
+        return Ok(response);
+    }
     
-    [Authorize]
-    [HttpPut("update/{id}")]
+    //[Authorize]
+    [HttpPut("{id:guid}")]
     public async Task<ActionResult<Guid>> UpdatePlan(Guid id, [FromBody] PlanRequest request, CancellationToken ct)
     {
-        var planId = await _plansService.UpdatePlanAsync(id, request.ExerciseIds, ct);
+        var planId = await _plansService.UpdatePlanAsync(id, request.Exercises, request.Description, ct);
         
         return Ok(planId);
     }
     
-    [Authorize]
-    [HttpDelete("delete/{id}")]
+    //[Authorize]
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult<Guid>> DeletePlan(Guid id, CancellationToken ct)
     {
         var planId = await _plansService.DeletePlanAsync(id, ct);

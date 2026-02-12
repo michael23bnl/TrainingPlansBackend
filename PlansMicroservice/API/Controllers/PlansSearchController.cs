@@ -112,7 +112,7 @@ public class PlansSearchController : ControllerBase
         });
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpGet("search/custom-plans/{query}")]
     public async Task<IActionResult> SearchThroughCustomPlansAsync(string query,
         [FromQuery] PlanParameters planParameters, CancellationToken ct)
@@ -132,7 +132,7 @@ public class PlansSearchController : ControllerBase
         });
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpGet("search/completed-plans/{query}")]
     public async Task<IActionResult> SearchThroughCompletedPlansAsync(string query,
         [FromQuery] PlanParameters planParameters, CancellationToken ct)

@@ -44,7 +44,7 @@ public class RabbitMqSubscriber : IMessageSubscriber
             {
                 var messageJson = ea.Body.ToArray();
                 var message = JsonSerializer.Deserialize<List<Guid>>(messageJson);
-                response = await _plansService.GetPlansAsync(message, ct);
+                //response = await _plansService.GetPlansAsync(message, ct);
             }
             catch (Exception ex)
             {

@@ -1,103 +1,103 @@
 ﻿
 services:
   
-  elasticsearch:
-    container_name: els
-    image: elasticsearch:8.17.0
-    ports: 
-      - "9200:9200"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
+#  elasticsearch:
+#    container_name: els
+#    image: elasticsearch:8.17.0
+#    ports: 
+#      - "9200:9200"
+#    volumes:
+#      - elasticsearch-data:/usr/share/elasticsearch/data
+#    environment:
+#      - discovery.type=single-node
+#      - xpack.security.enabled=false
         
-  # kibana: 
-  #  container_name: kibana
-  #  image: kibana:8.17.0
-  #  ports: 
-  #    - "5601:5601"
-  #  depends_on:
-  #    - elasticsearch
-  #  environment:
-  #    - ELASTICSEARCH_URL=http://elasticsaerch:9200
+#  kibana: 
+#    container_name: kibana
+#    image: kibana:8.17.0
+#    ports: 
+#      - "5601:5601"
+#    depends_on:
+#      - elasticsearch
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsaerch:9200
       
   
-  userservice:
-    container_name: usersdb
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: "usersdb"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "123"
-    volumes:
-      - usersdb-data:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
-    restart: always
+#  userservice:
+#    container_name: usersdb
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: "usersdb"
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "123"
+#    volumes:
+#      - usersdb-data:/var/lib/postgresql/data
+#    ports:
+#      - "5435:5432"
+#    restart: always
   
-  planservice:
-    container_name: plansdb
-    image: postgres:latest
+  plans-postgres:
+    container_name: plans-service-postgres
+    image: postgres:16
     environment:
-      POSTGRES_DB: "plansdb"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: ${POSTGRES_PLANS_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PLANS_PASSWORD}
     volumes:
-      - plansdb-data:/var/lib/postgresql/data
+      - plans-postgres-data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PLANS_PORT}:5432"
     restart: always
     
-  statisticservice:
-    container_name: statisticsdb
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: "statisticsdb"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "123"
-    volumes:
-      - statisticsdb-data:/var/lib/postgresql/data
-    ports:
-      - "5436:5432"
-    restart: always
+#  statisticservice:
+#    container_name: statisticsdb
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: "statisticsdb"
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "123"
+#    volumes:
+#      - statisticsdb-data:/var/lib/postgresql/data
+#    ports:
+#      - "5436:5432"
+#    restart: always
         
-  chatservice:
-    container_name: chatdb
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: "chatdb"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "123"
-    volumes:
-      - chatdb-data:/var/lib/postgresql/data
-    ports:
-      - "5434:5432"
-    restart: always
+#  chatservice:
+#    container_name: chatdb
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: "chatdb"
+#      POSTGRES_USER: "postgres"
+#      POSTGRES_PASSWORD: "123"
+#    volumes:
+#      - chatdb-data:/var/lib/postgresql/data
+#    ports:
+#      - "5434:5432"
+#    restart: always
 
-  realtimechat.redis:
-    image: redis
-    restart: always
-    ports:
-      - "6379:6379"
+#  realtimechat.redis:
+#    image: redis
+#    restart: always
+#    ports:
+#      - "6379:6379"
         
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"  # AMQP protocol port
-      - "15672:15672"  # Management UI port
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
-    restart: always
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    container_name: rabbitmq
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    volumes:
+#      - rabbitmq-data:/var/lib/rabbitmq
+#    environment:
+#      RABBITMQ_DEFAULT_USER: "guest"
+#      RABBITMQ_DEFAULT_PASS: "guest"
+#    restart: always
 
 volumes:
   elasticsearch-data:
   usersdb-data:
-  plansdb-data:
+  plans-postgres-data:
   statisticsdb-data:
   chatdb-data:
   rabbitmq-data:

@@ -18,27 +18,33 @@ public class ExercisesController : ControllerBase
         _exercisesService = exercisesService;
     }
     
-    [Authorize("Create")]
-    [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreateExerciseAsync([FromBody] ExerciseRequest request, CancellationToken ct)
+    //[Authorize("Create")]
+    [HttpPost]
+    public async Task<ActionResult<Guid>> CreateAsync([FromBody] ExerciseRequest request, CancellationToken ct)
     {
-        var exerciseId = await _exercisesService.CreateExerciseAsync(request.Name, request.MuscleGroup, ct);
+        var exerciseId = await _exercisesService.CreateExerciseAsync(request.Name, request.MuscleGroup,
+            request.Description, ct);
 
         return Ok(exerciseId);
     }
     
-    [Authorize]
-    [HttpGet("get/all")]
-    public async Task<ActionResult<List<ExerciseEntity>>> GetAllExercisesAsync(CancellationToken ct)
+    //[Authorize]
+    [HttpGet] 
+    public async Task<List<ExerciseEntity>> GetAsync([FromQuery] string? muscleGroup, CancellationToken ct)
     {
-        var exercises = await _exercisesService.GetAllExercisesAsync(ct);
+        List<ExerciseEntity> exercises;
         
-        return Ok(exercises);
+        if (!string.IsNullOrEmpty(muscleGroup))
+            exercises = await _exercisesService.GetExercisesByMuscleGroupAsync(muscleGroup, ct);
+        else
+            exercises = await _exercisesService.GetAllExercisesAsync(ct);
+
+        return exercises;
     }
     
-    [Authorize]
-    [HttpGet("get/{id:guid}")]
-    public async Task<ActionResult<Guid>> GetExerciseAsync(Guid id, CancellationToken ct)
+    //[Authorize]
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<Guid>> GetAsync(Guid id, CancellationToken ct)
     {
         var exercise = await _exercisesService.GetExerciseAsync(id, ct);
 
@@ -50,9 +56,9 @@ public class ExercisesController : ControllerBase
         return Ok(exercise);
     }
     
-    [Authorize]
-    [HttpGet("get/{name}")]
-    public async Task<ActionResult<ExerciseEntity>> GetExerciseByNameAsync(string name, CancellationToken ct)
+    //[Authorize]
+    [HttpGet("{name}")]
+    public async Task<ActionResult<ExerciseEntity>> GetByNameAsync(string name, CancellationToken ct)
     {
         var exercise = await _exercisesService.GetExerciseByNameAsync(name, ct);
         
@@ -63,38 +69,29 @@ public class ExercisesController : ControllerBase
         
         return exercise;
     }
-    
-    [Authorize]
-    [HttpGet("get/muscle-group/{muscleGroup}")]
-    public async Task<List<ExerciseEntity>> GetExercisesByMuscleGroupAsync(string muscleGroup, CancellationToken ct)
-    {
-        var exercises = await _exercisesService.GetExercisesByMuscleGroupAsync(muscleGroup, ct);
-        
-        return exercises;
-    }
-    
-    [Authorize]
-    [HttpGet("get/all-by-muscle-group")]
-    public async Task<ActionResult<Dictionary<string, List<ExerciseEntity>>>> GetAllExercisesByMuscleGroupAsync(CancellationToken ct)
+
+    //[Authorize]
+    [HttpGet("grouped")]
+    public async Task<ActionResult<Dictionary<string, List<ExerciseEntity>>>> GetAllByMuscleGroupAsync(CancellationToken ct)
     {
         var exercises = await _exercisesService.GetAllExercisesByMuscleGroupAsync(ct);
         
         return exercises;
     }
     
-    [Authorize("Update")]
-    [HttpPut("update")]
-    public async Task<ActionResult<Guid>> UpdateExercise(Guid id, [FromBody] ExerciseRequest request, CancellationToken ct)
+    //[Authorize("Update")]
+    [HttpPut]
+    public async Task<ActionResult<Guid>> UpdateAsync(Guid id, [FromBody] ExerciseRequest request, CancellationToken ct)
     {
         var exerciseId = await _exercisesService
-            .UpdateExerciseAsync(id, request.Name, request.MuscleGroup, ct);
+            .UpdateExerciseAsync(id, request.Name, request.MuscleGroup, request.Description, ct);
         
         return Ok(exerciseId);
     }
     
-    [Authorize("Delete")]
-    [HttpDelete("delete")]
-    public async Task<ActionResult<Guid>> DeleteExercise(Guid id, CancellationToken ct)
+    //[Authorize("Delete")]
+    [HttpDelete]
+    public async Task<ActionResult<Guid>> DeleteAsync(Guid id, CancellationToken ct)
     {
         var exerciseId = await _exercisesService.DeleteExerciseAsync(id, ct);
         
