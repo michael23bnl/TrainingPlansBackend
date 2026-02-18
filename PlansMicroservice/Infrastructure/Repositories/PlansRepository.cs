@@ -45,18 +45,25 @@ public class PlansRepository : IPlansRepository
     }
     
     public async Task<(int, List<PlanEntity>)> GetAllAsync(
-        PlanParameters planParameters, CancellationToken ct)
+        PlanParameters? planParameters, CancellationToken ct)
     {
         var totalPlanCount = await _context.Plans.CountAsync(ct);
-        var plans = await _context.Plans
-            .OrderBy(p => p.CreatedAt) 
-            .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
-            .Take(planParameters.PageSize)
+
+        var query = _context.Plans
+            .OrderBy(p => p.CreatedAt)
             .Include(p => p.PlanExercises
                 .OrderBy(pe => pe.Order))
             .ThenInclude(pe => pe.Exercise)
-            .AsNoTracking()
-            .ToListAsync(ct);
+            .AsNoTracking();
+
+        if (planParameters is not null)
+        {
+            query = query
+                .Skip((planParameters.PageNumber - 1) * planParameters.PageSize)
+                .Take(planParameters.PageSize);
+        }
+
+        var plans = await query.ToListAsync(ct);
 
         return (totalPlanCount, plans);
     }

@@ -27,6 +27,9 @@ builder.Services.AddDbContext<PlansDbContext>(
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
+builder.Services.Configure<ElasticSettings>(
+    builder.Configuration.GetSection("ElasticSettings"));
+
 //builder.Services.Configure<AuthorizationOptions>(builder.Configuration.GetSection(nameof(AuthorizationOptions)));
 
 //builder.Services.RequirePermissions("Create", Permission.Delete);
@@ -46,10 +49,12 @@ builder.Services.AddScoped<IPlansRepository, PlansRepository>();
 builder.Services.AddScoped<IExercisesRepository, ExercisesRepository>();
 builder.Services.AddScoped<ICustomPlansRepository, CustomPlansRepository>();
 builder.Services.AddScoped<IPlansService, PlansService>();
+builder.Services.AddScoped<IPlansSearchService, PlansSearchService>();
 builder.Services.AddScoped<IExercisesService, ExercisesService>();
 builder.Services.AddScoped<ICustomPlansService, CustomPlansService>();
 //builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
-//builder.Services.AddScoped<IElasticService, ElasticService>();
+builder.Services.AddScoped<IElasticAdmin, ElasticAdmin>();
+builder.Services.AddScoped<IFullTextSearch, FullTextSearch>();
 
 builder.Services.AddApiAuthentication();
 
@@ -75,7 +80,7 @@ var plansPath = Path.Combine(
 
 app.SeedExercisesData(exercisesPath);
 app.SeedPlansData(plansPath);
-//await app.SeedPlansData(app.Lifetime.ApplicationStopping);
+await app.SeedPlansData(app.Lifetime.ApplicationStopping);
 
 app.UseRouting();
 app.UseAuthentication();

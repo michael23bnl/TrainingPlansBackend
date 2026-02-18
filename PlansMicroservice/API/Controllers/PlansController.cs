@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.DTO;
 using TrainingPlans.API.DTO;
 using Shared.Pagination;
+using TrainingPlans.Application.Abstractions;
 using TrainingPlans.Domain.Abstractions;
 
 namespace TrainingPlans.API.Controllers;
@@ -13,10 +14,12 @@ namespace TrainingPlans.API.Controllers;
 public class PlansController : ControllerBase
 {
     private readonly IPlansService _plansService;
+    private readonly IPlansSearchService _plansSearchService;
 
-    public PlansController(IPlansService plansService)
+    public PlansController(IPlansService plansService, IPlansSearchService plansSearchService)
     {
         _plansService = plansService;
+        _plansSearchService = plansSearchService;
     }
     
     //[Authorize]
@@ -48,6 +51,19 @@ public class PlansController : ControllerBase
         var response = await _plansService.GetPlanAsync(id, ct);
 
         return Ok(response);
+    }
+
+    [HttpGet("search/{query}")]
+    public async Task<ActionResult<PlanResponse>> SearchAsync(string query, [FromQuery] PlanParameters planParameters,
+        CancellationToken ct)
+    {
+        var response = await _plansSearchService.SearchPlansAsync(query, planParameters, ct);
+
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
     }
 
     [HttpPost("batch")]

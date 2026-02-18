@@ -1,16 +1,16 @@
 ﻿
 services:
   
-#  elasticsearch:
-#    container_name: els
-#    image: elasticsearch:8.17.0
-#    ports: 
-#      - "9200:9200"
-#    volumes:
-#      - elasticsearch-data:/usr/share/elasticsearch/data
-#    environment:
-#      - discovery.type=single-node
-#      - xpack.security.enabled=false
+  plans-elasticsearch:
+    container_name: plans-service-elastic
+    image: elasticsearch:8.17.0
+    ports: 
+      - "9200:9200"
+    volumes:
+      - plans-elastic-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
         
 #  kibana: 
 #    container_name: kibana
@@ -95,7 +95,7 @@ services:
 #    restart: always
 
 volumes:
-  elasticsearch-data:
+  plans-elastic-data:
   usersdb-data:
   plans-postgres-data:
   statisticsdb-data:

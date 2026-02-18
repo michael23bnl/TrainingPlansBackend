@@ -43,7 +43,7 @@ public static class SeedPostgresDataExtensions
                     {
                         Id = Guid.NewGuid(),
                         Name = exerciseDto.Name,
-                        MuscleGroup = exerciseDto.MuscleGroup,
+                        MuscleGroup = exerciseDto.MuscleGroup != null ? exerciseDto.MuscleGroup : "",
                         Description = string.Empty
                     };
 

@@ -23,7 +23,7 @@ public class PlansService : IPlansService
         return planId;
     }
 
-    public async Task<(int, List<PlanResponse>)> GetAllPlansAsync(PlanParameters planParameters,
+    public async Task<(int, List<PlanResponse>)> GetAllPlansAsync(PlanParameters? planParameters,
         CancellationToken ct)
     {
         var plans = await _plansRepository.GetAllAsync(planParameters, ct);
@@ -32,7 +32,9 @@ public class PlansService : IPlansService
             (
                 pe.Id,
                 pe.PlanExercises
-                    .Select(e => e.Exercise.MuscleGroup)
+                    .SelectMany(pee => pee.Exercise.MuscleGroup
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(tag => tag.Trim()))
                     .Distinct()
                     .ToList(),
                 pe.Description,
@@ -51,6 +53,13 @@ public class PlansService : IPlansService
 
         return (plans.Item1, planResponse);
     }
+    
+    public async Task<List<PlanEntity>> GetAllPlansAsync(CancellationToken ct)
+    {
+        var plans = await _plansRepository.GetAllAsync(null, ct);
+
+        return plans.Item2;
+    }
 
     public async Task<PlanResponse?> GetPlanAsync(Guid planId, CancellationToken ct)
     {
@@ -58,7 +67,9 @@ public class PlansService : IPlansService
         var planResponse = new PlanResponse(
             plan.Id, 
             plan.PlanExercises
-                .Select(e => e.Exercise.MuscleGroup)
+                .SelectMany(pee => pee.Exercise.MuscleGroup
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(tag => tag.Trim()))
                 .Distinct()
                 .ToList(),
             plan.Description,
@@ -84,7 +95,9 @@ public class PlansService : IPlansService
             (
                 pe.Id,
                 pe.PlanExercises
-                    .Select(e => e.Exercise.MuscleGroup)
+                    .SelectMany(pee => pee.Exercise.MuscleGroup
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(tag => tag.Trim()))
                     .Distinct()
                     .ToList(),
                 pe.Description,
