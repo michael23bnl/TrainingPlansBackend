@@ -1,6 +1,7 @@
 using Shared.DTO;
 using Shared.Pagination;
 using TrainingPlans.Application.Abstractions;
+using TrainingPlans.Application.Models;
 using TrainingPlans.Domain.Abstractions;
 
 namespace TrainingPlans.Application.Services;
@@ -19,22 +20,7 @@ public class PlansSearchService : IPlansSearchService
     {
         var (totalCount, plans) = await _fullTextSearch.SearchAsync(query, null, parameters, ct);
         var planResponse = plans
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.Tags,
-                pe.Description,
-                pe.Exercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.Id, 
-                        pee.Name,
-                        pee.MuscleGroup, 
-                        pee.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        pee.Notes))
-                    .ToList()
-            ))
+            .Select(pe => Map(pe))
             .ToList();
 
         return (totalCount, planResponse);
@@ -45,24 +31,24 @@ public class PlansSearchService : IPlansSearchService
     {
         var (totalCount, plans) = await _fullTextSearch.SearchAsync(query, userId, parameters, ct);
         var planResponse = plans
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.Tags,
-                pe.Description,
-                pe.Exercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.Id, 
-                        pee.Name,
-                        pee.MuscleGroup, 
-                        pee.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        pee.Notes))
-                    .ToList()
-            ))
+            .Select(pe => Map(pe))
             .ToList();
 
         return (totalCount, planResponse);
     }
+    
+    private PlanResponse Map(PlanSearchResult planDocument) => new PlanResponse(
+        planDocument.Id,
+        planDocument.Tags,
+        planDocument.Description,
+        planDocument.Exercises
+            .Select(pee => new ExerciseResponse(
+                pee.Id, 
+                pee.Name,
+                pee.MuscleGroup, 
+                pee.Description,
+                pee.Sets,
+                pee.Reps, 
+                pee.Notes))
+            .ToList());
 }

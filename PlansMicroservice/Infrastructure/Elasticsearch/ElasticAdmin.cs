@@ -1,6 +1,8 @@
 
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.QueryDsl;
+using TrainingPlans.Application.Abstractions;
+using TrainingPlans.Application.Models;
 using TrainingPlans.Domain.Entities;
 using TrainingPlans.Infrastructure.Elasticsearch.ElasticClient;
 using TrainingPlans.Infrastructure.Elasticsearch.Models;
@@ -18,12 +20,12 @@ public class ElasticAdmin : IElasticAdmin
         _settings = elasticClientProvider.Settings;
     }
     
-    public async Task CreateIndexIfNotExistsAsync(CancellationToken ct)
+    public async Task CreateIndexAsync(CancellationToken ct)
     {
         var exists = await _client.Indices.ExistsAsync(_settings.DefaultIndex, ct);
         
-        if (exists.Exists) //return;
-            await _client.Indices.DeleteAsync(_settings.DefaultIndex, ct);
+        if (exists.Exists) return;
+            //await _client.Indices.DeleteAsync(_settings.DefaultIndex, ct);
 
         await _client.Indices.CreateAsync(_settings.DefaultIndex, c => c
             .Mappings(m => m
@@ -62,26 +64,45 @@ public class ElasticAdmin : IElasticAdmin
 
         return response.Count > 0;
     }
-
-    public async Task<bool> AddOrUpdateAsync<TPlan>(
-        TPlan plan, 
-        Func<TPlan, PlanSearchDocument> map,
-        CancellationToken ct)
+    
+    public async Task<bool> AddOrUpdatePlanAsync(PlanEntity plan, CancellationToken ct)
     {
-        var doc = map(plan);
+        var doc = MapPlan(plan);
         var response = await _client.IndexAsync(doc, idx => idx
-                .Index(_settings.DefaultIndex)
-                .OpType(OpType.Index), ct);
+            .Index(_settings.DefaultIndex)
+            .OpType(OpType.Index), ct);
+        
+        return response.IsValidResponse;
+    }
+    
+    public async Task<bool> AddOrUpdateCustomPlanAsync(CustomPlanEntity plan, CancellationToken ct)
+    {
+        var doc = MapCustomPlan(plan);
+        var response = await _client.IndexAsync(doc, idx => idx
+            .Index(_settings.DefaultIndex)
+            .OpType(OpType.Index), ct);
+        
         return response.IsValidResponse;
     }
 
-    public async Task<bool> AddOrUpdateBulkAsync<TPlan>(
-        List<TPlan> plans, 
-        Func<TPlan, PlanSearchDocument> map,
-        CancellationToken ct)
+    public async Task<bool> AddOrUpdatePlanBulkAsync(List<PlanEntity> plans, CancellationToken ct)
     {
         var docs = plans
-            .Select(p => map(p))
+            .Select(p => MapPlan(p))
+            .ToList();
+        var response = await _client.BulkAsync(b => b
+            .Index(_settings.DefaultIndex)
+            .UpdateMany(docs, (pd, p) => pd
+                .Doc(p)
+                .DocAsUpsert(true)), ct);
+        
+        return response.IsValidResponse;
+    }
+    
+    public async Task<bool> AddOrUpdateCustomPlanBulkAsync(List<CustomPlanEntity> plans, CancellationToken ct)
+    {
+        var docs = plans
+            .Select(p => MapCustomPlan(p))
             .ToList();
         var response = await _client.BulkAsync(b => b
             .Index(_settings.DefaultIndex)
@@ -92,25 +113,67 @@ public class ElasticAdmin : IElasticAdmin
         return response.IsValidResponse;
     }
 
-    public async Task<PlanSearchDocument?> GetAsync(string id, CancellationToken ct)
+    public async Task<PlanSearchResult?> GetAsync(Guid id, CancellationToken ct)
     {
         var response = await _client.GetAsync<PlanSearchDocument>(
             id, 
             g => g.Index(_settings.DefaultIndex), 
             ct);
+        var planDocument = response.Source;
         
-        return response.Source;
+        if (planDocument is null) return null;
+        
+        var result = new PlanSearchResult
+        {
+            Id = planDocument.Id,
+            Description = planDocument.Description,
+            Tags = planDocument.Tags,
+            Exercises = planDocument.Exercises
+                .Select(e => new ExerciseSearchResult
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    MuscleGroup = e.MuscleGroup,
+                    Description = e.Description,
+                    Sets = e.Sets,
+                    Reps = e.Reps,
+                    Notes = e.Notes
+                }).ToList()
+        };
+        
+        return result;
     }
 
-    public async Task<List<PlanSearchDocument>?> GetAllAsync(CancellationToken ct)
+    public async Task<List<PlanSearchResult>?> GetAllAsync(CancellationToken ct)
     {
         var response = await _client.SearchAsync<PlanSearchDocument>(s =>
             s.Index(_settings.DefaultIndex), ct);
+
+        if (!response.IsValidResponse) return null;
+
+        var result = response.Documents.ToList()
+            .Select(p => new PlanSearchResult
+            {
+                Id = p.Id,
+                Description = p.Description,
+                Tags = p.Tags,
+                Exercises = p.Exercises
+                    .Select(e => new ExerciseSearchResult
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        MuscleGroup = e.MuscleGroup,
+                        Description = e.Description,
+                        Sets = e.Sets,
+                        Reps = e.Reps,
+                        Notes = e.Notes
+                    }).ToList()
+            }).ToList();
         
-        return response.IsValidResponse ? response.Documents.ToList() : null;
+        return result;
     }
 
-    public async Task<bool> RemoveAsync(string id, CancellationToken ct)
+    public async Task<bool> RemoveAsync(Guid id, CancellationToken ct)
     {
         var response = await _client.DeleteAsync<PlanSearchDocument>(
             id,
@@ -131,64 +194,35 @@ public class ElasticAdmin : IElasticAdmin
         return response.IsValidResponse ? response.Deleted : null;
     }
     
-    // private static PlanSearchDocument Map(PlanEntity plan)
-    // {
-    //     return new PlanSearchDocument
-    //     {
-    //         Id = plan.Id,
-    //         Description = plan.Description,
-    //         CreatedAt = plan.CreatedAt,
-    //         Tags = plan.PlanExercises
-    //             .SelectMany(pe => pe.Exercise.MuscleGroup
-    //                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
-    //                 .Select(tag => tag.Trim()))
-    //             .Distinct()
-    //             .ToList(),
-    //         Exercises = plan.PlanExercises
-    //             .Select(pe => new ExerciseSearchDocument
-    //             {
-    //                 Id = pe.Exercise.Id,
-    //                 Name = pe.Exercise.Name,
-    //                 MuscleGroup = pe.Exercise.MuscleGroup,
-    //                 Description = pe.Exercise.Description,
-    //                 Sets = pe.Sets,
-    //                 Reps = pe.Reps
-    //             })
-    //             .ToList(),
-    //         UserId = null,
-    //         CompletionDate = null
-    //     };
-    // }
-    //
-    // private static PlanSearchDocument Map(CustomPlanEntity customPlan)
-    // {
-    //     return new PlanSearchDocument
-    //     {
-    //         Id = customPlan.Id,
-    //         Description = customPlan.Description,
-    //         CreatedAt = customPlan.CreatedAt,
-    //         Tags = customPlan.PlanExercises
-    //             .SelectMany(cpe => cpe.Exercise.MuscleGroup
-    //                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
-    //                 .Select(tag => tag.Trim()))
-    //             .Distinct()
-    //             .ToList(),
-    //         Exercises = customPlan.PlanExercises
-    //             .Select(cpe => new ExerciseSearchDocument
-    //             {
-    //                 Id = cpe.Exercise.Id,
-    //                 Name = cpe.Exercise.Name,
-    //                 MuscleGroup = cpe.Exercise.MuscleGroup,
-    //                 Description = cpe.Exercise.Description,
-    //                 Sets = cpe.Sets,
-    //                 Reps = cpe.Reps,
-    //                 Notes = cpe.Notes
-    //             })
-    //             .ToList(),
-    //         UserId = customPlan.UserId,
-    //         CompletionDate = customPlan.CompletionDate
-    //     };
-    // }
+    private async Task<bool> AddOrUpdateAsync<TPlan>(
+        TPlan plan, 
+        Func<TPlan, PlanSearchDocument> map,
+        CancellationToken ct)
+    {
+        var doc = map(plan);
+        var response = await _client.IndexAsync(doc, idx => idx
+            .Index(_settings.DefaultIndex)
+            .OpType(OpType.Index), ct);
+        
+        return response.IsValidResponse;
+    }
+
+    private async Task<bool> AddOrUpdateBulkAsync<TPlan>(
+        List<TPlan> plans, 
+        Func<TPlan, PlanSearchDocument> map,
+        CancellationToken ct)
+    {
+        var docs = plans
+            .Select(p => map(p))
+            .ToList();
+        var response = await _client.BulkAsync(b => b
+            .Index(_settings.DefaultIndex)
+            .UpdateMany(docs, (pd, p) => pd
+                .Doc(p)
+                .DocAsUpsert(true)), ct);
+        
+        return response.IsValidResponse;
+    }
 
     private static PlanSearchDocument Map<TPlan, TPlanExercise>(
         TPlan plan,

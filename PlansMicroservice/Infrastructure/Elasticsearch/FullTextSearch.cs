@@ -1,6 +1,7 @@
 using Elastic.Clients.Elasticsearch;
 using Shared.Pagination;
 using TrainingPlans.Application.Abstractions;
+using TrainingPlans.Application.Models;
 using TrainingPlans.Infrastructure.Elasticsearch.ElasticClient;
 using TrainingPlans.Infrastructure.Elasticsearch.Models;
 
@@ -17,7 +18,7 @@ public class FullTextSearch : IFullTextSearch
         _settings = elasticClientProvider.Settings;
     }
 
-    public async Task<(int totalCount, List<PlanSearchDocument> plans)>
+    public async Task<(int totalCount, List<PlanSearchResult> plans)>
         SearchAsync(string query, Guid? userId, PlanParameters parameters, CancellationToken ct)
     {
         var response = await _client.SearchAsync<PlanSearchDocument>(s => s
@@ -84,8 +85,27 @@ public class FullTextSearch : IFullTextSearch
                 .From((parameters.PageNumber - 1) * parameters.PageSize)
                 .Size(parameters.PageSize),
             ct);
-    
-        return ((int)response.Total, response.Documents.ToList());
+        
+        var searchResult = response.Documents.ToList()
+            .Select(p => new PlanSearchResult
+            {
+                Id = p.Id,
+                Description = p.Description,
+                Tags = p.Tags,
+                Exercises = p.Exercises
+                    .Select(e => new ExerciseSearchResult
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        MuscleGroup = e.MuscleGroup,
+                        Description = e.Description,
+                        Sets = e.Sets,
+                        Reps = e.Reps,
+                        Notes = e.Notes
+                    }).ToList()
+            }).ToList()
+            ;
+        return ((int)response.Total, searchResult);
     }
     
 }

@@ -57,6 +57,7 @@ builder.Services.AddScoped<ICustomPlansService, CustomPlansService>();
 builder.Services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
 builder.Services.AddScoped<IElasticAdmin, ElasticAdmin>();
 builder.Services.AddScoped<IFullTextSearch, FullTextSearch>();
+builder.Services.AddScoped<IElasticAdminService, ElasticAdminService>();
 
 //builder.Services.AddApiAuthentication();
 
