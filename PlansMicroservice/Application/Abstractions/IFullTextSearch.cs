@@ -6,6 +6,6 @@ namespace TrainingPlans.Application.Abstractions;
 
 public interface IFullTextSearch
 {
-    Task<(int totalCount, List<PlanSearchDocument> plans)> SearchAsync(string query, PlanParameters planParameters,
+    Task<(int totalCount, List<PlanSearchDocument> plans)> SearchAsync(string query, Guid? userId, PlanParameters planParameters,
         CancellationToken ct);
 }

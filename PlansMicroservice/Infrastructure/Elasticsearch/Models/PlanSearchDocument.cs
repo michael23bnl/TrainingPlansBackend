@@ -7,4 +7,6 @@ public class PlanSearchDocument
     public DateTime CreatedAt { get; set; }
     public List<string> Tags { get; set; } = [];
     public List<ExerciseSearchDocument> Exercises { get; set; } = [];
+    public Guid? UserId { get; set; }
+    public DateOnly? CompletionDate { get; set; }
 }

@@ -10,7 +10,6 @@ namespace TrainingPlans.API.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-
 public class PlansController : ControllerBase
 {
     private readonly IPlansService _plansService;

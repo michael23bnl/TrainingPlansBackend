@@ -7,8 +7,9 @@ public interface IElasticAdmin
 {
     Task CreateIndexIfNotExistsAsync(CancellationToken ct);
     Task<bool> ContainsDocumentsAsync(CancellationToken ct);
-    Task<bool> AddOrUpdateAsync(PlanEntity plan, CancellationToken ct);
-    Task<bool> AddOrUpdateBulkAsync(List<PlanEntity> plans, CancellationToken ct);
+    Task<bool> AddOrUpdateAsync<TPlan>(TPlan plan, Func<TPlan, PlanSearchDocument> map, CancellationToken ct);
+    Task<bool> AddOrUpdateBulkAsync<TPlan>(List<TPlan> plans, Func<TPlan, PlanSearchDocument> map,
+        CancellationToken ct);
     Task<PlanSearchDocument?> GetAsync(string id, CancellationToken ct);
     Task<List<PlanSearchDocument>?> GetAllAsync(CancellationToken ct);
     Task<bool> RemoveAsync(string id, CancellationToken ct);

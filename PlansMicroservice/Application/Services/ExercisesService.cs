@@ -1,5 +1,4 @@
 
-using TrainingPlans.Application.Abstractions;
 using TrainingPlans.Domain.Abstractions;
 using TrainingPlans.Domain.Entities;
 

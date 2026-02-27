@@ -5,24 +5,97 @@ services:
     container_name: plans-service-elastic
     image: elasticsearch:8.17.0
     ports: 
-      - "9200:9200"
-    volumes:
-      - plans-elastic-data:/usr/share/elasticsearch/data
+      - "${ELASTIC_HOST_PORT}:${ELASTIC_CONTAINER_PORT}"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+#      - ELASTIC_PASSWORD=somePassword
+    volumes:
+      - plans-elastic-data:/usr/share/elasticsearch/data
+    networks:
+      - plans-net
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200 || exit 1" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+      start_interval: 1s
         
 #  kibana: 
 #    container_name: kibana
 #    image: kibana:8.17.0
 #    ports: 
 #      - "5601:5601"
-#    depends_on:
-#      - elasticsearch
 #    environment:
-#      - ELASTICSEARCH_URL=http://elasticsaerch:9200
-      
+#      - ELASTICSEARCH_HOSTS=http://plans-service-elastic:9200
+#      - ELASTICSEARCH_SERVICEACCOUNTTOKEN=AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjpqanZvaWl4eFRMU3d1VnplN0hnM0t3
+#    networks:
+#      - elastic
+#    depends_on:
+#      - plans-elasticsearch
   
+  plans-postgres:
+    container_name: plans-service-postgres
+    image: postgres:16
+    ports:
+      - "${POSTGRES_PLANS_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
+      - "${REDIS_PLANS_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
+    environment:
+      POSTGRES_DB: ${POSTGRES_PLANS_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PLANS_PASSWORD}
+    volumes:
+      - plans-postgres-data:/var/lib/postgresql/data
+    networks:
+      - plans-net
+    command: ["postgres", "-c", "wal_level=logical"]
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d ${POSTGRES_PLANS_DB}" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+      start_period: 2s
+      start_interval: 1s
+      
+  sequin:
+    container_name: service-sequin
+    image: sequin/sequin:latest
+    ports:
+      - "${SEQUIN_HOST_PORT}:${SEQUIN_CONTAINER_PORT}"
+    environment:
+      PG_HOSTNAME: plans-postgres
+      PG_DATABASE: ${POSTGRES_PLANS_DB}
+      PG_PORT: ${POSTGRES_CONTAINER_PORT}
+      PG_USERNAME: ${POSTGRES_USER}
+      PG_PASSWORD: ${POSTGRES_PLANS_PASSWORD}
+      ELASTICSEARCH_URL: ${ELASTIC_URL}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE} 
+      VAULT_KEY: ${VAULT_KEY}
+      REDIS_URL: ${REDIS_URL}
+      CONFIG_FILE_PATH: /config/playground.yml
+    volumes:
+      - ./playground.yml:/config/playground.yml
+    networks:
+      - plans-net
+    depends_on:
+      plans-postgres:
+        condition: service_healthy
+      plans-elasticsearch:
+        condition: service_healthy
+      sequin-redis:
+        condition: service_started
+        
+  sequin-redis:
+    image: redis:7
+    ports:
+      - "${REDIS_SEQUIN_HOST_PORT}:${REDIS_CONTAINER_PORT}"
+    command: [ "redis-server", "--port", "${REDIS_CONTAINER_PORT}" ]
+    volumes:
+      - sequin-redis-data:/data
+    networks:
+      - plans-net
+        
 #  userservice:
 #    container_name: usersdb
 #    image: postgres:latest
@@ -35,20 +108,7 @@ services:
 #    ports:
 #      - "5435:5432"
 #    restart: always
-  
-  plans-postgres:
-    container_name: plans-service-postgres
-    image: postgres:16
-    environment:
-      POSTGRES_DB: ${POSTGRES_PLANS_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PLANS_PASSWORD}
-    volumes:
-      - plans-postgres-data:/var/lib/postgresql/data
-    ports:
-      - "${POSTGRES_PLANS_PORT}:5432"
-    restart: always
-    
+        
 #  statisticservice:
 #    container_name: statisticsdb
 #    image: postgres:latest
@@ -75,7 +135,7 @@ services:
 #      - "5434:5432"
 #    restart: always
 
-#  realtimechat.redis:
+#  realtimechat-redis:
 #    image: redis
 #    restart: always
 #    ports:
@@ -94,10 +154,14 @@ services:
 #      RABBITMQ_DEFAULT_PASS: "guest"
 #    restart: always
 
+networks:
+  plans-net:
+
 volumes:
-  plans-elastic-data:
-  usersdb-data:
   plans-postgres-data:
+  plans-elastic-data:
+  sequin-redis-data:
+  usersdb-data:
   statisticsdb-data:
   chatdb-data:
   rabbitmq-data:

@@ -29,7 +29,7 @@ public class ExercisesController : ControllerBase
     }
     
     //[Authorize]
-    [HttpGet] 
+    [HttpGet("/category")] 
     public async Task<List<ExerciseEntity>> GetAsync([FromQuery] string? muscleGroup, CancellationToken ct)
     {
         List<ExerciseEntity> exercises;

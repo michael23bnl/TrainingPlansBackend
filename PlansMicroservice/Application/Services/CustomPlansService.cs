@@ -2,6 +2,7 @@
 using Shared.DTO;
 using TrainingPlans.Domain.Abstractions;
 using TrainingPlans.Domain.DTO;
+using TrainingPlans.Domain.Entities;
 
 namespace TrainingPlans.Application.Services;
 
@@ -26,27 +27,17 @@ public class CustomPlansService : ICustomPlansService
     {
         var plans =  await _customPlansRepository.GetAllAsync(userId, ct);
         var planResponse = plans
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.PlanExercises
-                    .Select(e => e.Exercise.MuscleGroup)
-                    .Distinct()
-                    .ToList(),
-                pe.Description,
-                pe.PlanExercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.ExerciseId, 
-                        pee.Exercise.Name,
-                        pee.Exercise.MuscleGroup, 
-                        pee.Exercise.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        null))
-                    .ToList()
-            ))
+            .Select(cp => Map(cp))
             .ToList();
 
+        return planResponse;
+    }
+    
+    public async Task<PlanResponse?> GetPlanAsync(Guid userId, Guid planId, CancellationToken ct)
+    {
+        var plan = await _customPlansRepository.GetAsync(userId, planId, ct);
+        var planResponse = Map(plan);
+        
         return planResponse;
     }
 
@@ -54,25 +45,7 @@ public class CustomPlansService : ICustomPlansService
     {
         var plans =  await _customPlansRepository.GetCompletedAsync(userId, ct);
         var planResponse = plans
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.PlanExercises
-                    .Select(e => e.Exercise.MuscleGroup)
-                    .Distinct()
-                    .ToList(),
-                pe.Description,
-                pe.PlanExercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.ExerciseId, 
-                        pee.Exercise.Name,
-                        pee.Exercise.MuscleGroup, 
-                        pee.Exercise.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        null))
-                    .ToList()
-            ))
+            .Select(cp => Map(cp))
             .ToList();
 
         return planResponse;
@@ -106,4 +79,23 @@ public class CustomPlansService : ICustomPlansService
         
         return uncompletedPlanId;
     }
+
+    private PlanResponse Map(CustomPlanEntity customPlan) => new PlanResponse(
+            customPlan.Id,
+            customPlan.PlanExercises
+                .Select(cpe => cpe.Exercise.MuscleGroup)
+                .Distinct()
+                .ToList(),
+            customPlan.Description,
+            customPlan.PlanExercises
+                .Select(cpe => new ExerciseResponse(
+                    cpe.ExerciseId,
+                    cpe.Exercise.Name,
+                    cpe.Exercise.MuscleGroup,
+                    cpe.Exercise.Description,
+                    cpe.Sets,
+                    cpe.Reps,
+                    cpe.Notes))
+                .ToList()
+        );
 }

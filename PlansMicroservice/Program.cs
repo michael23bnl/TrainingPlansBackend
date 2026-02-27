@@ -6,15 +6,16 @@ using Shared.RabbitMq.Connection;
 using TrainingPlans.Application.Abstractions;
 using TrainingPlans.Application.Services;
 using TrainingPlans.Infrastructure.RabbitMq;
-using UserMicroservice.Enums;
-using UserMicroservice.Extensions;
-using UserMicroservice.Infrastructure;
+// using UserMicroservice.Enums;
+// using UserMicroservice.Extensions;
+// using UserMicroservice.Infrastructure;
 using TrainingPlans.Infrastructure.Extensions;
 using TrainingPlans.Domain.Abstractions;
 using TrainingPlans.Infrastructure;
 using TrainingPlans.Infrastructure.Elasticsearch;
+using TrainingPlans.Infrastructure.Elasticsearch.ElasticClient;
 using TrainingPlans.Infrastructure.Repositories;
-using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
+//using AuthorizationOptions = UserMicroservice.Infrastructure.AuthorizationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,10 +54,11 @@ builder.Services.AddScoped<IPlansSearchService, PlansSearchService>();
 builder.Services.AddScoped<IExercisesService, ExercisesService>();
 builder.Services.AddScoped<ICustomPlansService, CustomPlansService>();
 //builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
+builder.Services.AddSingleton<IElasticClientProvider, ElasticClientProvider>();
 builder.Services.AddScoped<IElasticAdmin, ElasticAdmin>();
 builder.Services.AddScoped<IFullTextSearch, FullTextSearch>();
 
-builder.Services.AddApiAuthentication();
+//builder.Services.AddApiAuthentication();
 
 var app = builder.Build();
 
@@ -80,6 +82,7 @@ var plansPath = Path.Combine(
 
 app.SeedExercisesData(exercisesPath);
 app.SeedPlansData(plansPath);
+
 await app.SeedPlansData(app.Lifetime.ApplicationStopping);
 
 app.UseRouting();

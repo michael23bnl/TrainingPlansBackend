@@ -13,7 +13,8 @@ public class UserContextService : IUserContextService
 
     public Guid GetUserId()
     {
-        var userId = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Id"];
+        //var userId = _httpContextAccessor.HttpContext!.Request.Headers["X-User-Id"];
+        var userId = "088c2dd8-b404-49da-adcc-08c695e9ff55";
         if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var parsedId))
             return Guid.Empty;
         

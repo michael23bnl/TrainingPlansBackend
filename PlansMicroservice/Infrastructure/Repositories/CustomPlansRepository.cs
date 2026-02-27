@@ -51,22 +51,37 @@ public class CustomPlansRepository : ICustomPlansRepository
     {
         var plans = await _context.CustomPlans
             .Where(cp => cp.UserId == userId)
-            .OrderBy(p => p.CreatedAt)
+            .OrderBy(cp => cp.CreatedAt)
             .Include(cp => cp.PlanExercises
                 .OrderBy(cpe => cpe.Order))
+            .ThenInclude(cpe => cpe.Exercise)
             .AsNoTracking()
             .ToListAsync(ct);
 
         return plans;
     }
     
+    public async Task<CustomPlanEntity?> GetAsync(Guid userId, Guid planId, CancellationToken ct)
+    {
+        var plan = await _context.CustomPlans
+            .Where(cp => cp.UserId == userId)
+            .Include(cp => cp.PlanExercises 
+                .OrderBy(cpe => cpe.Order))
+            .ThenInclude(cpe => cpe.Exercise)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cp => cp.Id == planId, ct);
+        
+        return plan;
+    }
+    
     public async Task<List<CustomPlanEntity>> GetCompletedAsync(Guid userId, CancellationToken ct)
     {
         var plans = await _context.CustomPlans
             .Where(cp => cp.UserId == userId && cp.CompletionDate != null)
-            .OrderBy(p => p.CreatedAt)
+            .OrderBy(cp => cp.CreatedAt)
             .Include(cp => cp.PlanExercises
                 .OrderBy(cpe => cpe.Order))
+            .ThenInclude(cpe => cpe.Exercise)
             .AsNoTracking()
             .ToListAsync(ct);
 

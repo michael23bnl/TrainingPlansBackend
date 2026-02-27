@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TrainingPlans.Domain.Entities;
-using UserMicroservice.Entities;
 
 namespace TrainingPlans.Infrastructure.Configurations;
 
@@ -11,24 +10,24 @@ public class CustomPlanConfiguration : IEntityTypeConfiguration<CustomPlanEntity
     {
         builder.HasKey(cp => cp.Id);
         
-        builder.HasOne<UserEntity>()
-            .WithMany()
-            .HasForeignKey(cp => cp.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(cp => cp.UserId).IsRequired();
         
-        builder.HasOne(cp => cp.SourcePlan)
+        builder
+            .HasOne(cp => cp.SourcePlan)
             .WithMany()
             .HasForeignKey(cp => cp.SourcePlanId)
             .OnDelete(DeleteBehavior.SetNull);
         
-        builder.HasMany(cp => cp.PlanExercises)
+        builder
+            .HasMany(cp => cp.PlanExercises)
             .WithOne(pe => pe.CustomPlan)
             .HasForeignKey(pe => pe.PlanId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
         
-        builder.Property(p => p.CreatedAt);
+        builder.Property(cp => cp.CreatedAt).IsRequired();
+        builder.Property(cp => cp.CompletionDate);
 
-        builder.Property(cp => cp.Description)
-            .HasMaxLength(500);
+        builder.Property(cp => cp.Description).HasMaxLength(500);
     }
 }

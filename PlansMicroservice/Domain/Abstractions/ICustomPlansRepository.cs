@@ -8,6 +8,7 @@ public interface ICustomPlansRepository
     Task<Guid> CreateAsync(Guid userId, string? description, Guid? sourcePlanId,
         List<CustomPlanExercise> exercises, CancellationToken ct);
     Task<List<CustomPlanEntity>> GetAllAsync(Guid userId, CancellationToken ct);
+    Task<CustomPlanEntity?> GetAsync(Guid userId, Guid planId, CancellationToken ct);
     Task<List<CustomPlanEntity>> GetCompletedAsync(Guid userId, CancellationToken ct);
      Task<Guid> UpdateAsync(Guid userId, Guid planId, string? description,
         List<CustomPlanExercise>? exercises, CancellationToken ct);

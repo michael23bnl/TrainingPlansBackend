@@ -28,27 +28,7 @@ public class PlansService : IPlansService
     {
         var plans = await _plansRepository.GetAllAsync(planParameters, ct);
         var planResponse = plans.Item2
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.PlanExercises
-                    .SelectMany(pee => pee.Exercise.MuscleGroup
-                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(tag => tag.Trim()))
-                    .Distinct()
-                    .ToList(),
-                pe.Description,
-                pe.PlanExercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.ExerciseId, 
-                        pee.Exercise.Name,
-                        pee.Exercise.MuscleGroup, 
-                        pee.Exercise.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        null))
-                    .ToList()
-            ))
+            .Select(p => Map(p))
             .ToList();
 
         return (plans.Item1, planResponse);
@@ -64,25 +44,7 @@ public class PlansService : IPlansService
     public async Task<PlanResponse?> GetPlanAsync(Guid planId, CancellationToken ct)
     {
         var plan = await _plansRepository.GetAsync(planId, ct);
-        var planResponse = new PlanResponse(
-            plan.Id, 
-            plan.PlanExercises
-                .SelectMany(pee => pee.Exercise.MuscleGroup
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(tag => tag.Trim()))
-                .Distinct()
-                .ToList(),
-            plan.Description,
-            plan.PlanExercises
-                .Select(pee => new ExerciseResponse(
-                    pee.ExerciseId, 
-                    pee.Exercise.Name,
-                    pee.Exercise.MuscleGroup, 
-                    pee.Exercise.Description,
-                    pee.Sets,
-                    pee.Reps, 
-                    null))
-                .ToList());
+        var planResponse = Map(plan);
         
         return planResponse;
     }
@@ -91,27 +53,7 @@ public class PlansService : IPlansService
     {
         var plans = await _plansRepository.GetByIdsAsync(planIds, ct);
         var planResponse = plans
-            .Select(pe => new PlanResponse
-            (
-                pe.Id,
-                pe.PlanExercises
-                    .SelectMany(pee => pee.Exercise.MuscleGroup
-                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(tag => tag.Trim()))
-                    .Distinct()
-                    .ToList(),
-                pe.Description,
-                pe.PlanExercises
-                    .Select(pee => new ExerciseResponse(
-                        pee.ExerciseId, 
-                        pee.Exercise.Name,
-                        pee.Exercise.MuscleGroup, 
-                        pee.Exercise.Description,
-                        pee.Sets,
-                        pee.Reps, 
-                        null))
-                    .ToList()
-            ))
+            .Select(p => Map(p))
             .ToList();
     
         return planResponse;
@@ -131,4 +73,22 @@ public class PlansService : IPlansService
 
         return planId;
     }
+
+    private PlanResponse Map(PlanEntity plan) => new PlanResponse(
+        plan.Id,
+        plan.PlanExercises
+            .Select(pe => pe.Exercise.MuscleGroup)
+            .Distinct()
+            .ToList(),
+        plan.Description,
+        plan.PlanExercises
+            .Select(pe => new ExerciseResponse(
+                pe.ExerciseId,
+                pe.Exercise.Name,
+                pe.Exercise.MuscleGroup,
+                pe.Exercise.Description,
+                pe.Sets,
+                pe.Reps,
+                null))
+            .ToList());
 }

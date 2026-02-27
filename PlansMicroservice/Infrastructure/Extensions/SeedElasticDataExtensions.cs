@@ -14,11 +14,11 @@ public static class SeedElasticDataExtensions
         
         await elasticAdminService.CreateIndexIfNotExistsAsync(ct);
         
-        if (!await elasticAdminService.ContainsDocumentsAsync(ct))
-        {
-            var plans = await plansService.GetAllPlansAsync(ct);
-            
-            await elasticAdminService.AddOrUpdateBulkAsync(plans, ct);
-        }
+        // if (!await elasticAdminService.ContainsDocumentsAsync(ct))
+        // {
+        //     var plans = await plansService.GetAllPlansAsync(ct);
+        //     
+        //     await elasticAdminService.AddOrUpdateBulkAsync(plans, ct);
+        // }
     }
 }

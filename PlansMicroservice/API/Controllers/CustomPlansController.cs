@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Auth;
 using Shared.DTO;
+using Shared.Pagination;
 using TrainingPlans.API.DTO;
 using TrainingPlans.Domain.Abstractions;
 using TrainingPlans.Domain.DTO;
@@ -13,11 +14,14 @@ namespace TrainingPlans.API.Controllers;
 public class CustomPlansController : ControllerBase
 {
     private readonly ICustomPlansService _customPlansService;
+    private readonly IPlansSearchService _plansSearchService;
     private readonly IUserContextService _userContextService;
 
-    public CustomPlansController(ICustomPlansService customPlansService, IUserContextService userContextService)
+    public CustomPlansController(ICustomPlansService customPlansService, IPlansSearchService plansSearchService, 
+        IUserContextService userContextService)
     {
         _customPlansService = customPlansService;
+        _plansSearchService = plansSearchService;
         _userContextService = userContextService;
     }
     
@@ -39,6 +43,29 @@ public class CustomPlansController : ControllerBase
         var plans = await _customPlansService.GetAllCustomPlansAsync(userId, ct);
 
         return Ok(plans);
+    }
+    
+    [HttpGet("search/{query}")]
+    public async Task<ActionResult<PlanResponse>> SearchAsync(string query, [FromQuery] PlanParameters planParameters,
+        CancellationToken ct)
+    {
+        var userId = _userContextService.GetUserId();
+        var response = await _plansSearchService.SearchCustomPlansAsync(query, userId, planParameters, ct);
+
+        return Ok(new
+        {
+            totalCount = response.Item1,
+            plans = response.Item2
+        });
+    }
+    
+    [HttpGet("{planId:guid}")]
+    public async Task<ActionResult<PlanResponse>> GetAsync(Guid planId, CancellationToken ct)
+    {
+        var userId = _userContextService.GetUserId();
+        var response = await _customPlansService.GetPlanAsync(userId, planId, ct);
+
+        return Ok(response);
     }
     
     [HttpGet("completed")]
