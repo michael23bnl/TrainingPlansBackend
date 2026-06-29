@@ -8,17 +8,21 @@ using UserMicroservice.Repositories.Interfaces;
 
 namespace UserMicroservice.Infrastructure;
 
-public class JwtProvider : IJwtProvider{
+public class JwtProvider : IJwtProvider
+{
 
     private readonly JwtOptions _options;
 
-    public JwtProvider(IOptions<JwtOptions> options) { 
+    public JwtProvider(IOptions<JwtOptions> options)
+    {
         _options = options.Value;
     }
 
-    public string GenerateToken(UserModel userModel) {
-        Claim[] claims = [
-            new (CustomClaims.UserId, userModel.Id.ToString()),
+    public string GenerateToken(UserModel userModel)
+    {
+        Claim[] claims =
+        [
+            new(CustomClaims.UserId, userModel.Id.ToString()),
         ];
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

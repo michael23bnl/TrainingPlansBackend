@@ -60,9 +60,7 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     {
 
         var permission = _httpContextAccessor.HttpContext.Request.Headers["X-User-Permissions"].ToString();
-
         var permissionList = permission.Split(',').Select(s => s.Trim()).ToList();
-        
         var permissions = new HashSet<Permission>();
 
         foreach (var permissionName in permissionList)
